@@ -1,5 +1,11 @@
 'use client'
 
+import allanImage from '@/public/team/allan.jpeg';
+import japhetImage from '@/public/team/japhet.jpeg';
+import roseImage from '@/public/team/benny.jpeg';
+import bariImage from '@/public/team/benny.jpeg';
+import bennyImage from '@/public/team/benny.jpeg';
+
 import { Linkedin, Twitter, Instagram, Mail, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,8 +18,8 @@ export default function TeamPage() {
       role: "Head of Sales and Marketing",
       department: "Sales & Marketing",
       bio: "8+ years driving revenue growth and brand expansion. Specializes in digital marketing strategies and sales pipeline optimization.",
-      image: "/team/allan.jpeg",
-      tzExperience: "10+ years growing Tanzanian brands",
+      image: allanImage,
+      tzExperience: "5+ years growing Tanzanian brands",
       badge: "Certified Sales Leader (CPSL)",
       skills: [
         "Digital Marketing Strategy",
@@ -28,7 +34,7 @@ export default function TeamPage() {
       role: "Head MC",
       department: "Master of Ceremonies",
       bio: "Charismatic host with 8 years experience in weddings and corporate events across Tanzania.",
-      image: "/team/japhet.jpeg",
+      image: japhetImage,
       tzExperience: "Known as 'Bwana Shindano' on TZ reality TV",
       badge: "Tanzania Events Host of the Year 2022",
       skills: [
@@ -44,7 +50,7 @@ export default function TeamPage() {
       role: "Chief Editor",
       department: "Content Editor",
       bio: "Digital content editor growing brands across Africa. Fluent in Swahili/English content creation.",
-      image: "/team/rose.jpg",
+      image: roseImage,
       tzExperience: "Built 5 Tanzanian brands to 100K+ followers",
       badge: "Meta Certified Professional",
       skills: [
@@ -60,7 +66,7 @@ export default function TeamPage() {
       role: "Lead Developer",
       department: "Technology",
       bio: "Full stack developer with expertise in modern web technologies. Architect of our digital platforms and technical vision.",
-      image: "/team/bari4.png",
+      image: bariImage,
       tzExperience: "Building Tanzania's digital future",
       badge: "Lead Developer",
       skills: [
@@ -77,7 +83,7 @@ export default function TeamPage() {
       role: "Head of Catering",
       department: "Catering Services",
       bio: "Gourmet chef trained in Zanzibar and Paris. Creates unforgettable culinary experiences.",
-      image: "/team/benny.jpeg",
+      image: bennyImage,
       tzExperience: "Former head chef at Serengeti Safari Lodge",
       badge: "Tanzania Culinary Award Winner",
       skills: [
@@ -89,6 +95,7 @@ export default function TeamPage() {
       ]
     },
   ];
+
 
   return (
     <div className="bg-brand-foam">
@@ -184,13 +191,12 @@ export default function TeamPage() {
 }
 
 
-
 function TeamMemberCard({
   name,
   role,
   department,
   bio,
-  image, // Expecting path relative to public folder (e.g., '/team/john-doe.jpg')
+  image,
   tzExperience,
   badge,
   skills = []
@@ -199,52 +205,23 @@ function TeamMemberCard({
   role: string;
   department: string;
   bio: string;
-  image: string;
+  image: any;
   tzExperience: string;
   badge: string;
   skills?: string[];
 }) {
-  const [imageError, setImageError] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
-
-  // Validate and format the image path
-  const getImagePath = () => {
-    if (!image) return '';
-    // Ensure path starts with slash but doesn't have double slashes
-    return `${image.startsWith('/') ? '' : '/'}${image}`.replace(/\/+/g, '/');
-  };
-
-  const imagePath = getImagePath();
-
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all h-full flex flex-col group">
       {/* Image with department color overlay */}
       <div className="relative h-80 bg-gray-100">
-        {imagePath && !imageError ? (
-          <>
-            <Image
-              src={imagePath}
-              alt={`${name}, ${role} at ${department}`}
-              fill
-              className={`object-cover transition-opacity duration-300 ${
-                imageLoaded ? 'opacity-100' : 'opacity-0'
-              }`}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-              onLoad={() => setImageLoaded(true)}
-              onError={() => setImageError(true)}
-              priority={false}
-            />
-            {/* Show loading skeleton while image loads */}
-            {!imageLoaded && (
-              <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
-            )}
-          </>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-200">
-            <User className="w-16 h-16 text-gray-400" />
-            <span className="sr-only">Image not available</span>
-          </div>
-        )}
+        <Image
+          src={image}
+          alt={`${name}, ${role} at ${department}`}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+          placeholder="blur"
+        />
         
         {/* Name and role overlay */}
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
