@@ -37,28 +37,57 @@ export async function generateMetadata(): Promise<Metadata> {
     query: settingsQuery,
     stega: false,
   });
-  const title = settings?.title || demo.title;
-  const description = settings?.description || demo.description;
+  const title = settings?.title || "Future Holders | Digital Innovation Studio";
+  const description = settings?.description || "We build digital experiences that shape the future. Web design, development, and digital strategy services.";
 
   const ogImage = resolveOpenGraphImage(settings?.ogImage);
   let metadataBase: URL | undefined = undefined;
   try {
     metadataBase = settings?.ogImage?.metadataBase
       ? new URL(settings.ogImage.metadataBase)
-      : undefined;
+      : new URL("https://www.futureholders.com");
   } catch {
-    // ignore
+    metadataBase = new URL("https://www.futureholders.com");
   }
+  
   return {
     metadataBase,
     title: {
       template: `%s | ${title}`,
       default: title,
     },
-    description: toPlainText(description),
+    description: typeof description === 'string' ? description : toPlainText(description),
     openGraph: {
+      title: "Future Holders",
+      description: "Digital innovation studio creating future-ready experiences",
+      url: metadataBase,
+      siteName: "Future Holders",
+      images: ogImage ? [ogImage] : [],
+      locale: "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Future Holders",
+      description: "Digital innovation studio creating future-ready experiences",
       images: ogImage ? [ogImage] : [],
     },
+    themeColor: "#E0F2FE", // Your brand-foam color or primary brand color
+    colorScheme: "light",
+    icons: {
+      icon: "/favicon.ico",
+      shortcut: "/favicon-16x16.png",
+      apple: "/apple-touch-icon.png",
+    },
+    manifest: "/site.webmanifest",
+    keywords: [
+      "web design",
+      "digital agency",
+      "web development",
+      "digital strategy",
+      "future holders",
+      "innovation studio"
+    ],
   };
 }
 
@@ -71,8 +100,19 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+      <head>
+        {/* Safari 15+ theme color meta tags */}
+        <meta name="theme-color" content="#E0F2FE" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#0C4A6E" media="(prefers-color-scheme: dark)" />
+        
+        {/* Windows 11 tile color */}
+        <meta name="msapplication-TileColor" content="#E0F2FE" />
+        
+        {/* Apple touch icon */}
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+      </head>
+      
       <body className="bg-brand-foam text-brand-dark font-sans">
-        {/* Added relative positioning for z-index control */}
         <div className="relative min-h-screen flex flex-col">
           <Toaster />
           {isDraftMode && (
@@ -83,12 +123,10 @@ export default async function RootLayout({
           )}
           <SanityLive onError={handleError} />
           
-          {/* Header now properly layered */}
           <div className="sticky top-0 z-50">
             <Header />
           </div>
           
-          {/* Main content with lower z-index */}
           <main className="flex-1 z-10">
             {children}
           </main>
