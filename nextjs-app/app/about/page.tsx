@@ -1,5 +1,6 @@
 import { Libre_Baskerville, Source_Sans_3 as Source_Sans_Pro } from "next/font/google";
 import { Zap, Cpu, Utensils, Mic2, Share2, Users, Globe, Award, HeartHandshake } from 'lucide-react';
+import Link from "next/link";
 
 const baskerville = Libre_Baskerville({
   subsets: ["latin"],
@@ -73,7 +74,7 @@ export default function AboutPage() {
             Our Story
           </h1>
           <p className="text-xl text-brand-foam/90 max-w-3xl mx-auto">
-            Pioneering multi-service solutions for Tanzania's evolving business landscape
+            Pioneering multi-service solutions for Tanzania&apos;s evolving business landscape
           </p>
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-24 bg-brand-foam clip-path-wave"></div>
@@ -169,13 +170,13 @@ export default function AboutPage() {
             Our diverse team of experts brings together technology and creativity to deliver exceptional results
           </p>
           <div className="flex justify-center">
-            <a 
+            <Link 
               href="/team" 
               className="inline-flex items-center justify-center gap-2 bg-white text-brand-dark font-bold px-8 py-4 rounded-lg hover:bg-brand-foam transition-all duration-300 shadow-depth hover:shadow-glow"
             >
               <Users className="w-5 h-5" />
               Explore Our Team
-            </a>
+            </Link>
           </div>
         </div>
       </section>
