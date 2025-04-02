@@ -2,10 +2,66 @@ import HeroSection from "@/app/components/home/HeroSection";
 import ServicesGrid from "@/app/components/home/ServicesGrid";
 import TestimonialSection from "@/app/components/home/TestimonialSection";
 import CTASection from "@/app/components/home/CTASection";
-import { AllPosts} from "@/app/components/Posts";
-import { AllFeatureUpdates } from "@/app/components/FeatureUpdates";
 import { sanityFetch } from "@/sanity/lib/live";
 import { groq } from "next-sanity";
+import Link from "next/link";
+import { ChevronRight, Rocket, Code, Zap } from "lucide-react";
+import { format, parseISO } from "date-fns";
+
+// Import your Post component
+import {Post} from "@/app/components/Posts";
+
+// Compact FeatureUpdate component variant
+function FeatureUpdateCompact({ update }) {
+  const {
+    title,
+    version,
+    releaseDate,
+    updateType,
+    summary,
+    slug,
+    isHighlight
+  } = update;
+
+  const updateIcons = {
+    feature: <Rocket className="w-4 h-4 text-brand-accent" />,
+    improvement: <Code className="w-4 h-4 text-brand-blue" />,
+    fix: <Zap className="w-4 h-4 text-brand-teal" />
+  };
+
+  return (
+    <article className="group border-b border-brand-medium/10 pb-6 last:border-0 last:pb-0">
+      <div className="flex gap-4">
+        <div className="flex-1">
+          <div className="flex items-center gap-2 text-sm text-brand-dark/60 mb-1">
+            {updateIcons[updateType] || updateIcons.feature}
+            <span>v{version}</span>
+            <span>•</span>
+            <span className="capitalize">{updateType}</span>
+            {isHighlight && (
+              <>
+                <span>•</span>
+                <span className="text-brand-accent font-medium">Highlight</span>
+              </>
+            )}
+          </div>
+          <h3 className="text-lg font-bold text-brand-dark group-hover:text-brand-blue transition-colors">
+            {title}
+          </h3>
+          <p className="text-brand-dark/80 mt-1 line-clamp-2">
+            {summary}
+          </p>
+          <time 
+            dateTime={releaseDate} 
+            className="text-xs text-brand-dark/50 mt-2 block"
+          >
+            {format(parseISO(releaseDate), 'MMMM d, yyyy')}
+          </time>
+        </div>
+      </div>
+    </article>
+  );
+}
 
 // Combined content query
 const homepageContentQuery = groq`{
@@ -96,7 +152,7 @@ export default async function Home() {
               </h3>
               <div className="space-y-6">
                 {updates.map((update) => (
-                  <FeatureUpdate key={update._id} update={update} variant="compact" />
+                  <FeatureUpdateCompact key={update._id} update={update} />
                 ))}
               </div>
               {updates.length >= 3 && (
@@ -119,64 +175,5 @@ export default async function Home() {
       <TestimonialSection />
       <CTASection />
     </div>
-  );
-}
-
-// Compact Post Variant (add to your Post component)
-function PostCompact({ post }) {
-  const { title, subtitle, slug, date, serviceType } = post;
-  
-  return (
-    <article className="group">
-      <Link href={`/posts/${slug}`} className="block">
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <div className="flex items-center gap-3 text-sm text-brand-dark/60 mb-1">
-              <DateComponent dateString={date} />
-              {serviceType?.title && (
-                <span className="text-brand-accent font-medium">{serviceType.title}</span>
-              )}
-            </div>
-            <h3 className="text-xl font-bold text-brand-dark group-hover:text-brand-accent transition-colors">
-              {title}
-            </h3>
-            {subtitle && (
-              <p className="text-brand-dark/80 mt-1 line-clamp-2">
-                {subtitle}
-              </p>
-            )}
-          </div>
-        </div>
-      </Link>
-    </article>
-  );
-}
-
-// Compact FeatureUpdate Variant (add to your FeatureUpdate component)
-function FeatureUpdateCompact({ update }) {
-  const { title, version, releaseDate, updateType, summary, slug } = update;
-  
-  return (
-    <article className="group">
-      <div className="flex gap-4">
-        <div className="flex-1">
-          <div className="flex items-center gap-3 text-sm text-brand-dark/60 mb-1">
-            <span>v{version}</span>
-            <span>•</span>
-            <span>{updateType}</span>
-            <span>•</span>
-            <time dateTime={releaseDate}>
-              {format(parseISO(releaseDate), 'MMM d')}
-            </time>
-          </div>
-          <h3 className="text-xl font-bold text-brand-dark">
-            {title}
-          </h3>
-          <p className="text-brand-dark/80 mt-1 line-clamp-2">
-            {summary}
-          </p>
-        </div>
-      </div>
-    </article>
   );
 }

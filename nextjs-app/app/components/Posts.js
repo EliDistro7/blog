@@ -20,7 +20,7 @@ const sourceSans = Source_Sans_Pro({
   variable: "--font-source-sans"
 });
 
-const Post = ({ post }) => {
+export const Post = ({ post }) => {
   const { 
     _id, 
     title, 
