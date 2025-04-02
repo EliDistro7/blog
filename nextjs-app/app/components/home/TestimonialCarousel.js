@@ -40,9 +40,9 @@ export default function TestimonialCarousel() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <blockquote className="text-xl italic mb-6">
-                "{testimonial.quote}"
-              </blockquote>
+             <blockquote className="text-xl italic mb-6">
+  &ldquo;{testimonial.quote}&rdquo;
+</blockquote>
               <p className="font-bold">— {testimonial.author}</p>
             </motion.div>
           </SwiperSlide>

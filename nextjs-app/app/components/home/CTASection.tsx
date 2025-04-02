@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function CTASection() {
   return (
     <section className="container mx-auto py-20 px-4 text-center">
@@ -9,12 +11,12 @@ export default function CTASection() {
           Whether it&apos;s a website, event, or social media strategy—we&apos;ve got you covered.
         </p>
       </div>
-      <a 
+      <Link 
         href="/contact" 
         className="inline-block px-8 py-4 bg-gradient-to-r from-brand-accent to-brand-teal text-white rounded-full font-bold hover:shadow-glow hover:bg-opacity-90 transition-all"
       >
         Contact Us Today
-      </a>
+      </Link>
     </section>
   );
 }
