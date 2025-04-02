@@ -2,6 +2,7 @@ import {person} from './documents/person'
 import {page} from './documents/page'
 import { program } from './documents/program'
 import {post} from './documents/post'
+import { featureUpdate } from './documents/featureUpdate'
 import {companyProfile} from './documents/companyProfile'
 import {event} from './documents/event'
 import {callToAction} from './objects/callToAction'
@@ -22,6 +23,7 @@ export const schemaTypes = [
   // References
   post,
  program ,
+ featureUpdate,
   person,
   // Objects
   blockContent,
