@@ -57,8 +57,8 @@ export default function MCServicesPage() {
               Events That Shine
             </h2>
             <p className="text-xl text-gray-700 mb-8">
-              "Our MCs blend <span className="font-semibold text-brand-goldDark">professional polish</span> with 
-              <span className="font-semibold text-brand-goldDark"> Tanzanian warmth</span> - creating unforgettable moments"
+              Our MCs blend <span className="font-semibold text-brand-goldDark">professional polish</span> with 
+              <span className="font-semibold text-brand-goldDark"> Tanzanian warmth</span> - creating unforgettable moments
             </p>
           </div>
         </div>
@@ -146,8 +146,8 @@ export default function MCServicesPage() {
           </h2>
           <div className="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-brand-gold/20">
             <blockquote className="text-xl italic mb-6">
-              "Our wedding MC blended modern energy with traditional respect - 
-              keeping 300 guests engaged for 8 hours!"
+              Our wedding MC blended modern energy with traditional respect - 
+              keeping 300 guests engaged for 8 hours!
             </blockquote>
             <div className="w-16 h-1 bg-brand-gold mx-auto mb-4"></div>
             <p className="font-bold">- Sarah & James, Dar es Salaam</p>
