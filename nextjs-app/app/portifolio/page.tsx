@@ -73,7 +73,7 @@ export default function Portfolio() {
             Have a project that could be our next case study?
           </h3>
           <button className="px-8 py-3 bg-brand-accent hover:bg-brand-accent/90 text-white rounded-full font-bold shadow-depth">
-            Let's Discuss Your Idea
+            Let&apos;s Discuss Your Idea 
           </button>
         </div>
       </div>

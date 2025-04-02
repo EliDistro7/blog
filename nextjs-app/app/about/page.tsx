@@ -185,7 +185,7 @@ export default function AboutPage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-brand-dark mb-4`}>
-              Tanzania's Trusted Multi-Service Partner
+              Tanzania&apos;s Trusted Multi-Service Partner
             </h2>
             <p className="text-brand-dark/80 text-lg">
               Serving clients across East Africa with our unique integrated approach
@@ -199,7 +199,7 @@ export default function AboutPage() {
                   Our Footprint
                 </h3>
                 <p className="text-brand-dark/80 mb-6">
-                  From our headquarters in Dar es Salaam, we've expanded our services to Nairobi and Cape Town, bringing our unique combination of digital expertise and event services to clients across East Africa.
+                  From our headquarters in Dar es Salaam, we&apos;ve expanded our services to Nairobi and Cape Town, bringing our unique combination of digital expertise and event services to clients across East Africa.
                 </p>
                 <ul className="space-y-3">
                   <li className="flex items-center gap-3">

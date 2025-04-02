@@ -172,20 +172,20 @@ export default function ContactPage() {
                     </div>
                     <p className="text-brand-dark/80 mb-3 text-sm">{service.details}</p>
                     <div className="space-y-2">
-                      <a 
+                      <Link 
                         href={`mailto:${service.email}`} 
                         className="flex items-center gap-2 text-brand-dark hover:text-brand-accent text-sm"
                       >
                         <Mail className="w-4 h-4" />
                         {service.email}
-                      </a>
-                      <a 
+                      </Link>
+                      <Link 
                         href={`tel:${service.phone.replace(/\D/g, '')}`} 
                         className="flex items-center gap-2 text-brand-dark hover:text-brand-accent text-sm"
                       >
                         <Phone className="w-4 h-4" />
                         {service.phone}
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 ))}
@@ -232,7 +232,7 @@ export default function ContactPage() {
             Meet Our Expert Team
           </h2>
           <p className="text-brand-foam/90 mb-8 text-lg max-w-2xl mx-auto">
-            Discover the talented professionals behind Future Holders' diverse services
+            Discover the talented professionals behind Future Holders diverse services
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
