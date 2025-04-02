@@ -1,5 +1,6 @@
 import { Linkedin, Twitter, Instagram, Mail } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function TeamPage() {
   const departmentHeads = [
@@ -166,13 +167,13 @@ export default function TeamPage() {
           <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
             Get in touch with our team to discuss how we can collaborate on your next project.
           </p>
-          <a 
+          <Link
             href="/contact" 
             className="inline-flex items-center justify-center gap-2 bg-white text-brand-dark font-bold px-8 py-4 rounded-full hover:bg-brand-foam transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             <Mail className="w-5 h-5" />
             Contact Our Team
-          </a>
+          </Link>
         </div>
       </section>
     </div>
@@ -241,15 +242,15 @@ function TeamMemberCard({
         
         {/* Social Links */}
         <div className="flex gap-3 mt-auto">
-          <a href="#" className="text-brand-dark hover:text-brand-blue transition-colors">
+          <Link href="#" className="text-brand-dark hover:text-brand-blue transition-colors">
             <Linkedin className="w-5 h-5" />
-          </a>
-          <a href="#" className="text-brand-dark hover:text-brand-blue transition-colors">
+          </Link>
+          <Link href="#" className="text-brand-dark hover:text-brand-blue transition-colors">
             <Twitter className="w-5 h-5" />
-          </a>
-          <a href="#" className="text-brand-dark hover:text-brand-blue transition-colors">
+          </Link>
+          <Link href="#" className="text-brand-dark hover:text-brand-blue transition-colors">
             <Instagram className="w-5 h-5" />
-          </a>
+          </Link>
         </div>
       </div>
     </div>
