@@ -1,5 +1,5 @@
 import { Libre_Baskerville, Source_Sans_3 as Source_Sans_Pro } from "next/font/google";
-import Link from "next/link";
+import { Zap, Cpu, Utensils, Mic2, Share2, Users, Globe, Award, HeartHandshake } from 'lucide-react';
 
 const baskerville = Libre_Baskerville({
   subsets: ["latin"],
@@ -14,147 +14,216 @@ const sourceSans = Source_Sans_Pro({
 });
 
 export default function AboutPage() {
+  const services = [
+    {
+      name: "Web Design",
+      icon: <Cpu className="w-6 h-6 text-brand-accent" />,
+      description: "Cutting-edge digital solutions that propel your business forward",
+      color: "bg-brand-accent/10",
+      border: "border-brand-accent/20"
+    },
+    {
+      name: "Catering",
+      icon: <Utensils className="w-6 h-6 text-brand-coral" />,
+      description: "Exceptional culinary experiences for all occasions",
+      color: "bg-brand-coral/10",
+      border: "border-brand-coral/20"
+    },
+    {
+      name: "Social Media",
+      icon: <Share2 className="w-6 h-6 text-brand-teal" />,
+      description: "Strategic digital presence that amplifies your brand",
+      color: "bg-brand-teal/10",
+      border: "border-brand-teal/20"
+    },
+    {
+      name: "MC Services",
+      icon: <Mic2 className="w-6 h-6 text-brand-foam" />,
+      description: "Dynamic hosting that elevates your events",
+      color: "bg-brand-foam/10",
+      border: "border-brand-foam/20"
+    }
+  ];
+
+  const values = [
+    {
+      name: "Innovation",
+      description: "Pioneering solutions that set industry standards",
+      icon: <Zap className="w-6 h-6 text-brand-accent" />
+    },
+    {
+      name: "Excellence",
+      description: "Uncompromising quality in every service delivered",
+      icon: <Award className="w-6 h-6 text-brand-blue" />
+    },
+    {
+      name: "Collaboration",
+      description: "Building lasting partnerships for mutual success",
+      icon: <HeartHandshake className="w-6 h-6 text-brand-coral" />
+    }
+  ];
+
   return (
-    <div className={`min-h-screen ${sourceSans.variable} font-sans`}>
+    <div className={`min-h-screen ${sourceSans.variable} font-sans bg-brand-foam text-brand-dark`}>
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-ocean-deep via-ocean-medium to-ocean-teal py-32 text-center">
-        <div className="container relative z-10">
-          <h1 className={`text-4xl md:text-6xl font-bold ${baskerville.variable} font-serif text-ocean-foam mb-6`}>
-            About SOA Tanzania
+      <div className="relative bg-gradient-to-br from-brand-dark to-brand-blue py-32 text-center">
+        <div className="absolute inset-0 opacity-10 bg-[url('/images/circuit-pattern.svg')] bg-[size:1200px]"></div>
+        <div className="container relative z-10 px-4">
+          <h1 className={`text-4xl md:text-6xl font-bold ${baskerville.variable} font-serif text-white mb-6`}>
+            Our Story
           </h1>
-          <p className="text-xl text-ocean-light max-w-3xl mx-auto">
-            Protecting Tanzania's marine heritage through science, community, and action
+          <p className="text-xl text-brand-foam/90 max-w-3xl mx-auto">
+            Pioneering multi-service solutions for Tanzania's evolving business landscape
           </p>
         </div>
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-brand-foam clip-path-wave"></div>
       </div>
 
       {/* Mission Section */}
-      <div className="container py-16">
-        <div className="max-w-4xl mx-auto">
-          <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-ocean-deep mb-8 text-center`}>
-            Our Mission
+      <section className="container py-20 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-brand-dark mb-6`}>
+            Redefining Possibilities
           </h2>
-          
-          <div className="space-y-6 text-ocean-dark/90">
-            <div className="p-6 bg-ocean-foam/30 rounded-xl border border-ocean-medium/20">
-              <h3 className={`text-xl font-bold ${baskerville.variable} font-serif text-ocean-deep mb-3`}>
-                Conservation First
-              </h3>
-              <p>
-                Save Our Oceans Africa Tanzania is dedicated to preserving the rich marine biodiversity 
-                along Tanzania's coastline through community-led conservation, education programs, and 
-                sustainable fishing initiatives.
-              </p>
-            </div>
-            
-            <div className="p-6 bg-ocean-foam/30 rounded-xl border border-ocean-medium/20">
-              <h3 className={`text-xl font-bold ${baskerville.variable} font-serif text-ocean-deep mb-3`}>
-                Our Growth
-              </h3>
-              <p>
-                Founded in 2018, we've grown from a small group of marine enthusiasts to a network of 
-                2,800 local volunteers across 35 coastal communities.
-              </p>
-            </div>
-            
-            <div className="p-6 bg-ocean-foam/30 rounded-xl border border-ocean-medium/20">
-              <h3 className={`text-xl font-bold ${baskerville.variable} font-serif text-ocean-deep mb-3`}>
-                Three Pillars
-              </h3>
-              <p>
-                Our work focuses on: <span className="text-ocean-teal font-semibold">protection</span> of marine ecosystems, 
-                <span className="text-ocean-teal font-semibold"> education</span> of coastal communities, and 
-                <span className="text-ocean-teal font-semibold"> sustainable development</span> of ocean resources.
-              </p>
-            </div>
+          <div className="space-y-6 text-brand-dark/90">
+            <p>
+              Founded in Dar es Salaam, Future Holders emerged from a vision to create a one-stop solution for businesses navigating the digital and physical event spaces. We bridge the gap between technology and hospitality, offering integrated services that cover all aspects of modern business needs.
+            </p>
+            <p>
+              What began as a small web design studio has blossomed into a full-service agency, expanding our expertise to include catering, event hosting, and digital marketing - all while maintaining our commitment to technological innovation.
+            </p>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Impact Section */}
-      <div className="bg-ocean-foam py-20">
-        <div className="container">
-          <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-ocean-deep mb-12 text-center`}>
-            Our Impact in Tanzania
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            <div className="bg-white p-6 rounded-xl text-center shadow-sm border border-ocean-medium/20">
-              <div className="text-5xl font-bold text-ocean-teal mb-3">35+</div>
-              <h3 className="text-xl font-bold text-ocean-deep mb-2">Coastal Communities</h3>
-              <p className="text-ocean-dark/80">Engaged in conservation programs</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl text-center shadow-sm border border-ocean-medium/20">
-              <div className="text-5xl font-bold text-ocean-teal mb-3">18T</div>
-              <h3 className="text-xl font-bold text-ocean-deep mb-2">Plastic Removed</h3>
-              <p className="text-ocean-dark/80">From beaches and ocean since 2018</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl text-center shadow-sm border border-ocean-medium/20">
-              <div className="text-5xl font-bold text-ocean-teal mb-3">6</div>
-              <h3 className="text-xl font-bold text-ocean-deep mb-2">Protected Areas</h3>
-              <p className="text-ocean-dark/80">Established with local partners</p>
-            </div>
+      {/* Services Showcase */}
+      <section className="bg-gradient-to-b from-white to-brand-foam/50 py-20 px-4">
+        <div className="container max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-brand-dark mb-4`}>
+              Our Integrated Services
+            </h2>
+            <p className="text-brand-dark/80 text-lg">
+              Comprehensive solutions for complete business transformation
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {services.map((service, index) => (
+              <div 
+                key={index} 
+                className={`p-6 rounded-xl ${service.color} border ${service.border} hover:shadow-glow transition-all`}
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className={`p-3 rounded-lg ${service.color.replace('10', '20')}`}>
+                    {service.icon}
+                  </div>
+                  <h3 className={`text-xl font-bold ${baskerville.variable} font-serif`}>
+                    {service.name}
+                  </h3>
+                </div>
+                <p className="text-brand-dark/80">{service.description}</p>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Values Section */}
-      <div className="container py-20">
-        <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-ocean-deep mb-12 text-center`}>
-          Our Core Values
-        </h2>
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          <div className="p-6 bg-ocean-deep/5 rounded-xl border border-ocean-deep/10">
-            <h3 className={`text-xl font-bold ${baskerville.variable} font-serif text-ocean-deep mb-3`}>
-              Community
-            </h3>
-            <p className="text-ocean-dark/90">
-              Empowering local communities as stewards of their marine resources through education and capacity building.
+      <section className="container py-20 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-brand-dark mb-4`}>
+              Our Core Values
+            </h2>
+            <p className="text-brand-dark/80 text-lg">
+              The principles that guide every decision we make
             </p>
           </div>
-          <div className="p-6 bg-ocean-deep/5 rounded-xl border border-ocean-deep/10">
-            <h3 className={`text-xl font-bold ${baskerville.variable} font-serif text-ocean-deep mb-3`}>
-              Sustainability
-            </h3>
-            <p className="text-ocean-dark/90">
-              Promoting practices that balance ecological health with community needs for long-term impact.
-            </p>
-          </div>
-          <div className="p-6 bg-ocean-deep/5 rounded-xl border border-ocean-deep/10">
-            <h3 className={`text-xl font-bold ${baskerville.variable} font-serif text-ocean-deep mb-3`}>
-              Transparency
-            </h3>
-            <p className="text-ocean-dark/90">
-              Maintaining open communication about our work, challenges, and achievements with all stakeholders.
-            </p>
-          </div>
-        </div>
-      </div>
 
-      {/* CTA Section */}
-      <div className="bg-gradient-to-r from-ocean-medium to-ocean-teal py-20">
-        <div className="container text-center">
-          <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-white mb-6`}>
-            Ready to make a difference?
-          </h2>
-          <p className="text-ocean-foam/90 max-w-3xl mx-auto mb-8 text-lg">
-            Join our network of ocean protectors and contribute to Tanzania's marine conservation efforts.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link
-              href="/volunteer"
-              className="px-8 py-4 rounded-full bg-ocean-foam hover:bg-white text-ocean-deep font-bold transition-colors shadow-depth hover:shadow-glow text-lg"
-            >
-              Volunteer With Us
-            </Link>
-            <Link
-              href="/donate"
-              className="px-8 py-4 rounded-full border-2 border-ocean-foam hover:bg-ocean-foam/10 text-ocean-foam font-bold transition-colors text-lg"
-            >
-              Support Our Work
-            </Link>
+          <div className="grid md:grid-cols-3 gap-8">
+            {values.map((value, index) => (
+              <div key={index} className="text-center">
+                <div className="flex justify-center mb-4">
+                  <div className="p-4 bg-brand-foam rounded-full">
+                    {value.icon}
+                  </div>
+                </div>
+                <h3 className={`text-xl font-bold ${baskerville.variable} font-serif text-brand-dark mb-2`}>
+                  {value.name}
+                </h3>
+                <p className="text-brand-dark/80">{value.description}</p>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Team CTA */}
+      <section className="bg-gradient-to-r from-brand-blue to-brand-accent py-16 px-4">
+        <div className="container max-w-4xl mx-auto text-center">
+          <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-white mb-6`}>
+            Meet The Architects of Tomorrow
+          </h2>
+          <p className="text-brand-foam/90 mb-8 text-lg max-w-2xl mx-auto">
+            Our diverse team of experts brings together technology and creativity to deliver exceptional results
+          </p>
+          <div className="flex justify-center">
+            <a 
+              href="/team" 
+              className="inline-flex items-center justify-center gap-2 bg-white text-brand-dark font-bold px-8 py-4 rounded-lg hover:bg-brand-foam transition-all duration-300 shadow-depth hover:shadow-glow"
+            >
+              <Users className="w-5 h-5" />
+              Explore Our Team
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Global Reach */}
+      <section className="container py-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-brand-dark mb-4`}>
+              Tanzania's Trusted Multi-Service Partner
+            </h2>
+            <p className="text-brand-dark/80 text-lg">
+              Serving clients across East Africa with our unique integrated approach
+            </p>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-depth p-8 border border-brand-foam/20">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <h3 className={`text-2xl font-bold ${baskerville.variable} font-serif text-brand-dark mb-4`}>
+                  Our Footprint
+                </h3>
+                <p className="text-brand-dark/80 mb-6">
+                  From our headquarters in Dar es Salaam, we've expanded our services to Nairobi and Cape Town, bringing our unique combination of digital expertise and event services to clients across East Africa.
+                </p>
+                <ul className="space-y-3">
+                  <li className="flex items-center gap-3">
+                    <Globe className="w-5 h-5 text-brand-accent" />
+                    <span>3 Countries</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <Users className="w-5 h-5 text-brand-blue" />
+                    <span>50+ Professionals</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <Award className="w-5 h-5 text-brand-coral" />
+                    <span>100+ Successful Projects</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="bg-brand-foam/30 rounded-lg h-64 flex items-center justify-center">
+                {/* Replace with your map component or image */}
+                <Globe className="w-16 h-16 text-brand-blue/30" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
