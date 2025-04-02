@@ -10,12 +10,14 @@ import { Toaster } from "sonner";
 
 import DraftModeToast from "@/app/components/DraftModeToast";
 import Footer from "@/app/components/Footer";
+//import {GoogleTranslate} from "@/app/components/GoogleTranslate";
 import Header from "@/app/components/Header";
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch, SanityLive } from "@/sanity/lib/live";
 import { settingsQuery } from "@/sanity/lib/queries";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import { handleError } from "./client-utils";
+
 
 // Fonts
 const inter = Inter({
@@ -110,6 +112,7 @@ export default async function RootLayout({
         
         {/* Apple touch icon */}
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+      
       </head>
       
       <body className="bg-brand-foam text-brand-dark font-sans">

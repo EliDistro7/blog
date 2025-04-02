@@ -6,6 +6,8 @@ import { Menu, X, Mic2, Share2, Camera, Utensils, Users } from 'lucide-react'
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+  
+
   // Lock body scroll when menu is open
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'auto'

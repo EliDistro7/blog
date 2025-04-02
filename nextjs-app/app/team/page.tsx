@@ -1,6 +1,7 @@
-import { Linkedin, Twitter, Instagram, Mail } from 'lucide-react';
+import { Linkedin, Twitter, Instagram, Mail, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function TeamPage() {
   const departmentHeads = [
@@ -180,12 +181,14 @@ export default function TeamPage() {
   );
 }
 
+
+
 function TeamMemberCard({
   name,
   role,
   department,
   bio,
-  image,
+  image, // Expecting path relative to public folder (e.g., '/team/john-doe.jpg')
   tzExperience,
   badge,
   skills = []
@@ -199,29 +202,64 @@ function TeamMemberCard({
   badge: string;
   skills?: string[];
 }) {
+  const [imageError, setImageError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  // Validate and format the image path
+  const getImagePath = () => {
+    if (!image) return '';
+    // Ensure path starts with slash but doesn't have double slashes
+    return `${image.startsWith('/') ? '' : '/'}${image}`.replace(/\/+/g, '/');
+  };
+
+  const imagePath = getImagePath();
+
   return (
-    <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all h-full flex flex-col">
+    <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all h-full flex flex-col group">
       {/* Image with department color overlay */}
-      <div className="relative h-80">
-        <Image
-          src={image}
-          alt={name}
-          fill
-          className="object-cover"
-        />
+      <div className="relative h-80 bg-gray-100">
+        {imagePath && !imageError ? (
+          <>
+            <Image
+              src={imagePath}
+              alt={`${name}, ${role} at ${department}`}
+              fill
+              className={`object-cover transition-opacity duration-300 ${
+                imageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+              onLoad={() => setImageLoaded(true)}
+              onError={() => setImageError(true)}
+              priority={false}
+            />
+            {/* Show loading skeleton while image loads */}
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
+            )}
+          </>
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-200">
+            <User className="w-16 h-16 text-gray-400" />
+            <span className="sr-only">Image not available</span>
+          </div>
+        )}
+        
+        {/* Name and role overlay */}
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
           <h3 className="text-xl font-bold text-white">{name}</h3>
           <p className="text-brand-foam/90">{role}</p>
         </div>
-        <div className="absolute top-4 right-4 bg-brand-yellow text-brand-foam text-xs font-bold px-3 py-1 rounded-full">
+        
+        {/* Badge */}
+        <div className="absolute top-4 right-4 bg-brand-yellow text-brand-foam text-xs font-bold px-3 py-1 rounded-full transition-transform group-hover:scale-105">
           {badge}
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-6 flex-grow">
+      <div className="p-6 flex-grow flex flex-col">
         <div className="flex items-center gap-2 mb-3">
-          <span className="text-xs font-medium bg-brand-foam px-2 py-1 rounded-full">
+          <span className="text-xs font-medium bg-brand-foam/10 text-brand-foam px-2 py-1 rounded-full">
             {department}
           </span>
           <span className="text-xs font-medium bg-brand-green/10 text-brand-green px-2 py-1 rounded-full">
@@ -229,26 +267,43 @@ function TeamMemberCard({
           </span>
         </div>
         
-        <p className="text-gray-700 mb-4">{bio}</p>
+        <p className="text-gray-700 mb-4 line-clamp-3">{bio}</p>
         
         {/* Skills chips */}
-        <div className="mb-4 flex flex-wrap gap-2">
-          {skills.map((skill, i) => (
-            <span key={i} className="text-xs bg-brand-blue/10 text-brand-blue px-2 py-1 rounded-full">
-              {skill}
-            </span>
-          ))}
-        </div>
+        {skills.length > 0 && (
+          <div className="mb-4 flex flex-wrap gap-2">
+            {skills.map((skill, i) => (
+              <span 
+                key={`${name}-skill-${i}`} 
+                className="text-xs bg-brand-blue/10 text-brand-blue px-2 py-1 rounded-full"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        )}
         
         {/* Social Links */}
         <div className="flex gap-3 mt-auto">
-          <Link href="#" className="text-brand-dark hover:text-brand-blue transition-colors">
+          <Link 
+            href="#" 
+            aria-label={`${name}'s LinkedIn profile`}
+            className="text-brand-dark hover:text-brand-blue transition-colors hover:scale-110"
+          >
             <Linkedin className="w-5 h-5" />
           </Link>
-          <Link href="#" className="text-brand-dark hover:text-brand-blue transition-colors">
+          <Link 
+            href="#" 
+            aria-label={`${name}'s Twitter profile`}
+            className="text-brand-dark hover:text-brand-blue transition-colors hover:scale-110"
+          >
             <Twitter className="w-5 h-5" />
           </Link>
-          <Link href="#" className="text-brand-dark hover:text-brand-blue transition-colors">
+          <Link 
+            href="#" 
+            aria-label={`${name}'s Instagram profile`}
+            className="text-brand-dark hover:text-brand-blue transition-colors hover:scale-110"
+          >
             <Instagram className="w-5 h-5" />
           </Link>
         </div>
