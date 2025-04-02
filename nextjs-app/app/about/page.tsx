@@ -31,7 +31,7 @@ export default function AboutPage() {
       border: "border-brand-coral/20"
     },
     {
-      name: "Social Media",
+      name: "Social Media management",
       icon: <Share2 className="w-6 h-6 text-brand-teal" />,
       description: "Strategic digital presence that amplifies your brand",
       color: "bg-brand-teal/10",
@@ -164,7 +164,7 @@ export default function AboutPage() {
       <section className="bg-gradient-to-r from-brand-blue to-brand-accent py-16 px-4">
         <div className="container max-w-4xl mx-auto text-center">
           <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-white mb-6`}>
-            Meet The Architects of Tomorrow
+            Meet The Architects of Tomorrow 
           </h2>
           <p className="text-brand-foam/90 mb-8 text-lg max-w-2xl mx-auto">
             Our diverse team of experts brings together technology and creativity to deliver exceptional results
