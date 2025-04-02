@@ -5,13 +5,25 @@ const nextConfig: NextConfig = {
     SC_DISABLE_SPEEDY: "false",
   },
   images: {
-    domains: ['picsum.photos'],
+   
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'cdn.sanity.io',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+        pathname: '/team/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'blog-nextjs-app-puce.vercel.app', // Replace with your actual domain
+        port: '',
+        pathname: '/team/**',
       },
       // Add your other image domains if needed
     ],

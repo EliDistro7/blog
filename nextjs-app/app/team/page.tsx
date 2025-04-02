@@ -18,7 +18,7 @@ export default function TeamPage() {
       role: "Head of Sales and Marketing",
       department: "Sales & Marketing",
       bio: "8+ years driving revenue growth and brand expansion. Specializes in digital marketing strategies and sales pipeline optimization.",
-      image: allanImage,
+      image: '/team/allan.jpeg',
       tzExperience: "5+ years growing Tanzanian brands",
       badge: "Certified Sales Leader (CPSL)",
       skills: [
@@ -34,7 +34,7 @@ export default function TeamPage() {
       role: "Head MC",
       department: "Master of Ceremonies",
       bio: "Charismatic host with 8 years experience in weddings and corporate events across Tanzania.",
-      image: japhetImage,
+      image: '/team/japhet.jpeg',
       tzExperience: "Known as 'Bwana Shindano' on TZ reality TV",
       badge: "Tanzania Events Host of the Year 2022",
       skills: [
@@ -50,7 +50,7 @@ export default function TeamPage() {
       role: "Chief Editor",
       department: "Content Editor",
       bio: "Digital content editor growing brands across Africa. Fluent in Swahili/English content creation.",
-      image: roseImage,
+      image: '/team/benny.jpeg',
       tzExperience: "Built 5 Tanzanian brands to 100K+ followers",
       badge: "Meta Certified Professional",
       skills: [
@@ -66,7 +66,7 @@ export default function TeamPage() {
       role: "Lead Developer",
       department: "Technology",
       bio: "Full stack developer with expertise in modern web technologies. Architect of our digital platforms and technical vision.",
-      image: bariImage,
+      image: '/team/bari4.png',
       tzExperience: "Building Tanzania's digital future",
       badge: "Lead Developer",
       skills: [
@@ -83,7 +83,7 @@ export default function TeamPage() {
       role: "Head of Catering",
       department: "Catering Services",
       bio: "Gourmet chef trained in Zanzibar and Paris. Creates unforgettable culinary experiences.",
-      image: bennyImage,
+      image: '/team/benny.jpeg',
       tzExperience: "Former head chef at Serengeti Safari Lodge",
       badge: "Tanzania Culinary Award Winner",
       skills: [
@@ -214,6 +214,23 @@ function TeamMemberCard({
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
+
+   // Validate and format the absolute URL
+   const getAbsoluteImageUrl = () => {
+    try {
+      // If it's already a valid URL, return it
+      if (image.startsWith('http://') || image.startsWith('https://')) {
+        return image;
+      }
+      // If it's a path, prepend your base URL
+      return `${process.env.NEXT_PUBLIC_BASE_URL || ''}${image.startsWith('/') ? '' : '/'}${image}`;
+    } catch {
+      return ''; // Return empty string if URL construction fails
+    }
+  };
+
+  const imageUrl = getAbsoluteImageUrl();
+
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all h-full flex flex-col group">
       {/* Image container with loading/error states */}
@@ -234,21 +251,24 @@ function TeamMemberCard({
         )}
 
         {/* Actual image */}
-        <Image
-          src={image}
-          alt={`${name}, ${role} at ${department}`}
-          fill
-          className={`object-cover transition-opacity duration-300 ${
-            isLoading ? 'opacity-0' : 'opacity-100'
-          }`}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-          onLoad={() => setIsLoading(false)}
-          onError={() => {
-            setIsLoading(false);
-            setHasError(true);
-          }}
-          priority={false}
-        />
+       {/* Actual image */}
+       {imageUrl && (
+          <Image
+            src={imageUrl}
+            alt={`${name}, ${role} at ${department}`}
+            fill
+            className={`object-cover transition-opacity duration-300 ${
+              isLoading ? 'opacity-0' : 'opacity-100'
+            }`}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+            onLoad={() => setIsLoading(false)}
+            onError={() => {
+              setIsLoading(false);
+              setHasError(true);
+            }}
+            unoptimized={!imageUrl.startsWith(process.env.NEXT_PUBLIC_BASE_URL || '')}
+          />
+        )}
 
         {/* Name and role overlay (only shown when image is loaded) */}
         {!isLoading && !hasError && (
