@@ -61,13 +61,6 @@ export type SanityFileAsset = {
   source?: SanityAssetSourceData;
 };
 
-export type Geopoint = {
-  _type: "geopoint";
-  lat?: number;
-  lng?: number;
-  alt?: number;
-};
-
 export type CallToAction = {
   _type: "callToAction";
   heading: string;
@@ -166,6 +159,108 @@ export type BlockContent = Array<{
   _key: string;
 }>;
 
+export type Event = {
+  _id: string;
+  _type: "event";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  date: string;
+  location?: string;
+  description?: BlockContent;
+  featuredImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  };
+  relatedPosts?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "post";
+  }>;
+};
+
+export type CompanyProfile = {
+  _id: string;
+  _type: "companyProfile";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  shortName?: string;
+  logo?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    darkModeVersion?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    _type: "image";
+  };
+  tagline?: string;
+  about?: BlockContent;
+  mission?: string;
+  values?: Array<{
+    title: string;
+    description?: string;
+    _key: string;
+  }>;
+  contact?: {
+    email?: string;
+    phone?: string;
+    address?: string;
+    location?: Geopoint;
+    hours?: Array<{
+      days?: "monday" | "tuesday" | "weekdays" | "weekend" | "everyday";
+      hours?: string;
+      closed?: boolean;
+      _key: string;
+    }>;
+    socialMedia?: Array<{
+      platform?: "facebook" | "twitter" | "instagram" | "linkedin" | "youtube";
+      url?: string;
+      _key: string;
+    }>;
+  };
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    keywords?: Array<string>;
+  };
+};
+
+export type Geopoint = {
+  _type: "geopoint";
+  lat?: number;
+  lng?: number;
+  alt?: number;
+};
+
 export type Page = {
   _id: string;
   _type: "page";
@@ -190,6 +285,7 @@ export type Post = {
   _updatedAt: string;
   _rev: string;
   title: string;
+  subtitle?: string;
   slug: Slug;
   content?: BlockContent;
   excerpt?: string;
@@ -202,7 +298,8 @@ export type Post = {
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    alt?: string;
+    alt: string;
+    caption?: string;
     _type: "image";
   };
   date?: string;
@@ -211,6 +308,41 @@ export type Post = {
     _type: "reference";
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "person";
+  };
+  location?: string;
+  program?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "program";
+  };
+  tags?: Array<string>;
+  isFeatured?: boolean;
+};
+
+export type Program = {
+  _id: string;
+  _type: "program";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  description?: string;
+  location?: string;
+  startDate?: string;
+  ongoing?: boolean;
+  coverImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
   };
 };
 
@@ -460,7 +592,7 @@ export type SanityAssistSchemaTypeField = {
   } & SanityAssistInstruction>;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | CallToAction | Link | InfoSection | BlockContent | Page | Post | Person | Slug | Settings | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | CallToAction | Link | InfoSection | BlockContent | Event | CompanyProfile | Geopoint | Page | Post | Program | Person | Slug | Settings | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/lib/queries.ts
 // Variable: settingsQuery
@@ -584,7 +716,8 @@ export type AllPostsQueryResult = Array<{
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    alt?: string;
+    alt: string;
+    caption?: string;
     _type: "image";
   };
   date: string;
@@ -622,7 +755,8 @@ export type MorePostsQueryResult = Array<{
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    alt?: string;
+    alt: string;
+    caption?: string;
     _type: "image";
   };
   date: string;
@@ -682,7 +816,8 @@ export type PostQueryResult = {
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    alt?: string;
+    alt: string;
+    caption?: string;
     _type: "image";
   };
   date: string;
