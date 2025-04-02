@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Libre_Baskerville, Source_Sans_3 as Source_Sans_Pro } from "next/font/google";
 import { sanityFetch } from "@/sanity/lib/live";
 import { morePostsQuery, allPostsQuery } from "@/sanity/lib/queries";
-import { Post as PostType } from "@/sanity.types";
 import DateComponent from "@/app/components/Date";
 import OnBoarding from "@/app/components/Onboarding";
 import Image from "next/image";
@@ -21,7 +20,7 @@ const sourceSans = Source_Sans_Pro({
   variable: "--font-source-sans"
 });
 
-const Post = ({ post }: { post: PostType }) => {
+const Post = ({ post }) => {
   const { _id, title, subtitle, slug, excerpt, date, location, tags, coverImage } = post;
 
   // Get image dimensions for proper aspect ratio
@@ -109,15 +108,7 @@ const Post = ({ post }: { post: PostType }) => {
   );
 };
 
-const Posts = ({
-  children,
-  heading,
-  subHeading,
-}: {
-  children: React.ReactNode;
-  heading?: string;
-  subHeading?: string;
-}) => (
+const Posts = ({ children, heading, subHeading }) => (
   <div className={`py-16 ${sourceSans.variable} font-sans`}>
     {heading && (
       <h2 className={`text-4xl md:text-5xl font-bold ${baskerville.variable} font-serif tracking-tight text-ocean-deep mb-4`}>
@@ -137,13 +128,7 @@ const Posts = ({
   </div>
 );
 
-export const MorePosts = async ({
-  skip,
-  limit,
-}: {
-  skip: string;
-  limit: number;
-}) => {
+export const MorePosts = async ({ skip, limit }) => {
   const { data } = await sanityFetch({
     query: morePostsQuery,
     params: { skip, limit },
@@ -155,7 +140,7 @@ export const MorePosts = async ({
 
   return (
     <Posts heading={`More Updates (${data?.length})`}>
-      {data?.map((post: any) => <Post key={post._id} post={post} />)}
+      {data?.map((post) => <Post key={post._id} post={post} />)}
     </Posts>
   );
 };
@@ -175,7 +160,7 @@ export const AllPosts = async () => {
       heading="Latest Stories"
       subHeading="Updates from our conservation efforts across Tanzania"
     >
-      {data.map((post: any) => (
+      {data.map((post) => (
         <Post key={post._id} post={post} />
       ))}
     </Posts>

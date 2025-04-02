@@ -20,6 +20,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/page.js", "app/components/home/TestimonialCarousel.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/page.js", "app/components/home/TestimonialCarousel.js", "app/components/Posts.js"],
   "exclude": ["node_modules"]
 }
