@@ -1,8 +1,9 @@
+// app/layout.tsx
 import "./globals.css";
 
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import { draftMode } from "next/headers";
 import { VisualEditing, toPlainText } from "next-sanity";
 import { Toaster } from "sonner";
@@ -16,14 +17,24 @@ import { settingsQuery } from "@/sanity/lib/queries";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import { handleError } from "./client-utils";
 
-/**
- * Generate metadata for the page.
- * Learn more: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
- */
+// Fonts
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "700", "900"],
+});
+
+// Metadata
 export async function generateMetadata(): Promise<Metadata> {
   const { data: settings } = await sanityFetch({
     query: settingsQuery,
-    // Metadata should never contain stega
     stega: false,
   });
   const title = settings?.title || demo.title;
@@ -51,12 +62,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
-
 export default async function RootLayout({
   children,
 }: {
@@ -65,24 +70,31 @@ export default async function RootLayout({
   const { isEnabled: isDraftMode } = await draftMode();
 
   return (
-    <html lang="en" className={`${inter.variable} bg-white text-black`}>
-      <body>
-        <section className="min-h-screen pt-24">
-          {/* The <Toaster> component is responsible for rendering toast notifications used in /app/client-utils.ts and /app/components/DraftModeToast.tsx */}
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+      <body className="bg-brand-foam text-brand-dark font-sans">
+        {/* Added relative positioning for z-index control */}
+        <div className="relative min-h-screen flex flex-col">
           <Toaster />
           {isDraftMode && (
             <>
               <DraftModeToast />
-              {/*  Enable Visual Editing, only to be rendered when Draft Mode is enabled */}
               <VisualEditing />
             </>
           )}
-          {/* The <SanityLive> component is responsible for making all sanityFetch calls in your application live, so should always be rendered. */}
           <SanityLive onError={handleError} />
-          <Header />
-          <main className="">{children}</main>
+          
+          {/* Header now properly layered */}
+          <div className="sticky top-0 z-50">
+            <Header />
+          </div>
+          
+          {/* Main content with lower z-index */}
+          <main className="flex-1 z-10">
+            {children}
+          </main>
+          
           <Footer />
-        </section>
+        </div>
         <SpeedInsights />
       </body>
     </html>

@@ -1,6 +1,6 @@
 {
-  "name": "sanity-template-nextjs-clean",
-  "description": "Next.js + Sanity: A Powerful Website Starter with Real-time Visual Editing",
+  "name": "blog",
+  "description": "a blog website for ocean related contributors",
   "scripts": {
     "dev": "npm-run-all --parallel dev:*",
     "dev:next": "npm run dev --workspace=nextjs-app",

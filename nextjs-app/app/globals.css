@@ -1,3 +1,46 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* app/globals.css */
+.clip-path-wave {
+    clip-path: polygon(0 0, 100% 0, 100% 50%, 0 100%);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body.menu-open {
+    overflow: hidden;
+  }
+
+  [class^="fixed inset-0 bg-brand-dark"] {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  /* Smooth mobile menu transitions */
+[role="navigation"] {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  /* Better touch targets */
+  @media (pointer: coarse) {
+    nav a, nav button {
+      min-height: 48px;
+      min-width: 48px;
+    }
+  }
+
+  /* Swiper styles */
+.swiper-pagination-bullet {
+    background: rgba(226, 232, 240, 0.5); /* brand-light/50 */
+    opacity: 1;
+  }
+  
+  .swiper-pagination-bullet-active {
+    background: #6366F1; /* brand-accent */
+    transform: scale(1.2);
+    transition: all 0.3s ease;
+  }

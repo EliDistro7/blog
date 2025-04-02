@@ -2,11 +2,6 @@ import {DocumentTextIcon} from '@sanity/icons'
 import {format, parseISO} from 'date-fns'
 import {defineField, defineType} from 'sanity'
 
-/**
- * Post schema.  Define and edit the fields for the 'post' content type.
- * Learn more: https://www.sanity.io/docs/schema-types
- */
-
 export const post = defineType({
   name: 'post',
   title: 'Post',
@@ -20,10 +15,16 @@ export const post = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'subtitle',
+      title: 'Subtitle',
+      type: 'string',
+      description: 'Optional short description that appears below the title',
+      validation: (rule) => rule.max(120).warning('Subtitle should be brief'),
+    }),
+    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      description: 'A slug is required for the post to show up in the preview',
       options: {
         source: 'title',
         maxLength: 96,
@@ -40,6 +41,8 @@ export const post = defineType({
       name: 'excerpt',
       title: 'Excerpt',
       type: 'text',
+      rows: 3,
+      validation: (rule) => rule.max(200).warning('Excerpt should be concise'),
     }),
     defineField({
       name: 'coverImage',
@@ -52,21 +55,19 @@ export const post = defineType({
         },
       },
       fields: [
-        {
+        defineField({
           name: 'alt',
           type: 'string',
           title: 'Alternative text',
           description: 'Important for SEO and accessibility.',
-          validation: (rule) => {
-            // Custom validation to ensure alt text is provided if the image is present. https://www.sanity.io/docs/validation
-            return rule.custom((alt, context) => {
-              if ((context.document?.coverImage as any)?.asset?._ref && !alt) {
-                return 'Required'
-              }
-              return true
-            })
-          },
-        },
+          validation: (rule) => rule.required(),
+        }),
+        defineField({
+          name: 'caption',
+          type: 'string',
+          title: 'Caption',
+          description: 'Optional image caption',
+        }),
       ],
       validation: (rule) => rule.required(),
     }),
@@ -82,23 +83,65 @@ export const post = defineType({
       type: 'reference',
       to: [{type: 'person'}],
     }),
+    defineField({
+      name: 'location',
+      title: 'Location',
+      type: 'string',
+      description: 'Where this post is relevant (e.g., Dar es Salaam, Zanzibar)',
+    }),
+    defineField({
+      name: 'program',
+      title: 'Related Program',
+      type: 'reference',
+      to: [{type: 'program'}],
+      description: 'Link to a specific SOA Tanzania program',
+    }),
+    defineField({
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      of: [{type: 'string'}],
+      options: {
+        layout: 'tags',
+        list: [
+          {title: 'Cleanup', value: 'cleanup'},
+          {title: 'Education', value: 'education'},
+          {title: 'Conservation', value: 'conservation'},
+          {title: 'Community', value: 'community'},
+          {title: 'Research', value: 'research'},
+        ]
+      }
+    }),
+    defineField({
+      name: 'isFeatured',
+      title: 'Featured Post',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Should this post be featured on the homepage?',
+    }),
   ],
-  // List preview configuration. https://www.sanity.io/docs/previews-list-views
   preview: {
     select: {
       title: 'title',
+      subtitle: 'subtitle',
       authorFirstName: 'author.firstName',
       authorLastName: 'author.lastName',
       date: 'date',
       media: 'coverImage',
+      location: 'location',
     },
-    prepare({title, media, authorFirstName, authorLastName, date}) {
-      const subtitles = [
+    prepare({title, subtitle, media, authorFirstName, authorLastName, date, location}) {
+      const metadata = [
         authorFirstName && authorLastName && `by ${authorFirstName} ${authorLastName}`,
+        location && `in ${location}`,
         date && `on ${format(parseISO(date), 'LLL d, yyyy')}`,
       ].filter(Boolean)
 
-      return {title, media, subtitle: subtitles.join(' ')}
+      return {
+        title,
+        subtitle: subtitle || metadata.join(' • '),
+        media,
+      }
     },
   },
 })

@@ -27,3 +27,6 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
         .child(S.document().schemaType('settings').documentId('siteSettings'))
         .icon(CogIcon),
     ])
+
+
+    

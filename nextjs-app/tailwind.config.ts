@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 import typography from "@tailwindcss/typography";
+import plugin from 'tailwindcss/plugin';
 
 export default {
   content: ["./app/**/*.{ts,tsx}", "./sanity/**/*.{ts,tsx}"],
@@ -9,98 +10,93 @@ export default {
       padding: "2rem",
     },
     extend: {
+      aspectRatio: {
+        '4/3': '4 / 3',
+        '3/4': '3 / 4',
+      },
+      
+      dropShadow: {
+        'icon': '0 2px 4px rgba(0,0,0,0.3)',
+      },
+
       boxShadow: {
         layer: "0 35px 60px -15px rgba(0, 0, 0, 0.3)",
+        wave: "0 4px 14px 0 rgba(32, 150, 200, 0.25)",
+        depth: "0 10px 25px -5px rgba(7, 89, 133, 0.35)",
+        glow: "0 0 15px rgba(66, 178, 214, 0.5)",
+        gold: "0 10px 25px -5px rgba(212, 175, 55, 0.3)",
       },
+     
+          transitionProperty: {
+            'shadow': 'box-shadow',
+            'transform': 'transform'
+          }
+      ,
       colors: {
-        black: "#0d0e12",
-        white: "#fff",
-        cyan: {
-          50: "#e7fefe",
-          100: "#c5fcfc",
-          200: "#96f8f8",
-          300: "#62efef",
-          400: "#18e2e2",
-          500: "#04b8be",
-          600: "#037782",
-          700: "#024950",
-          800: "#042f34",
-          900: "#072227",
-          950: "#0d181c",
-        },
+          // Primary Brand Colors
+  brand: {
+    dark: "#0F172A",       // Deep navy
+    deep: "#1E293B",       // Slightly lighter navy
+    medium: "#334155",     // Versatile slate
+    light: "#64748B",      // Soft gray-blue
+    accent: "#6366F1",     // Vibrant indigo
+    coral: "#F97316",      // Warm orange
+    teal: "#0D9488",       // Balanced teal
+    foam: "#E2E8F0",       // Light neutral
+    gold: "#D4AF37",       // Rich gold
+    goldLight: "#F5D07A",  // Light gold
+    goldDark: "#996515",   // Dark gold
+    blue: "#3B82F6", 
+  },
+        // Supporting Colors
+        success: "#10B981",      // Emerald green
+        warning: "#F59E0B",      // Amber yellow
+        danger: "#EF4444",       // Red for alerts
+        // Neutrals (optimized for contrast)
+        green: "#1EB53A",  // Tanzanian green
+    yellow: "#FCD116", // Tanzanian yellow
+    blue: "#00A3DD",   // Tanzanian blue
+
+
+        white: "#FFFFFF",
+        black: "#0F172A",
         gray: {
-          50: "#f6f6f8",
-          100: "#eeeef1",
-          200: "#e3e4e8",
-          300: "#bbbdc9",
-          400: "#9499ad",
-          500: "#727892",
-          600: "#515870",
-          700: "#383d51",
-          800: "#252837",
-          900: "#1b1d27",
-          950: "#13141b",
-        },
-        red: {
-          50: "#fff6f5",
-          100: "#ffe7e5",
-          200: "#ffdedc",
-          300: "#fdada5",
-          400: "#f77769",
-          500: "#ef4434",
-          600: "#cc2819",
-          700: "#8b2018",
-          800: "#4d1714",
-          900: "#321615",
-          950: "#1e1011",
-        },
-        orange: {
-          50: "#fcf1e8",
-          100: "#f9e3d2",
-          200: "#f4c7a6",
-          300: "#efab7a",
-          400: "#ea8f4e",
-          500: "#e57322",
-          600: "#ba5f1e",
-          700: "#8f4b1b",
-          800: "#653818",
-          900: "#3a2415",
-          950: "#251a13",
-        },
-        yellow: {
-          50: "#fefae1",
-          100: "#fcf3bb",
-          200: "#f9e994",
-          300: "#f7d455",
-          400: "#f9bc15",
-          500: "#d28a04",
-          600: "#965908",
-          700: "#653a0b",
-          800: "#3b220c",
-          900: "#271a11",
-          950: "#181410",
-        },
-        green: {
-          50: "#e7f9ed",
-          100: "#d0f4dc",
-          200: "#a1eaba",
-          300: "#72e097",
-          400: "#43d675",
-          500: "#3ab564",
-          600: "#329454",
-          700: "#297343",
-          800: "#215233",
-          900: "#183122",
-          950: "#14211a",
+          50: "#F8FAFC",
+          100: "#F1F5F9",
+          200: "#E2E8F0",
+          300: "#CBD5E1",
+          400: "#94A3B8",
+          500: "#64748B",
+          600: "#475569",
+          700: "#334155",
+          800: "#1E293B",
+          900: "#0F172A",
         },
       },
-      fontFamily: {
-        sans: ["var(--font-inter)"],
-      },
+      // ... rest of your config remains the same
     },
   },
-  future: {
-    hoverOnlyWhenSupported: true,
-  },
-  plugins: [typography],
+  plugins: [
+    typography,
+    plugin(function({ addUtilities }) {
+      addUtilities({
+        ".text-shadow": {
+          "text-shadow": "1px 1px 3px rgba(7, 27, 54, 0.3)",
+        },
+        ".text-shadow-md": {
+          "text-shadow": "2px 2px 6px rgba(7, 27, 54, 0.3)",
+        },
+        ".text-shadow-lg": {
+          "text-shadow": "3px 3px 9px rgba(7, 27, 54, 0.3)",
+        },
+        ".text-shadow-none": {
+          "text-shadow": "none",
+        },
+        ".wave-mask": {
+          "mask-image": "linear-gradient(to right, transparent, white 20%, white 80%, transparent)",
+          "-webkit-mask-image": "linear-gradient(to right, transparent, white 20%, white 80%, transparent)",
+        },
+      });
+    }),
+  ],
 } satisfies Config;

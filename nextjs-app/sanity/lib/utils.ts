@@ -2,21 +2,19 @@ import createImageUrlBuilder from "@sanity/image-url";
 import { Link } from "@/sanity.types";
 import { dataset, projectId, studioUrl } from "@/sanity/lib/api";
 import { createDataAttribute, CreateDataAttributeProps } from "next-sanity";
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+
+
 
 const imageBuilder = createImageUrlBuilder({
   projectId: projectId || "",
   dataset: dataset || "",
 });
 
-export const urlForImage = (source: any) => {
-  // Ensure that source image contains a valid reference
-  if (!source?.asset?._ref) {
-    return undefined;
-  }
-
-  return imageBuilder?.image(source).auto("format").fit("max");
-};
-
+export const urlForImage = (source: SanityImageSource | undefined) => {
+  if (!source) return undefined
+  return imageBuilder.image(source)
+}
 export function resolveOpenGraphImage(image: any, width = 1200, height = 627) {
   if (!image) return;
   const url = urlForImage(image)?.width(1200).height(627).fit("crop").url();
@@ -59,3 +57,14 @@ export function dataAttr(config: DataAttributeConfig) {
     baseUrl: studioUrl,
   }).combine(config);
 }
+
+
+export function formatDate(dateString: string) {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+}
+

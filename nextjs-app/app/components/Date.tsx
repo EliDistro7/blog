@@ -10,7 +10,7 @@ export default function DateComponent({
   }
 
   return (
-    <time dateTime={dateString}>
+    <time dateTime={dateString} className="text-ocean-dark/80">
       {format(new Date(dateString), "LLLL	d, yyyy")}
     </time>
   );

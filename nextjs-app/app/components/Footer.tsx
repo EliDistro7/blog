@@ -1,24 +1,21 @@
+// components/Footer.tsx
 export default function Footer() {
   return (
-    <footer className="bg-gray-50 border-gray-100 border-t">
-      <div className="container">
-        <div className="flex flex-col items-center py-28 lg:flex-row">
-          <h3 className="mb-10 text-center text-4xl font-bold leading-tight tracking-tighter lg:mb-0 lg:w-1/2 lg:pr-4 lg:text-left lg:text-5xl">
-            Built with Sanity + Next.js.
-          </h3>
-          <div className="flex flex-col gap-3 items-center justify-center lg:w-1/2 lg:flex-row lg:pl-4">
-            <a
-              href="https://github.com/sanity-io/sanity-template-nextjs-clean"
-              className="rounded-full flex gap-2 items-center bg-black hover:bg-red-500 focus:bg-cyan-500 py-3 px-6 text-white transition-colors duration-200"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View on GitHub
-            </a>
-            <a href="https://nextjs.org/docs" className="mx-3 hover:underline">
-              Read Next.js Documentation
-            </a>
+    <footer className="bg-brand-dark text-brand-foam py-12">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="mb-6 md:mb-0">
+            <span className="text-2xl font-serif font-bold">Future Holders</span>
+            <p className="mt-2">Elevating brands across industries.</p>
           </div>
+          <div className="flex gap-6">
+            <a href="#" className="hover:text-brand-accent">Terms</a>
+            <a href="#" className="hover:text-brand-accent">Privacy</a>
+            <a href="#" className="hover:text-brand-accent">Contact</a>
+          </div>
+        </div>
+        <div className="mt-8 pt-8 border-t border-brand-medium/30 text-center">
+          <p>© {new Date().getFullYear()} Future Holders. All rights reserved.</p>
         </div>
       </div>
     </footer>
