@@ -1,23 +1,19 @@
 // app/layout.tsx
 import "./globals.css";
-
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { draftMode } from "next/headers";
 import { VisualEditing, toPlainText } from "next-sanity";
 import { Toaster } from "sonner";
-
 import DraftModeToast from "@/app/components/DraftModeToast";
 import Footer from "@/app/components/Footer";
-//import {GoogleTranslate} from "@/app/components/GoogleTranslate";
 import Header from "@/app/components/Header";
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch, SanityLive } from "@/sanity/lib/live";
 import { settingsQuery } from "@/sanity/lib/queries";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import { handleError } from "./client-utils";
-
 
 // Fonts
 const inter = Inter({
@@ -32,6 +28,15 @@ const playfair = Playfair_Display({
   display: "swap",
   weight: ["400", "700", "900"],
 });
+
+// Viewport configuration
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#E0F2FE' },
+    { media: '(prefers-color-scheme: dark)', color: '#0C4A6E' },
+  ],
+  colorScheme: 'light',
+}
 
 // Metadata
 export async function generateMetadata(): Promise<Metadata> {
@@ -74,8 +79,6 @@ export async function generateMetadata(): Promise<Metadata> {
       description: "Digital innovation studio creating future-ready experiences",
       images: ogImage ? [ogImage] : [],
     },
-    themeColor: "#E0F2FE", // Your brand-foam color or primary brand color
-    colorScheme: "light",
     icons: {
       icon: "/favicon.ico",
       shortcut: "/favicon-16x16.png",
@@ -103,16 +106,10 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <head>
-        {/* Safari 15+ theme color meta tags */}
-        <meta name="theme-color" content="#E0F2FE" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#0C4A6E" media="(prefers-color-scheme: dark)" />
-        
-        {/* Windows 11 tile color */}
+        {/* Windows-specific tile color */}
         <meta name="msapplication-TileColor" content="#E0F2FE" />
-        
         {/* Apple touch icon */}
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-      
       </head>
       
       <body className="bg-brand-foam text-brand-dark font-sans">

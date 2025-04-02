@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
     SC_DISABLE_SPEEDY: "false",
   },
   images: {
+    domains: ['picsum.photos'],
     remotePatterns: [
       {
         protocol: 'https',
