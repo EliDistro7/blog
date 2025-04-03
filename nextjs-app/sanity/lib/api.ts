@@ -11,7 +11,7 @@ function assertValue<T>(v: T | undefined, errorMessage: string): T {
   return v;
 }
 
-console.log("testing dataset", process.env.NEXT_PUBLIC_SANITY_DATASET)
+//console.log("testing dataset", process.env.NEXT_PUBLIC_SANITY_DATASET)
 
 export const dataset = assertValue(
   process.env.NEXT_PUBLIC_SANITY_DATASET,
