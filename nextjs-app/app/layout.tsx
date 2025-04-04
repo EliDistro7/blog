@@ -1,3 +1,5 @@
+
+
 // app/layout.tsx
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -52,9 +54,9 @@ export async function generateMetadata(): Promise<Metadata> {
   try {
     metadataBase = settings?.ogImage?.metadataBase
       ? new URL(settings.ogImage.metadataBase)
-      : new URL("https://www.futureholders.com");
+      : new URL("https://www.futureholders.pro");
   } catch {
-    metadataBase = new URL("https://www.futureholders.com");
+    metadataBase = new URL("https://www.futureholders.pro");
   }
   
   return {
