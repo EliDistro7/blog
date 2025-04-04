@@ -1,5 +1,3 @@
-
-
 // schemas/documents/post.ts
 import { defineField, defineType } from 'sanity'
 import { DocumentTextIcon } from '@sanity/icons'
@@ -10,120 +8,144 @@ export const post = defineType({
   type: 'document',
   icon: DocumentTextIcon,
   fields: [
-    // Core Content
+    // Language version selector (optional for migration)
     defineField({
-      name: 'title',
-      title: 'Title',
+      name: 'language',
+      title: 'Language (Legacy - Deprecated)',
       type: 'string',
-      validation: (rule) => rule.required(),
+      description: 'This field is being phased out. Use the dedicated language versions below.',
+      readOnly: true,
+      hidden: true
     }),
+
+    // English Version
     defineField({
-      name: 'subtitle',
-      title: 'Subtitle',
-      type: 'string',
+      name: 'englishVersion',
+      title: 'English Version',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'title',
+          title: 'Title',
+          type: 'string',
+          validation: (rule) => rule.required()
+        }),
+        defineField({
+          name: 'subtitle',
+          title: 'Subtitle',
+          type: 'string'
+        }),
+        defineField({
+          name: 'excerpt',
+          title: 'Excerpt',
+          type: 'text',
+          rows: 3,
+          validation: (rule) => rule.max(200)
+        }),
+        defineField({
+          name: 'body',
+          title: 'Body Content',
+          type: 'array',
+          of: [
+            { type: 'block' },
+            { type: 'image' }
+          ]
+        })
+      ]
     }),
+
+    // Kiswahili Version
+    defineField({
+      name: 'kiswahiliVersion',
+      title: 'Kiswahili Version',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'title',
+          title: 'Kichwa',
+          type: 'string'
+        }),
+        defineField({
+          name: 'subtitle',
+          title: 'Mada Ndogo',
+          type: 'string'
+        }),
+        defineField({
+          name: 'excerpt',
+          title: 'Dondoo',
+          type: 'text',
+          rows: 3
+        }),
+        defineField({
+          name: 'body',
+          title: 'Maudhui',
+          type: 'array',
+          of: [
+            { type: 'block' },
+            { type: 'image' }
+          ]
+        })
+      ]
+    }),
+
+    // Shared Fields
     defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
       options: {
-        source: 'title',
-        maxLength: 96,
+        source: (doc) => doc.englishVersion?.title || doc.kiswahiliVersion?.title || 'untitled',
+        maxLength: 96
       },
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'excerpt',
-      title: 'Excerpt',
-      type: 'text',
-      rows: 3,
-      validation: (rule) => rule.max(200),
+      validation: (rule) => rule.required()
     }),
 
-    // Media
     defineField({
       name: 'coverImage',
       title: 'Cover Image',
       type: 'image',
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        defineField({
-          name: 'alt',
-          title: 'Alternative Text',
-          type: 'string',
-        }),
-      ],
+      options: { hotspot: true }
     }),
 
-    // Categorization
     defineField({
       name: 'serviceType',
       title: 'Service Type',
       type: 'reference',
       to: [{ type: 'serviceType' }],
-      validation: (rule) => rule.required(),
+      validation: (rule) => rule.required()
     }),
+
     defineField({
       name: 'tags',
       title: 'Tags',
       type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'tag' }] }],
+      of: [{ type: 'reference', to: [{ type: 'tag' }] }]
     }),
 
-    // Metadata
     defineField({
       name: 'date',
       title: 'Publish Date',
-      type: 'datetime',
-      initialValue: () => new Date().toISOString(),
+      type: 'datetime'
     }),
+
     defineField({
       name: 'location',
       title: 'Location',
-      type: 'string',
-      description: 'Optional location context',
-    }),
-
-    // Content
-    defineField({
-      name: 'body',
-      title: 'Body Content',
-      type: 'array',
-      of: [
-        { type: 'block' }, // Rich text
-        {
-          type: 'image',
-          fields: [
-            defineField({
-              name: 'caption',
-              title: 'Caption',
-              type: 'string',
-            }),
-            defineField({
-              name: 'alt',
-              title: 'Alt Text',
-              type: 'string',
-            }),
-          ],
-        },
-      ],
-    }),
+      type: 'string'
+    })
   ],
   preview: {
     select: {
-      title: 'title',
-      service: 'serviceType.title',
-      date: 'date',
-      media: 'coverImage',
+      enTitle: 'englishVersion.title',
+      swTitle: 'kiswahiliVersion.title',
+      media: 'coverImage'
     },
-    prepare({ title, media, service, date }) {
+    prepare({ enTitle, swTitle, media }) {
       return {
-        title,
-        subtitle: `${service || 'No service'} • ${date ? new Date(date).toLocaleDateString() : 'No date'}`,
-        media,
+        title: enTitle || swTitle || 'Untitled post',
+        subtitle: enTitle && swTitle ? 'Bilingual post' : enTitle ? 'English' : 'Kiswahili',
+        media
       }
-    },
-  },
+    }
+  }
 })
