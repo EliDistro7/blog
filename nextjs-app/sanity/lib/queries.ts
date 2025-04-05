@@ -5,12 +5,50 @@ export const settingsQuery = defineQuery(`*[_type == "settings"][0]`);
 const postFields = /* groq */ `
   _id,
   "status": select(_originalId in path("drafts.**") => "draft", "published"),
-  "title": coalesce(title, "Untitled"),
   "slug": slug.current,
-  excerpt,
-  coverImage,
+  coverImage {
+    ...,
+    asset->,
+    "alt": alt,
+    "altSw": altSw
+  },
   "date": coalesce(date, _updatedAt),
   "author": author->{firstName, lastName, picture},
+  serviceType->,
+  tags[]->,
+  location,
+  
+  // English version
+  englishVersion {
+    title,
+    subtitle,
+    excerpt,
+    body[]{
+      ...,
+      _type == "image" => {
+        ...,
+        asset->,
+        "caption": caption,
+        "alt": alt
+      }
+    }
+  },
+  
+  // Kiswahili version
+  kiswahiliVersion {
+    title,
+    subtitle,
+    excerpt,
+    body[]{
+      ...,
+      _type == "image" => {
+        ...,
+        asset->,
+        "caption": caption,
+        "alt": alt
+      }
+    }
+  }
 `;
 
 const linkReference = /* groq */ `
@@ -22,9 +60,9 @@ const linkReference = /* groq */ `
 
 const linkFields = /* groq */ `
   link {
-      ...,
-      ${linkReference}
-      }
+    ...,
+    ${linkReference}
+  }
 `;
 
 export const getPageQuery = defineQuery(`
@@ -75,13 +113,6 @@ export const morePostsQuery = defineQuery(`
 
 export const postQuery = defineQuery(`
   *[_type == "post" && slug.current == $slug] [0] {
-    content[]{
-    ...,
-    markDefs[]{
-      ...,
-      ${linkReference}
-    }
-  },
     ${postFields}
   }
 `);

@@ -3,12 +3,13 @@
   "private": true,
   "scripts": {
     "predev": "npm run typegen",
-    "dev": "next --turbo",
+    "dev": "next dev",
     "prebuild": "npm run typegen",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typegen": "sanity typegen generate"
+    "typegen": "sanity typegen generate",
+    "clean": "powershell -command \"Remove-Item -Recurse -Force node_modules\""
   },
   "dependencies": {
     "@sanity/client": "^6.27.2",
@@ -20,10 +21,11 @@
     "date-fns": "^3.6.0",
     "framer-motion": "^12.6.2",
     "lucide-react": "^0.486.0",
-    "next": "^15.1.6",
+    "next": "^15.2.4",
     "next-sanity": "^9.8.42",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-server-dom-webpack": "^19.1.0",
     "sanity": "^3.74.0",
     "sonner": "^1.7.0",
     "styled-components": "^6.1.13",

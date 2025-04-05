@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
+import { LanguageSwitcher } from "@/app/components/LanguageSwitcher";
 import { Menu, X, Mic2, Share2, Camera, Utensils, Users } from 'lucide-react'
 
 export default function Header() {
@@ -91,7 +92,7 @@ export default function Header() {
                     href={service.path}
                     className={`flex items-center gap-2 text-brand-foam hover:text-white px-3 py-2 rounded-lg transition-colors ${service.bg} hover:${service.bg.replace('10', '30')}`}
                   >
-                    {service.icon}
+                  
                     <span>{service.name}</span>
                   </Link>
                 </li>
@@ -106,6 +107,8 @@ export default function Header() {
               </li>
             </ul>
           </nav>
+
+          <LanguageSwitcher />
 
           {/* Mobile Menu Button */}
           <button

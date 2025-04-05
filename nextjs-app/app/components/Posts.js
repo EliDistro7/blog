@@ -6,6 +6,7 @@ import DateComponent from "@/app/components/Date";
 import OnBoarding from "@/app/components/Onboarding";
 import Image from "next/image";
 import { urlForImage } from "@/sanity/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
 
 // Define premium fonts
 const baskerville = Libre_Baskerville({
@@ -21,18 +22,22 @@ const sourceSans = Source_Sans_Pro({
 });
 
 export const Post = ({ post }) => {
+  const { language } = useLanguage();
   const { 
     _id, 
-    title, 
-    subtitle, 
     slug, 
-    excerpt, 
     date, 
     location, 
     tags, 
     coverImage,
-    serviceType // New field from your schema
+    serviceType,
+    englishVersion,
+    kiswahiliVersion
   } = post;
+
+  // Select content based on current language
+  const content = language === 'sw' ? kiswahiliVersion : englishVersion;
+  const { title, subtitle, excerpt, body } = content || {};
 
   // Get image dimensions for proper aspect ratio
   const imageWidth = coverImage?.asset?.metadata?.dimensions?.width || 1200;
@@ -42,6 +47,11 @@ export const Post = ({ post }) => {
   const imageUrl = coverImage?.asset?._ref 
     ? urlForImage(coverImage)?.width(1200).quality(90).url()
     : null;
+
+  // Get appropriate alt text
+  const imageAlt = language === 'sw' 
+    ? coverImage?.altSw || coverImage?.alt || title
+    : coverImage?.alt || title;
 
   // Service type color mapping
   const serviceColors = {
@@ -66,7 +76,7 @@ export const Post = ({ post }) => {
             >
               <Image
                 src={imageUrl}
-                alt={coverImage.alt || title}
+                alt={imageAlt}
                 width={imageWidth}
                 height={imageHeight}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
@@ -130,10 +140,10 @@ export const Post = ({ post }) => {
             
             return (
               <span 
-                key={tag} 
+                key={tag._id} 
                 className={`px-3 py-1 text-xs font-bold rounded-full ${tagColor} hover:opacity-90 transition-opacity`}
               >
-                {tag}
+                {language === 'sw' ? tag.titleSw || tag.title : tag.title}
               </span>
             );
           })}
@@ -143,27 +153,32 @@ export const Post = ({ post }) => {
   );
 };
 
-const Posts = ({ children, heading, subHeading }) => (
-  <div className={`py-16 ${sourceSans.variable} font-sans`}>
-    {heading && (
-      <h2 className={`text-4xl md:text-5xl font-bold ${baskerville.variable} font-serif tracking-tight text-brand-dark mb-4`}>
-        {heading}
-      </h2>
-    )}
-    {subHeading && (
-      <p className="text-xl text-brand-blue max-w-3xl leading-relaxed">
-        {subHeading}
-      </p>
-    )}
-    <div className="mt-12 pt-12 border-t border-brand-medium/20">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {children}
+const Posts = ({ children, heading, subHeading }) => {
+  const { language } = useLanguage();
+
+  return (
+    <div className={`py-16 ${sourceSans.variable} font-sans`}>
+      {heading && (
+        <h2 className={`text-4xl md:text-5xl font-bold ${baskerville.variable} font-serif tracking-tight text-brand-dark mb-4`}>
+          {language === 'sw' ? 'Habari Mpya' : heading}
+        </h2>
+      )}
+      {subHeading && (
+        <p className="text-xl text-brand-blue max-w-3xl leading-relaxed">
+          {language === 'sw' ? 'Taarifa na ufahamu kutoka kwa huduma zetu mbalimbali' : subHeading}
+        </p>
+      )}
+      <div className="mt-12 pt-12 border-t border-brand-medium/20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {children}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export const MorePosts = async ({ skip, limit }) => {
+  const { language } = useLanguage();
   const { data } = await sanityFetch({
     query: morePostsQuery,
     params: { skip, limit },
@@ -174,13 +189,14 @@ export const MorePosts = async ({ skip, limit }) => {
   }
 
   return (
-    <Posts heading={`More Updates (${data?.length})`}>
+    <Posts heading={language === 'sw' ? `Habari Zaidi (${data?.length})` : `More Updates (${data?.length})`}>
       {data?.map((post) => <Post key={post._id} post={post} />)}
     </Posts>
   );
 };
 
 export const AllPosts = async () => {
+  const { language } = useLanguage();
   const { data } = await sanityFetch({ 
     query: allPostsQuery,
     tags: ['post']
@@ -192,8 +208,8 @@ export const AllPosts = async () => {
 
   return (
     <Posts
-      heading="Latest Updates"
-      subHeading="News and insights from our multi-service offerings"
+      heading={language === 'sw' ? 'Habari Mpya' : "Latest Updates"}
+      subHeading={language === 'sw' ? 'Updates kuhusu huduma zetu mbalimbali' : "News and insights from our multi-service offerings"}
     >
       {data.map((post) => (
         <Post key={post._id} post={post} />

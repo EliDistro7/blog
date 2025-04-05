@@ -8,17 +8,7 @@ export const post = defineType({
   type: 'document',
   icon: DocumentTextIcon,
   fields: [
-    // Language version selector (optional for migration)
-    defineField({
-      name: 'language',
-      title: 'Language (Legacy - Deprecated)',
-      type: 'string',
-      description: 'This field is being phased out. Use the dedicated language versions below.',
-      readOnly: true,
-      hidden: true
-    }),
-
-    // English Version
+    // Language versions (both will be visible at all times)
     defineField({
       name: 'englishVersion',
       title: 'English Version',
@@ -48,13 +38,26 @@ export const post = defineType({
           type: 'array',
           of: [
             { type: 'block' },
-            { type: 'image' }
+            {
+              type: 'image',
+              fields: [
+                defineField({
+                  name: 'caption',
+                  title: 'Caption',
+                  type: 'string'
+                }),
+                defineField({
+                  name: 'alt',
+                  title: 'Alt Text',
+                  type: 'string'
+                })
+              ]
+            }
           ]
         })
       ]
     }),
 
-    // Kiswahili Version
     defineField({
       name: 'kiswahiliVersion',
       title: 'Kiswahili Version',
@@ -63,7 +66,8 @@ export const post = defineType({
         defineField({
           name: 'title',
           title: 'Kichwa',
-          type: 'string'
+          type: 'string',
+          validation: (rule) => rule.required()
         }),
         defineField({
           name: 'subtitle',
@@ -74,7 +78,8 @@ export const post = defineType({
           name: 'excerpt',
           title: 'Dondoo',
           type: 'text',
-          rows: 3
+          rows: 3,
+          validation: (rule) => rule.max(200)
         }),
         defineField({
           name: 'body',
@@ -82,7 +87,21 @@ export const post = defineType({
           type: 'array',
           of: [
             { type: 'block' },
-            { type: 'image' }
+            {
+              type: 'image',
+              fields: [
+                defineField({
+                  name: 'caption',
+                  title: 'Maelezo',
+                  type: 'string'
+                }),
+                defineField({
+                  name: 'alt',
+                  title: 'Maandishi Mbadala',
+                  type: 'string'
+                })
+              ]
+            }
           ]
         })
       ]
@@ -94,7 +113,7 @@ export const post = defineType({
       title: 'Slug',
       type: 'slug',
       options: {
-        source: (doc) => doc.englishVersion?.title || doc.kiswahiliVersion?.title || 'untitled',
+        source: 'englishVersion.title',
         maxLength: 96
       },
       validation: (rule) => rule.required()
@@ -104,7 +123,19 @@ export const post = defineType({
       name: 'coverImage',
       title: 'Cover Image',
       type: 'image',
-      options: { hotspot: true }
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alternative Text (English)',
+          type: 'string'
+        }),
+        defineField({
+          name: 'altSw',
+          title: 'Maandishi Mbadala (Kiswahili)',
+          type: 'string'
+        })
+      ]
     }),
 
     defineField({
@@ -125,7 +156,8 @@ export const post = defineType({
     defineField({
       name: 'date',
       title: 'Publish Date',
-      type: 'datetime'
+      type: 'datetime',
+      initialValue: () => new Date().toISOString()
     }),
 
     defineField({
@@ -136,14 +168,16 @@ export const post = defineType({
   ],
   preview: {
     select: {
-      enTitle: 'englishVersion.title',
-      swTitle: 'kiswahiliVersion.title',
+      title: 'englishVersion.title',
+      kiswahiliTitle: 'kiswahiliVersion.title',
+      service: 'serviceType.title',
+      date: 'date',
       media: 'coverImage'
     },
-    prepare({ enTitle, swTitle, media }) {
+    prepare({ title, kiswahiliTitle, service, date, media }) {
       return {
-        title: enTitle || swTitle || 'Untitled post',
-        subtitle: enTitle && swTitle ? 'Bilingual post' : enTitle ? 'English' : 'Kiswahili',
+        title: title || kiswahiliTitle,
+        subtitle: `${service || 'No service'} • ${date ? new Date(date).toLocaleDateString() : 'No date'}`,
         media
       }
     }

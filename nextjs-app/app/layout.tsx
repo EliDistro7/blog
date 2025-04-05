@@ -16,6 +16,9 @@ import { sanityFetch, SanityLive } from "@/sanity/lib/live";
 import { settingsQuery } from "@/sanity/lib/queries";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import { handleError } from "./client-utils";
+import { LanguageProvider } from '@/context/LanguageContext'
+
+
 
 // Fonts
 const inter = Inter({
@@ -114,7 +117,9 @@ export default async function RootLayout({
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
       </head>
       
-      <body className="bg-brand-foam text-brand-dark font-sans">
+      <body className="bg-brand-foam text-brand-dark font-sans ">
+        <LanguageProvider>
+         
         <div className="relative min-h-screen flex flex-col">
           <Toaster />
           {isDraftMode && (
@@ -126,6 +131,7 @@ export default async function RootLayout({
           <SanityLive onError={handleError} />
           
           <div className="sticky top-0 z-50">
+            
             <Header />
           </div>
           
@@ -136,6 +142,7 @@ export default async function RootLayout({
           <Footer />
         </div>
         <SpeedInsights />
+        </LanguageProvider>
       </body>
     </html>
   );
