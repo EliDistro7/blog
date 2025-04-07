@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { BookText, Calendar, Clock, Globe, Quote } from 'lucide-react';
 import { Libre_Baskerville, Source_Sans_3 as Source_Sans_Pro } from 'next/font/google';
+import { useLanguage } from '@/context/LanguageContext';
 
 // Define your custom fonts
 const baskerville = Libre_Baskerville({
@@ -17,57 +18,16 @@ const sourceSans = Source_Sans_Pro({
   variable: '--font-source-sans'
 });
 
-interface BlogPost {
-  id: string;
-  title: {
-    en: string;
-    sw: string;
-  };
-  excerpt: {
-    en: string;
-    sw: string;
-  };
-  content: {
-    en: string[];
-    sw: string[];
-  };
-  category: {
-    en: string;
-    sw: string;
-  };
-  date: string;
-  readTime: string;
-  imageUrl: string;
-  slug: string;
-  tags: string[];
-}
 
-interface BlogCardProps {
-  post: BlogPost;
-}
 
-const Blog = ({ post }: BlogCardProps) => {
-  const [language, setLanguage] = useState<'en' | 'sw'>('en');
+
+const Blog = ({ post }) => {
+    const { language } = useLanguage();
 
   return (
     <div className={`${sourceSans.variable} font-sans group relative overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-300 hover:shadow-xl`}>
       {/* Language toggle */}
-      <div className="absolute right-3 top-3 z-10 flex rounded-full bg-brand-foam/90 shadow-sm backdrop-blur-sm">
-        <button
-          onClick={() => setLanguage('en')}
-          className={`flex items-center rounded-l-full px-3 py-1 text-xs font-medium transition-colors ${language === 'en' ? 'bg-brand-blue text-white' : 'text-brand-medium hover:bg-brand-foam'}`}
-        >
-          <Globe className="mr-1 h-3 w-3" />
-          EN
-        </button>
-        <button
-          onClick={() => setLanguage('sw')}
-          className={`flex items-center rounded-r-full px-3 py-1 text-xs font-medium transition-colors ${language === 'sw' ? 'bg-brand-blue text-white' : 'text-brand-medium hover:bg-brand-foam'}`}
-        >
-          <Globe className="mr-1 h-3 w-3" />
-          SW
-        </button>
-      </div>
+    
 
       {/* Image */}
       <div className="relative h-48 w-full overflow-hidden">

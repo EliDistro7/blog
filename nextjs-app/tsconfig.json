@@ -40,7 +40,7 @@
     "app/components/Header.tsx",
     "app/contex/TranslateContext.js",
     "next.config.ts"
-, "app/components/StoriesSection.js"  ],
+, "app/components/StoriesSection.js", "app/components/Blog.js"  ],
   "exclude": [
     "node_modules"
   ]
