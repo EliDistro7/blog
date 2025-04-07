@@ -1,17 +1,85 @@
+
+'use client';
+
 import HeroSection from "@/app/components/home/HeroSection";
 import ServicesGrid from "@/app/components/home/ServicesGrid";
 import TestimonialSection from "@/app/components/home/TestimonialSection";
 import CTASection from "@/app/components/home/CTASection";
-import { sanityFetch } from "@/sanity/lib/live";
-import { groq } from "next-sanity";
+import Blog from "@/app/components/Blog";
+
 import Link from "next/link";
 import { ChevronRight, Rocket, Code, Zap } from "lucide-react";
 import { format, parseISO } from "date-fns";
+import { StoriesSection } from "./components/home/StoriesSection";
 
-// Import your Post component
-import {Post} from "@/app/components/Posts";
+//import { Post } from "@/app/components/Posts";
 
-// Compact FeatureUpdate component variant
+const ExampleBlogPost = {
+  id: '2',
+  title: {
+    en: 'Leadership as Service: The Legacy of Abeid Amani Karume',
+    sw: 'Uongozi kama Huduma: Urithi wa Abeid Amani Karume'
+  },
+  excerpt: {
+    en: 'Exploring the philosophy of leadership as service through the words of Zanzibar\'s first president.',
+    sw: 'Kuchunguza falsafa ya uongozi kama huduma kupitia maneno ya rais wa kwanza wa Zanzibar.'
+  },
+  content: {
+    en: [
+      "Abeid Amani Karume emphasized that leadership is service to the people and the unification of communities. As he famously said: 'I am a servant of the people, and I will never stop serving them with all my heart.'",
+      "At PichaZangu.store, we value images that showcase unity, history, and the contributions of our leaders. Your photographs are part of our collective heritage. Preserve and celebrate your history through PichaZangu.store!"
+    ],
+    sw: [
+      "Abeid Amani Karume alisisitiza kuwa uongozi ni huduma kwa watu na kuunganishwa kwa jamii. Kama alivyosema: 'Mimi ni mtumishi wa watu, na sitaacha kutumikia na kuwatumikia kwa moyo wangu wote.'",
+      "Katika PichaZangu.store, tunathamini picha zinazoonyesha umoja, historia, na michango ya viongozi wetu. Picha zako ni sehemu ya urithi wetu. Hifadhi na sherehekea historia yako kupitia PichaZangu.store!"
+    ]
+  },
+  category: {
+    en: 'History',
+    sw: 'Historia'
+  },
+  date: 'June 12, 2024',
+  readTime: '4 min read',
+  imageUrl: '/images/abeid.jpeg', // Example image - replace with actual Karume image
+  slug: 'leadership-legacy-abeid-karume',
+  tags: ['#AbeidAmaniKarume', '#Uongozi', '#PichaZanguStore', '#HifadhiHistoria', '#UmojaNaMaendeleo', '#Tanzania', '#Zanzibar']
+};
+
+
+ function Home() {
+
+ // console.log('Fetched posts:', posts); // Debug log
+
+
+
+  return (
+    <div className="bg-brand-foam">
+      <HeroSection />
+      
+      <section className="py-16 container">
+        <div className="mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-brand-dark mb-4">
+            Latest From Future Holders
+          </h2>
+          <p className="text-xl text-brand-blue max-w-3xl">
+            Stay updated with our news and product developments
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+       
+           <Blog post={ExampleBlogPost} />
+
+        </div>
+      </section>
+
+      <ServicesGrid />
+      <TestimonialSection />
+      <CTASection />
+    </div>
+  );
+}
+
 function FeatureUpdateCompact({ update }) {
   const {
     title,
@@ -63,117 +131,4 @@ function FeatureUpdateCompact({ update }) {
   );
 }
 
-// Combined content query
-const homepageContentQuery = groq`{
-  "posts": *[_type == "post"] | order(date desc)[0...3] {
-    _id,
-    title,
-    subtitle,
-    slug,
-    excerpt,
-    date,
-    location,
-    tags,
-    coverImage,
-    "serviceType": serviceType->{title, slug}
-  },
-  "updates": *[_type == "featureUpdate"] | order(releaseDate desc)[0...3] {
-    _id,
-    title,
-    version,
-    releaseDate,
-    updateType,
-    summary,
-    isHighlight,
-    documentationLink,
-    "product": product->{name},
-    "relatedTutorial": relatedTutorial->{slug}
-  }
-}`;
-
-export default async function Home() {
-  const { posts, updates } = await sanityFetch({ 
-    query: homepageContentQuery,
-    tags: ['post', 'featureUpdate']
-  });
-
-  const hasPosts = posts?.length > 0;
-  const hasUpdates = updates?.length > 0;
-
-  return (
-    <div className="bg-brand-foam">
-      <HeroSection />
-      
-      {/* Combined Content Section */}
-      <section className="py-16 container">
-        <div className="mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-brand-dark mb-4">
-            Latest From Future Holders
-          </h2>
-          <p className="text-xl text-brand-blue max-w-3xl">
-            Stay updated with our news and product developments
-          </p>
-        </div>
-
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Blog Posts Column */}
-          {hasPosts && (
-            <div>
-              <h3 className="text-2xl font-bold text-brand-dark mb-6 pb-2 border-b border-brand-medium/20 flex items-center gap-3">
-                <span className="w-3 h-3 rounded-full bg-brand-accent"></span>
-                Company Updates
-              </h3>
-              <div className="space-y-8">
-                {posts.map((post) => (
-                  <Post key={post._id} post={post} variant="compact" />
-                ))}
-              </div>
-              {posts.length >= 3 && (
-                <div className="mt-8 text-center">
-                  <Link 
-                    href="/posts" 
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-dark text-white hover:bg-brand-blue transition-colors"
-                  >
-                    View All Blog Posts
-                    <ChevronRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Feature Updates Column */}
-          {hasUpdates && (
-            <div>
-              <h3 className="text-2xl font-bold text-brand-dark mb-6 pb-2 border-b border-brand-medium/20 flex items-center gap-3">
-                <span className="w-3 h-3 rounded-full bg-brand-blue"></span>
-                Product Updates
-              </h3>
-              <div className="space-y-6">
-                {updates.map((update) => (
-                  <FeatureUpdateCompact key={update._id} update={update} />
-                ))}
-              </div>
-              {updates.length >= 3 && (
-                <div className="mt-8 text-center">
-                  <Link 
-                    href="/changelog" 
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-blue text-white hover:bg-brand-dark transition-colors"
-                  >
-                    View Full Changelog
-                    <ChevronRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </section>
-
-      <ServicesGrid />
-      <TestimonialSection />
-      <CTASection />
-    </div>
-  );
-}
+export default Home

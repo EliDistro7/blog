@@ -1,6 +1,8 @@
+// context/LanguageContext.tsx
 'use client'
 
 import { createContext, useContext, useState, useEffect } from 'react'
+import Cookies from 'js-cookie'
 
 type LanguageContextType = {
   language: string
@@ -13,33 +15,26 @@ const LanguageContext = createContext<LanguageContextType>({
 })
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<string>(() => {
-    // Initialize from localStorage if available
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('appLanguage') || 'en'
-    }
-    return 'en'
-  })
+  const [language, setLanguage] = useState('en')
 
-  // Persist to localStorage whenever language changes
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('appLanguage', language)
-      document.documentElement.lang = language // Optional: update HTML lang attribute
-    }
-  }, [language])
+    // Initialize language from cookie on client side
+    const savedLang = Cookies.get('lang') || 'en'
+    setLanguage(savedLang)
+  }, [])
+
+  const updateLanguage = (lang: string) => {
+    Cookies.set('lang', lang, { expires: 365, path: '/' })
+    setLanguage(lang)
+  }
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage }}>
+    <LanguageContext.Provider value={{ language, setLanguage: updateLanguage }}>
       {children}
     </LanguageContext.Provider>
   )
 }
 
 export function useLanguage() {
-  const context = useContext(LanguageContext)
-  if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider')
-  }
-  return context
+  return useContext(LanguageContext)
 }
