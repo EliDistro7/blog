@@ -59,11 +59,9 @@ const ExampleBlogPost = {
       <section className="py-16 container">
         <div className="mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-brand-dark mb-4">
-            Latest From Future Holders
+            Latest Updates
           </h2>
-          <p className="text-xl text-brand-blue max-w-3xl">
-            Stay updated with our news and product developments
-          </p>
+        
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
