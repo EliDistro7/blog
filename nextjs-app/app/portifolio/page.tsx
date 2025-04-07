@@ -7,7 +7,7 @@ export default function Portfolio() {
     return (
       <div className="bg-brand-foam">
         <ServiceHeader
-          title="Our"
+          
           highlight="Digital Creations"
           subtitle="Though we're new, our solutions deliver real impact"
           bgClass="bg-gradient-to-br from-brand-dark to-brand-deep"
