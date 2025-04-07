@@ -153,7 +153,7 @@ export default function Footer() {
          
           </div>
           <div className='flex flex-col justify-content-center mb-12'>
-          <h3 className="text-md font-bold text-white mb-6">{content[language].contactTitle}</h3>
+          <h3 className="text-md text-white mb-6">{content[language].contactTitle}</h3>
             <ul className="space-y-4">
               <li>
                 <a href="mailto:info@futureholders.co.tz" className="text-brand-foam/70 hover:text-brand-accent transition-colors text-lg">
@@ -162,7 +162,7 @@ export default function Footer() {
               </li>
               <li>
                 <a href="tel:+255789000000" className="text-brand-foam/70 hover:text-brand-accent transition-colors text-lg">
-                  +255 789 000 000
+                  +255 793 151 051
                 </a>
               </li>
             </ul>
