@@ -57,7 +57,7 @@ const ExampleBlogPost = {
       <HeroSection />
       
       <section className="py-16 container">
-        <div className="mb-16">
+    {/*    <div className="mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-brand-dark mb-4">
             Latest Updates
           </h2>
@@ -69,7 +69,9 @@ const ExampleBlogPost = {
            <Blog post={ExampleBlogPost} />
 
         </div>
-      </section>
+     
+      */}
+       </section>
 
       <ServicesGrid />
       <TestimonialSection />

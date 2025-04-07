@@ -69,27 +69,22 @@ export default function Footer() {
     { icon: <Facebook className="w-5 h-5" />, path: "#" },
     { icon: <Instagram className="w-5 h-5" />, path: "#" },
     { icon: <Twitter className="w-5 h-5" />, path: "#" },
-    { icon: <Linkedin className="w-5 h-5" />, path: "#" },
-    { icon: <Youtube className="w-5 h-5" />, path: "#" }
+  
   ];
 
   return (
     <footer className="bg-brand-dark text-brand-foam border-t border-brand-medium/30">
       <div className="container px-4 py-16 mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
           {/* Logo and description */}
           <div className="col-span-2 lg:col-span-1">
             <Link href="/" className="flex items-center gap-3 mb-6 group">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-brand-accent to-brand-teal text-white shadow-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                  <path d="M18.364 5.636L16.95 7.05A7 7 0 1 0 19 12h2a9 9 0 1 1-2.636-6.364z" />
-                </svg>
-              </div>
-              <span className="text-2xl font-serif font-bold text-white group-hover:text-brand-accent transition-colors">
+           
+              <span className="text-xl font-serif font-bold text-white group-hover:text-brand-accent transition-colors">
                 Future Holders
               </span>
             </Link>
-            <p className="text-brand-foam/80 mb-8 text-lg leading-relaxed">
+            <p className="text-brand-foam/80 mb-8 leading-relaxed">
               {content[language].description}
             </p>
             <div className="flex gap-4">
@@ -155,11 +150,14 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-            <h3 className="text-xl font-bold text-white mb-6">{content[language].contactTitle}</h3>
+         
+          </div>
+          <div className='flex flex-col justify-content-center'>
+          <h3 className="text-md font-bold text-white mb-6">{content[language].contactTitle}</h3>
             <ul className="space-y-4">
               <li>
                 <a href="mailto:info@futureholders.co.tz" className="text-brand-foam/70 hover:text-brand-accent transition-colors text-lg">
-                  info@futureholders.co.tz
+                  info@futureholders.net
                 </a>
               </li>
               <li>
@@ -168,11 +166,11 @@ export default function Footer() {
                 </a>
               </li>
             </ul>
-          </div>
+            </div>
         </div>
 
         {/* Divider */}
-        <div className="border-t border-brand-medium/30 my-10"></div>
+        <div className="border-t border-brand-medium/30 my-20"></div>
 
         {/* Bottom row */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
