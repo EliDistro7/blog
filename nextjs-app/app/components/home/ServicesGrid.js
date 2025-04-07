@@ -156,16 +156,7 @@ function ServiceCard({
   return (
     <div className={`group relative overflow-hidden rounded-xl h-full ${color} hover:shadow-layer transition-all`}>
       {/* Background Image */}
-      {image && (
-        <div className="absolute inset-0 -z-10 opacity-20 group-hover:opacity-30 transition-opacity">
-          <Image
-            src={image}
-            alt={title}
-            fill
-            className="object-cover"
-          />
-        </div>
-      )}
+    
       
       {/* Content */}
       <div className="p-8 h-full flex flex-col backdrop-blur-sm">
