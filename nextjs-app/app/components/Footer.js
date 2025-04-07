@@ -152,7 +152,7 @@ export default function Footer() {
             </ul>
          
           </div>
-          <div className='flex flex-col justify-content-center'>
+          <div className='flex flex-col justify-content-center mb-12'>
           <h3 className="text-md font-bold text-white mb-6">{content[language].contactTitle}</h3>
             <ul className="space-y-4">
               <li>
