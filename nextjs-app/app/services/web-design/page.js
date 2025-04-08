@@ -232,16 +232,17 @@ export default function WebDesignPage() {
       {/* Features Section */}
       <ServiceFeatures
         title={featuresContent.title[language]}
+        
         features={featuresContent.features.map((feature, index) => ({
           title: feature.title[language],
           description: feature.description[language],
           icon: [
-            <MonitorSmartphone className="w-8 h-8 text-brand-accent" />,
-            <Search className="w-8 h-8 text-brand-accent" />,
-            <Paintbrush className="w-8 h-8 text-brand-accent" />,
-            <Rocket className="w-8 h-8 text-brand-accent" />,
-            <ShoppingCart className="w-8 h-8 text-brand-accent" />,
-            <BarChart3 className="w-8 h-8 text-brand-accent" />
+            <MonitorSmartphone key='monitor-smartphone' className="w-8 h-8 text-brand-accent" />,
+            <Search key='search-key' className="w-8 h-8 text-brand-accent" />,
+            <Paintbrush key='paint-brush' className="w-8 h-8 text-brand-accent" />,
+            <Rocket key='rocket' className="w-8 h-8 text-brand-accent" />,
+            <ShoppingCart key='shopping-cart' className="w-8 h-8 text-brand-accent" />,
+            <BarChart3 key='barchart' className="w-8 h-8 text-brand-accent" />
           ][index]
         }))}
       />

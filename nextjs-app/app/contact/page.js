@@ -265,7 +265,7 @@ export default function ContactPage() {
                   className="w-full px-4 py-3 rounded-lg border border-brand-foam/30 focus:ring-2 focus:ring-brand-blue focus:border-transparent"
                 >
                   {content[language].form.services.map((service, index) => (
-                    <option key={index} value={service.value}>{service.label}</option>
+                    <option key={`${index}-option`} value={service.value}>{service.label}</option>
                   ))}
                 </select>
               </div>
@@ -300,7 +300,7 @@ export default function ContactPage() {
               <div className="space-y-4">
                 {serviceContacts.map((service, index) => (
                   <div 
-                    key={index} 
+                    key={`${index}-service-contacts`} 
                     className={`p-4 rounded-lg ${service.bg} border ${service.border}`}
                   >
                     <div className="flex items-center gap-3 mb-2">
@@ -338,7 +338,7 @@ export default function ContactPage() {
               </h2>
               <div className="space-y-4">
                 {content[language].companyContacts.items.map((info, index) => (
-                  <div key={index} className="p-4 rounded-lg bg-brand-foam/10 border border-brand-foam/30">
+                  <div key={`${index}-company-contacts`} className="p-4 rounded-lg bg-brand-foam/10 border border-brand-foam/30">
                     <h3 className="font-bold text-brand-dark mb-2">{info.title}</h3>
                     <div className="space-y-2">
                       <a 
@@ -376,7 +376,7 @@ export default function ContactPage() {
           <div className="flex flex-wrap justify-center gap-4">
             {content[language].cta.buttons.map((button, index) => (
               <Link
-                key={index}
+                key={`${index}-team-cta`}
                 href={button.href}
                 className={`inline-flex items-center justify-center gap-2 font-bold px-8 py-4 rounded-lg transition-all duration-300 shadow-depth hover:shadow-glow ${
                   index === 0 

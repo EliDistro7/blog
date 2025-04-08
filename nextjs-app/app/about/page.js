@@ -178,9 +178,9 @@ export default function AboutPage() {
 
   const values = content[language].values.items.map((item, index) => {
     const icons = [
-      <Zap className="w-6 h-6 text-brand-accent" />,
-      <Award className="w-6 h-6 text-brand-blue" />,
-      <HeartHandshake className="w-6 h-6 text-brand-coral" />
+      <Zap key="zap-icon" className="w-6 h-6 text-brand-accent" />,
+      <Award key='award-icon' className="w-6 h-6 text-brand-blue" />,
+      <HeartHandshake key='handshake-icon' className="w-6 h-6 text-brand-coral" />
     ];
     return { ...item, icon: icons[index] };
   });
@@ -230,7 +230,7 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service, index) => (
               <div 
-                key={index} 
+              key={`service-${index}`}
                 className={`p-6 rounded-xl ${service.bg} border ${service.border} hover:shadow-glow transition-all`}
               >
                 <div className="flex items-center gap-4 mb-4">
@@ -262,7 +262,7 @@ export default function AboutPage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {values.map((value, index) => (
-              <div key={index} className="text-center">
+                <div key={`value-${index}`} className="text-center">
                 <div className="flex justify-center mb-4">
                   <div className="p-4 bg-brand-foam rounded-full">
                     {value.icon}

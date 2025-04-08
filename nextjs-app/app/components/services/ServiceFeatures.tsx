@@ -66,6 +66,7 @@ const featuresContent: Record<string, { title: string; features: Feature[] }> = 
 export default function ServiceFeatures({
   title,
   features,
+  
   cardClass = "bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow",
   iconContainerClass = "p-3 rounded-lg bg-brand-accent/10",
   titleClass = "text-xl font-bold text-brand-dark",
@@ -82,7 +83,7 @@ export default function ServiceFeatures({
       </h2>
       <div className={gridClass}>
         {(features || content.features).map((feature, index) => (
-          <div key={index} className={cardClass}>
+          <div key={`feature-${index}`} className={cardClass}>
             <div className="flex items-center gap-4 mb-4">
               <div className={iconContainerClass}>
                 {feature.icon}
