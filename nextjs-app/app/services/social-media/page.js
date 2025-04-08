@@ -195,112 +195,97 @@ export default function SocialMediaPage() {
     }
   };
 
-  // Features with icons
-  const features = content[language].features.items.map((item, index) => {
-    const icons = [
-      <Share2 className="w-8 h-8 text-brand-teal" />,
-      <TrendingUp className="w-8 h-8 text-brand-teal" />,
-      <Hash className="w-8 h-8 text-brand-teal" />,
-      <Camera className="w-8 h-8 text-brand-teal" />,
-      <Heart className="w-8 h-8 text-brand-teal" />,
-      <Zap className="w-8 h-8 text-brand-teal" />
-    ];
-    return { ...item, icon: icons[index] };
-  });
+ // Features with icons - Fixed with keys
+ const features = content[language].features.items.map((item, index) => {
+  const icons = [
+    <Share2 key="share" className="w-8 h-8 text-brand-teal" />,
+    <TrendingUp key="trend" className="w-8 h-8 text-brand-teal" />,
+    <Hash key="hash" className="w-8 h-8 text-brand-teal" />,
+    <Camera key="camera" className="w-8 h-8 text-brand-teal" />,
+    <Heart key="heart" className="w-8 h-8 text-brand-teal" />,
+    <Zap key="zap" className="w-8 h-8 text-brand-teal" />
+  ];
+  return { ...item, icon: icons[index] };
+});
 
-  return (
-    <div className={`bg-brand-foam ${baskerville.variable}`}>
-      {/* Hero Section */}
-      <ServiceHeader
-        title={content[language].hero.title}
-        highlight={content[language].hero.highlight}
-        subtitle={content[language].hero.subtitle}
-        bgClass="bg-gradient-to-br from-brand-dark to-brand-teal/90"
-      />
+return (
+  <div className={`bg-brand-foam ${baskerville.variable}`}>
+    {/* Hero Section */}
+    <ServiceHeader
+      title={content[language].hero.title}
+      highlight={content[language].hero.highlight}
+      subtitle={content[language].hero.subtitle}
+      bgClass="bg-gradient-to-br from-brand-dark to-brand-teal/90"
+    />
 
-      {/* Results Showcase */}
-      <div className="container mx-auto py-20 px-4">
-        <div className="bg-white rounded-2xl shadow-sm p-8 md:p-12 grid grid-cols-2 md:grid-cols-4 gap-8">
-          {content[language].results.items.map((item, index) => (
-            <div key={index} className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-brand-teal mb-3">
-                {item.value}
+    {/* Results Showcase */}
+    <div className="container mx-auto py-20 px-4">
+      <div className="bg-white rounded-2xl shadow-sm p-8 md:p-12 grid grid-cols-2 md:grid-cols-4 gap-8">
+        {content[language].results.items.map((item, index) => (
+          <div key={`result-${index}`} className="text-center">
+            <div className="text-4xl md:text-5xl font-bold text-brand-teal mb-3">
+              {item.value}
+            </div>
+            <p className="text-gray-600 text-lg md:text-xl">
+              {item.label}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Features Section */}
+    <ServiceFeatures
+      title={content[language].features.title}
+      features={features}
+    />
+
+    {/* Platform Specialization */}
+    <div className="bg-white py-20">
+      <div className="container mx-auto px-4">
+        <h2 className={`text-4xl font-bold text-center mb-12 font-serif`}>
+          {content[language].platforms.title}{' '}
+          <span className="text-brand-teal">{content[language].platforms.highlight}</span>
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+          {content[language].platforms.items.map((platform) => (
+            <div key={`platform-${platform}`} className="bg-brand-foam/50 p-6 rounded-xl text-center hover:bg-brand-teal/10 transition-colors">
+              <div className="text-2xl md:text-3xl font-bold text-brand-dark mb-3">
+                {platform}
               </div>
-              <p className="text-gray-600 text-lg md:text-xl">
-                {item.label}
+              <div className="h-1.5 w-16 bg-brand-teal mx-auto mb-4"></div>
+              <p className="text-base text-gray-600">
+                {content[language].platforms.tagline}
               </p>
             </div>
           ))}
         </div>
       </div>
+    </div>
 
-      {/* Features Section */}
-      <ServiceFeatures
-        title={content[language].features.title}
-        features={features}
-      />
+    {/* ... (rest of the components remain the same) */}
 
-      {/* Platform Specialization */}
-      <div className="bg-white py-20">
-        <div className="container mx-auto px-4">
-          <h2 className={`text-4xl font-bold text-center mb-12 font-serif`}>
-            {content[language].platforms.title}{' '}
-            <span className="text-brand-teal">{content[language].platforms.highlight}</span>
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            {content[language].platforms.items.map((platform) => (
-              <div key={platform} className="bg-brand-foam/50 p-6 rounded-xl text-center hover:bg-brand-teal/10 transition-colors">
-                <div className="text-2xl md:text-3xl font-bold text-brand-dark mb-3">
-                  {platform}
-                </div>
-                <div className="h-1.5 w-16 bg-brand-teal mx-auto mb-4"></div>
-                <p className="text-base text-gray-600">
-                  {content[language].platforms.tagline}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Process Section */}
-      <ServiceProcess
-        title={content[language].process.title}
-        steps={content[language].process.steps}
-      />
-
-      {/* Testimonials */}
-      <div className="bg-brand-dark text-white py-20 px-4">
-        <div className="container mx-auto">
-          <h2 className={`text-4xl font-bold text-center mb-12 font-serif`}>
-            {content[language].testimonials.title}{' '}
-            <span className="text-brand-teal">{content[language].testimonials.highlight}</span>
-          </h2>
-          <TestimonialCarousel />
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="container mx-auto py-20 px-4 text-center">
-        <h2 className={`text-4xl font-bold mb-8 font-serif`}>
-          {content[language].cta.title}{' '}
-          <span className="text-brand-teal">{content[language].cta.highlight}</span>
-        </h2>
-        <div className="flex flex-col sm:flex-row gap-6 justify-center">
-          {content[language].cta.buttons.map((button, index) => (
-            <button
-              key={index}
-              className={`px-8 py-4 rounded-full font-bold transition-colors shadow-depth text-lg ${
-                button.variant === 'primary'
-                  ? 'bg-brand-teal hover:bg-brand-teal/90 text-black'
-                  : 'border-2 border-brand-dark hover:bg-brand-dark/5 text-brand-dark'
-              }`}
-            >
-              {button.text}
-            </button>
-          ))}
-        </div>
+    {/* CTA Section */}
+    <div className="container mx-auto py-20 px-4 text-center">
+      <h2 className={`text-4xl font-bold mb-8 font-serif`}>
+        {content[language].cta.title}{' '}
+        <span className="text-brand-teal">{content[language].cta.highlight}</span>
+      </h2>
+      <div className="flex flex-col sm:flex-row gap-6 justify-center">
+        {content[language].cta.buttons.map((button, index) => (
+          <button
+            key={`cta-btn-${index}`}
+            className={`px-8 py-4 rounded-full font-bold transition-colors shadow-depth text-lg ${
+              button.variant === 'primary'
+                ? 'bg-brand-teal hover:bg-brand-teal/90 text-black'
+                : 'border-2 border-brand-dark hover:bg-brand-dark/5 text-brand-dark'
+            }`}
+          >
+            {button.text}
+          </button>
+        ))}
       </div>
     </div>
-  );
+  </div>
+);
 }
