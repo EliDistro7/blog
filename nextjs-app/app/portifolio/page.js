@@ -10,7 +10,7 @@ export default function Portfolio() {
           title="Our"
           highlight="Digital Creations"
           subtitle="Though we're new, our solutions deliver real impact"
-          bgClass="bg-gradient-to-br from-brand-dark to-brand-deep"
+          bgClass="bg-gradient-to-br from-brand-dark to-brand-deep "
         />
   
         {/* Current Projects */}
