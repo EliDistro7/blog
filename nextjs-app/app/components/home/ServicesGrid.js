@@ -146,7 +146,8 @@ function ServicesGrid() {
 function ServiceCard({ 
   title, 
   desc, 
-  icon, 
+  icon,
+  key,
   color, 
   image, 
   buttonColor, 
@@ -154,7 +155,7 @@ function ServiceCard({
   learnMore
 }) {
   return (
-    <div className={`group relative overflow-hidden rounded-xl h-full ${color} hover:shadow-layer transition-all`}>
+    <div key={key} className={`group relative overflow-hidden rounded-xl h-full ${color} hover:shadow-layer transition-all`}>
       {/* Background Image */}
     
       
