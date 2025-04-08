@@ -7,6 +7,7 @@ function ServicesGrid() {
 
   const services = [
     {
+      id: 'web-design', // Added unique id
       title: {
         en: "Web Design",
         sw: "Uundaji wa Tovuti"
@@ -15,7 +16,7 @@ function ServicesGrid() {
         en: "Stunning, responsive websites tailored to your brand identity and business goals.",
         sw: "Tovuti zenye kuvutia na zinazobadilika kulingana na kifaa, zilizobuniwa kwa kufuata utambulisho wa chapa yako na malengo ya biashara."
       },
-      icon: <Camera className="w-10 h-10 text-brand-accent" />,
+      icon: <Camera key="camera-icon" className="w-10 h-10 text-brand-accent" />, // Added key
       color: "bg-brand-accent/10",
       image: "/services/web-design-2.jpg",
       buttonColor: "bg-brand-accent hover:bg-brand-accent/90",
@@ -29,6 +30,7 @@ function ServicesGrid() {
       }
     },
     {
+      id: 'catering', // Added unique id
       title: {
         en: "Catering Services",
         sw: "Huduma za Chakula"
@@ -37,7 +39,7 @@ function ServicesGrid() {
         en: "Exquisite gourmet experiences and flawless event catering for memorable occasions.",
         sw: "Uzoefu wa hali ya juu wa vyakula na huduma bora za chakula kwa hafla zisizosahaulika."
       },
-      icon: <Utensils className="w-10 h-10 text-brand-coral" />,
+      icon: <Utensils key="utensils-icon" className="w-10 h-10 text-brand-coral" />, // Added key
       color: "bg-brand-coral/10",
       image: "/services/catering-bg.jpg",
       buttonColor: "bg-brand-coral hover:bg-brand-coral/90",
@@ -51,6 +53,7 @@ function ServicesGrid() {
       }
     },
     {
+      id: 'social-media', // Added unique id
       title: {
         en: "Social Media Management",
         sw: "Usimamizi wa Mitandao ya Kijamii"
@@ -59,7 +62,7 @@ function ServicesGrid() {
         en: "Strategic campaigns to amplify your digital presence and engagement.",
         sw: "Kampeni za kimkakati za kuongeza uwepo wako wa kidijitali na mwingiliano."
       },
-      icon: <Share2 className="w-10 h-10 text-brand-teal" />,
+      icon: <Share2 key="share-icon" className="w-10 h-10 text-brand-teal" />, // Added key
       color: "bg-brand-teal/10",
       image: "/services/social-media-bg.jpg",
       buttonColor: "bg-brand-teal hover:bg-brand-teal/90",
@@ -73,6 +76,7 @@ function ServicesGrid() {
       }
     },
     {
+      id: 'mc', // Added unique id
       title: {
         en: "Master of Ceremonies",
         sw: "Mwenye Sherehe"
@@ -81,7 +85,7 @@ function ServicesGrid() {
         en: "Charismatic hosts to elevate your events with professional flair.",
         sw: "Wenyeji wenye ukarimu wa kuinua hafla zako kwa ufundi wa kitaaluma."
       },
-      icon: <Mic2 className="w-10 h-10 text-brand-deep" />,
+      icon: <Mic2 key="mic-icon" className="w-10 h-10 text-brand-deep" />, // Added key
       color: "bg-brand-deep/10",
       image: "/services/mc-bg.jpg",
       buttonColor: "bg-brand-deep hover:bg-brand-deep/90",
@@ -121,13 +125,12 @@ function ServicesGrid() {
       
       <h2 className="text-4xl md:text-5xl font-bold text-center mb-8 text-brand-dark font-serif">
         {sectionTitles[language].main}
-       
       </h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-        {services.map((service, index) => (
+        {services.map((service) => (
           <ServiceCard 
-            key={index} 
+            key={service.id} // Using the unique id as key
             title={service.title[language]}
             desc={service.desc[language]}
             icon={service.icon}
