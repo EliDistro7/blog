@@ -193,10 +193,10 @@ export default function ContactPage() {
   // Service contacts with icons and colors
   const serviceContacts = content[language].serviceContacts.items.map((item, index) => {
     const icons = [
-      <Camera className="w-5 h-5 text-brand-accent" />,
-      <Utensils className="w-5 h-5 text-brand-coral" />,
-      <Share2 className="w-5 h-5 text-brand-teal" />,
-      <Mic2 className="w-5 h-5 text-brand-foam" />
+      <Camera key='camera-icon' className="w-5 h-5 text-brand-accent" />,
+      <Utensils key='utensils-icon' className="w-5 h-5 text-brand-coral" />,
+      <Share2 key='shaare-2' className="w-5 h-5 text-brand-teal" />,
+      <Mic2 key='mic2' className="w-5 h-5 text-brand-foam" />
     ];
     const colors = [
       { bg: "bg-brand-accent/10", border: "border-brand-accent/30" },
