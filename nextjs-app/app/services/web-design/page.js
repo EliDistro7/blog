@@ -220,13 +220,13 @@ export default function WebDesignPage() {
   };
 
   return (
-    <div>
+    <div className="bg-brand-foam">
       {/* Hero Section */}
       <ServiceHeader
         title={headerContent.title[language]}
         highlight={headerContent.highlight[language]}
         subtitle={headerContent.subtitle[language]}
-        bgClass="bg-gradient-to-br from-brand-dark to-brand-deep"
+        bgClass="bg-gradient-to-br from-brand-accent to-brand-dark"
       />
 
       {/* Features Section */}

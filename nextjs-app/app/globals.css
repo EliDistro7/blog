@@ -39,4 +39,62 @@
     transition: all 0.3s ease;
   }
 
+  .clip-path-polygon {
+    clip-path: polygon(0 0, 100% 0, 100% 60%, 0 90%);
+  }
   
+  @supports (-webkit-mask-image: paint(something)) or (mask-image: paint(something)) {
+    .clip-path-polygon {
+      -webkit-mask-image: paint(polygon-mask);
+      mask-image: paint(polygon-mask);
+    }
+  }
+  
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .hover\:shadow-layer {
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  
+  .hover\:shadow-layer:hover {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transform: translateY(-5px);
+  }
+
+  .service-card-mask {
+    mask-image: radial-gradient(circle at left, 
+      black 0%, 
+      black 40%, 
+      transparent 100%
+    );
+  }
+  
+  @keyframes content-slide {
+    from { transform: translateX(20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  .service-card-content {
+    animation: content-slide 0.6s ease-out;
+  }
+
+
+  .mask-organic {
+    -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M 10 10 Q 30 5, 50 20 T 90 10 L 90 90 Q 80 95, 70 85 T 10 90 Z" fill="black"/></svg>');
+    mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M 10 10 Q 30 5, 50 20 T 90 10 L 90 90 Q 80 95, 70 85 T 10 90 Z" fill="black"/></svg>');
+    mask-size: cover;
+    mask-repeat: no-repeat;
+    mask-position: center;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  
+  .group:hover .mask-organic {
+    animation: float 3s ease-in-out infinite;
+  }

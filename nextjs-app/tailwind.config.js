@@ -10,6 +10,14 @@ export default {
       padding: "2rem",
     },
     extend: {
+      maskImage: {
+        'brand-radial': 'radial-gradient(circle at left, var(--tw-gradient-from) 60%, var(--tw-gradient-to) 100%)',
+      },
+      gradientColorStops: {
+        'brand-accent/50': 'rgba(99, 102, 241, 0.5)',
+        'brand-coral/50': 'rgba(249, 115, 22, 0.5)',
+        // Add other brand colors as needed
+      },
       aspectRatio: {
         '4/3': '4 / 3',
         '3/4': '3 / 4',
@@ -17,6 +25,9 @@ export default {
       animation: {
         'gradient-x': 'gradient-x 3s ease infinite',
         'float': 'float 6s ease-in-out infinite',
+      },
+      clipPath: {
+        'polygon': 'polygon(0 0, 100% 0, 100% 60%, 0 90%)',
       },
       keyframes: {
         'gradient-x': {
@@ -94,6 +105,7 @@ brand: {
   },
   plugins: [
     typography,
+    require('tailwind-clip-path'),
     plugin(function({ addUtilities }) {
       addUtilities({
         ".text-shadow": {
