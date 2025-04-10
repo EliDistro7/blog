@@ -94,7 +94,7 @@ export default function RootLayout({
       <body className="bg-brand-foam text-brand-dark font-sans">
         <LanguageProvider>
           <div className="relative min-h-screen flex flex-col">
-            <Toaster />
+            
             
             <div className="sticky top-0 z-50">
               <Header />

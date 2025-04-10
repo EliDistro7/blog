@@ -220,7 +220,7 @@ export default function WebDesignPage() {
   };
 
   return (
-    <div className="bg-brand-foam">
+    <div>
       {/* Hero Section */}
       <ServiceHeader
         title={headerContent.title[language]}

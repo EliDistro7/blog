@@ -60,7 +60,7 @@ function ServicesGrid() {
       },
       desc: {
         en: "Strategic campaigns to amplify your digital presence and engagement.",
-        sw: "Kampeni za kimkakati za kuongeza uwepo wako wa kidijitali na mwingiliano."
+        sw: "Kampeni za kimkakati za kuongeza uwepo wako mtandaoni."
       },
       icon: <Share2 key="share-icon" className="w-10 h-10 text-brand-teal" />, // Added key
       color: "bg-brand-teal/10",
@@ -114,14 +114,7 @@ function ServicesGrid() {
   return (
     <section className="container mx-auto py-20 px-4 relative">
       {/* Section Background Pattern */}
-      <div className="absolute inset-0 -z-10 opacity-5">
-        <Image 
-          src="/services/grid-pattern.svg" 
-          alt={language === 'en' ? "Decorative pattern" : "Muundo wa mapambo"}
-          fill
-          className="object-cover"
-        />
-      </div>
+      
       
       <h2 className="text-4xl md:text-5xl font-bold text-center mb-8 text-brand-dark font-serif">
         {sectionTitles[language].main}

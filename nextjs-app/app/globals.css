@@ -13,12 +13,10 @@
   }
   
   body.menu-open {
-    overflow: hidden;
+    overflow: scroll;
   }
 
-  [class^="fixed inset-0 bg-brand-dark"] {
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
+
 
   /* Smooth mobile menu transitions */
 [role="navigation"] {
@@ -33,11 +31,7 @@
     }
   }
 
-  /* Swiper styles */
-.swiper-pagination-bullet {
-    background: rgba(226, 232, 240, 0.5); /* brand-light/50 */
-    opacity: 1;
-  }
+
   
   .swiper-pagination-bullet-active {
     background: #6366F1; /* brand-accent */

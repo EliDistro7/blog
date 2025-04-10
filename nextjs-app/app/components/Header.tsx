@@ -68,7 +68,7 @@ export default function Header() {
   ]
 
   return (
-    <header className="w-full h-20 bg-brand-dark/95 backdrop-blur-md border-b border-brand-medium/30 sticky top-0 z-50">
+    <header className="sticky z-50 w-full h-20 bg-brand-dark/95 backdrop-blur-md border-b border-brand-medium/30 ">
       <div className="container h-full px-4 sm:px-6 mx-auto">
         <div className="flex items-center justify-between h-full gap-5">
           {/* Logo */}

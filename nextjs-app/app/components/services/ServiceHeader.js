@@ -19,7 +19,7 @@ export default function ServiceHeader({
   title = headerContent.en.title,
   highlight = headerContent.en.highlight,
   subtitle = headerContent.en.subtitle,
-  bgClass = "bg-gradient-to-br from-brand-blue to-brand-deep"
+  bgClass = "bg-gradient-to-br from-brand-accent to-brand-deep"
 }) {
   const { language } = useLanguage();
 

@@ -6,6 +6,7 @@ import ProjectCard from "@/app/components/portifolio/ProjectCard";
 export default function Portfolio() {
     return (
       <div className="bg-brand-foam">
+        
         <ServiceHeader
           title="Our"
           highlight="Digital Creations"

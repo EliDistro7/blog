@@ -1,9 +1,9 @@
-import type { Config } from "tailwindcss";
+import { Config } from "tailwindcss";
 import typography from "@tailwindcss/typography";
 import plugin from 'tailwindcss/plugin';
 
 export default {
-  content: ["./app/**/*.{ts,tsx}", "./sanity/**/*.{ts,tsx}"],
+  content: ["./app/**/*.{js, jsx,ts,tsx}", , "./sanity/**/*.{ts,tsx}"],
   theme: {
     container: {
       center: true,
@@ -47,47 +47,49 @@ export default {
           }
       ,
       colors: {
-          // Primary Brand Colors
-  brand: {
-    dark: "#0F172A",       // Deep navy
-    deep: "#1E293B",       // Slightly lighter navy
-    medium: "#334155",     // Versatile slate
-    light: "#64748B",      // Soft gray-blue
-    accent: "#6366F1",     // Vibrant indigo
-    coral: "#F97316",      // Warm orange
-    teal: "#0D9488",       // Balanced teal
-    foam: "#E2E8F0",       // Light neutral
-    gold: "#D4AF37",       // Rich gold
-    goldLight: "#F5D07A",  // Light gold
-    goldDark: "#996515",   // Dark gold
-    blue: "#3B82F6", 
-  },
-        // Supporting Colors
-        success: "#10B981",      // Emerald green
-        warning: "#F59E0B",      // Amber yellow
-        danger: "#EF4444",       // Red for alerts
-        // Neutrals (optimized for contrast)
-        green: "#1EB53A",  // Tanzanian green
-    yellow: "#FCD116", // Tanzanian yellow
-    blue: "#00A3DD",   // Tanzanian blue
+        // Primary Brand Colors
+brand: {
+  dark: "#0F172A",       // Deep navy
+  deep: "#1E293B",       // Slightly lighter navy
+  medium: "#334155",     // Versatile slate
+  light: "#64748B",      // Soft gray-blue
+  accent: "#6366F1",     // Vibrant indigo
+  coral: "#F97316",      // Warm orange
+  teal: "#0D9488",       // Balanced teal
+  foam: "#E2E8F0",       // Light neutral
+  gold: "#D4AF37",       // Rich gold
+  goldLight: "#F5D07A",  // Light gold
+  goldDark: "#996515",   // Dark gold
+  blue: "#3B82F6", 
+},
+      // Supporting Colors
+      success: "#10B981",      // Emerald green
+      warning: "#F59E0B",      // Amber yellow
+      danger: "#EF4444",       // Red for alerts
+      // Neutrals (optimized for contrast)
+      green: "#1EB53A",  // Tanzanian green
+  yellow: "#FCD116", // Tanzanian yellow
+  blue: "#00A3DD",   // Tanzanian blue
 
 
-        white: "#FFFFFF",
-        black: "#0F172A",
-        gray: {
-          50: "#F8FAFC",
-          100: "#F1F5F9",
-          200: "#E2E8F0",
-          300: "#CBD5E1",
-          400: "#94A3B8",
-          500: "#64748B",
-          600: "#475569",
-          700: "#334155",
-          800: "#1E293B",
-          900: "#0F172A",
-        },
+      white: "#FFFFFF",
+      black: "#0F172A",
+      gray: {
+        50: "#F8FAFC",
+        100: "#F1F5F9",
+        200: "#E2E8F0",
+        300: "#CBD5E1",
+        400: "#94A3B8",
+        500: "#64748B",
+        600: "#475569",
+        700: "#334155",
+        800: "#1E293B",
+        900: "#0F172A",
       },
-      // ... rest of your config remains the same
+    },
+
+
+     
     },
   },
   plugins: [
@@ -113,4 +115,4 @@ export default {
       });
     }),
   ],
-} satisfies Config;
+}

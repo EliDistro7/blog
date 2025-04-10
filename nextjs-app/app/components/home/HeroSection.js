@@ -19,7 +19,7 @@ const heroContent = {
     titlePart2: "Future Holders",
     description: "Kutoka kwa uundaji wa tovuti hadi uhodari wa hafla—tunatoa ubora katika majukwaa yote.",
     cta1: "Pata Bei",
-    cta2: "Gundua Huduma"
+    cta2: "Huduma zetu"
   }
 };
 
@@ -52,7 +52,7 @@ export default function HeroSection() {
               <button className="px-6 py-3 bg-brand-accent hover:bg-brand-accent/90 rounded-full font-bold transition-colors shadow-depth">
                 {heroContent[language].cta1}
               </button>
-              <button className="px-6 py-3 border-2 border-white hover:bg-white/10 rounded-full font-bold transition-colors">
+              <button className="px-6 py-3 border-2 bg-brand-medium border-white hover:bg-white/10 rounded-full font-bold transition-colors">
                 {heroContent[language].cta2}
               </button>
             </div>
@@ -63,12 +63,12 @@ export default function HeroSection() {
         <SwiperSlide>
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              {language === 'en' ? "Innovative Solutions for" : "Solutions za Ubunifu kwa"} <span className="text-brand-accent">{language === 'en' ? "Your Business" : "Biashara Yako"}</span>
+              {language === 'en' ? "Innovative Solutions for" : "Suluhu za Ubunifu kwa"} <span className="text-brand-accent">{language === 'en' ? "Your Business" : "Biashara Yako"}</span>
             </h1>
             <p className="text-xl max-w-2xl mx-auto mb-8">
               {language === 'en' 
                 ? "Cutting-edge technology tailored to your specific needs" 
-                : "Teknolojia ya kisasa iliyobinafsishwa kwa mahitaji yako maalum"}
+                : "Teknolojia ya kisasa kwa mahitaji yako maalum"}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="px-6 py-3 bg-brand-accent hover:bg-brand-accent/90 rounded-full font-bold transition-colors shadow-depth">
@@ -82,7 +82,7 @@ export default function HeroSection() {
         </SwiperSlide>
       </Swiper>
       
-      <div className="absolute bottom-0 left-0 right-0 h-16 bg-brand-foam clip-path-wave"></div>
+      
     </section>
   );
 }
