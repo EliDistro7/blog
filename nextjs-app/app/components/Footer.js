@@ -24,7 +24,6 @@ export default function Footer() {
       copyright: "Haki zote zimehifadhiwa.",
       links: [
         { name: "Huduma", path: "/services" },
-        { name: "Kuhusu", path: "/about" },
         { name: "Portfolio", path: "/portfolio" },
         { name: "Mawasiliano", path: "/contact" },
       ]
@@ -66,7 +65,7 @@ export default function Footer() {
           
           {/* Contact - simplified */}
           <a href="mailto:info@futureholders.net" className="text-brand-foam/70 hover:text-brand-accent transition-colors text-sm mb-5">
-            info@futureholders.net
+            info@futureholders.pro
           </a>
           
           {/* Social icons */}
