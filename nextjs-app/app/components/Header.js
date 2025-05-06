@@ -9,6 +9,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [servicesOpen, setServicesOpen] = useState(false)
   const dropdownRef = useRef(null)
+  const mobileMenuRef = useRef(null)
 
   // Detect scroll for header styling
   useEffect(() => {
@@ -21,7 +22,11 @@ export default function Header() {
 
   // Lock body scroll when menu is open
   useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'auto'
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
     return () => { document.body.style.overflow = 'auto' }
   }, [mobileMenuOpen])
   
@@ -74,7 +79,7 @@ export default function Header() {
 
   return (
     <header 
-      className={`fixed z-50 w-full transition-all duration-300 ${
+      className={`fixed z-40 w-full transition-all duration-300 ${
         scrolled 
           ? 'h-16 bg-brand-dark/95 backdrop-blur-md shadow-lg' 
           : 'h-20 bg-brand-dark/80 backdrop-blur-sm'
@@ -164,60 +169,78 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Menu - Slide from right */}
-      <div 
+      {/* Overlay for mobile menu background */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+      
+      {/* Simple Mobile Menu that slides down */}
+      <div
         id="mobile-menu"
-        className={`fixed inset-y-0 right-0 z-40 w-full sm:max-w-sm transform transition-all duration-300 ease-in-out ${
-          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        ref={mobileMenuRef}
+        className={`fixed inset-x-0 z-50 bg-brand-dark border-b border-brand-medium/30 shadow-xl lg:hidden transition-all duration-300 ease-in-out ${
+          mobileMenuOpen
+            ? 'translate-y-0 opacity-100'
+            : '-translate-y-full opacity-0 pointer-events-none'
         }`}
         style={{ top: scrolled ? '4rem' : '5rem' }}
       >
-        <div className="h-full overflow-y-auto bg-gradient-to-b from-brand-dark to-brand-dark/95 backdrop-blur-lg shadow-xl border-l border-brand-medium/30">
-          <div className="flex flex-col p-6 space-y-6">
-            <div className="space-y-1.5">
-              <h3 className="text-xs uppercase tracking-wider text-brand-foam/60 font-medium mb-2">Services</h3>
-              {services.map((service) => (
-                <Link
-                  key={service.name}
-                  href={service.path}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-brand-medium/10 hover:bg-brand-medium/20 border border-brand-medium/20 transition-all"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <div className="p-1.5 rounded-md bg-brand-accent/10 text-brand-accent">
-                    {service.icon}
-                  </div>
-                  <span className="text-sm font-medium text-white">{service.name}</span>
-                </Link>
-              ))}
+        <div className="container px-4 py-6 mx-auto">
+          <nav>
+            <div className="grid gap-4 mb-6">
+              <h3 className="text-xs uppercase tracking-wider text-brand-foam/60 font-medium px-2">
+                Services
+              </h3>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-2">
+                {services.map((service) => (
+                  <Link
+                    key={service.name}
+                    href={service.path}
+                    className="flex items-center gap-3 p-3 rounded-lg bg-brand-medium/10 hover:bg-brand-medium/20 border border-brand-medium/20 transition-all"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <div className="p-1.5 rounded-md bg-brand-accent/10 text-brand-accent">
+                      {service.icon}
+                    </div>
+                    <span className="text-sm font-medium text-white">{service.name}</span>
+                  </Link>
+                ))}
+              </div>
             </div>
             
-            <div className="space-y-1.5">
-              <h3 className="text-xs uppercase tracking-wider text-brand-foam/60 font-medium mb-2">Navigation</h3>
-              {navItems.map((item) => (
+            <div className="grid gap-4">
+              <h3 className="text-xs uppercase tracking-wider text-brand-foam/60 font-medium px-2">
+                Navigation
+              </h3>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.path}
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-brand-medium/20 transition-all"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <div className="p-1.5 rounded-md bg-brand-foam/10 text-brand-foam">
+                      {item.icon}
+                    </div>
+                    <span className="text-sm font-medium text-white">{item.name}</span>
+                  </Link>
+                ))}
+                
                 <Link
-                  key={item.name}
-                  href={item.path}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-brand-medium/20 transition-all"
+                  href="/contact"
+                  className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-brand-accent to-brand-accent/80 hover:opacity-90 text-white transition-all sm:col-span-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <div className="p-1.5 rounded-md bg-brand-foam/10 text-brand-foam">
-                    {item.icon}
-                  </div>
-                  <span className="text-sm font-medium text-white">{item.name}</span>
+                  <span className="text-sm font-medium">Contact Us</span>
                 </Link>
-              ))}
+              </div>
             </div>
-            
-            <div className="pt-4">
-              <Link
-                href="/contact"
-                className="flex items-center justify-center w-full py-3 rounded-lg bg-gradient-to-r from-brand-accent to-brand-accent/80 hover:opacity-90 text-white font-medium transition-all shadow-glow"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Contact Us
-              </Link>
-            </div>
-          </div>
+          </nav>
         </div>
       </div>
     </header>
