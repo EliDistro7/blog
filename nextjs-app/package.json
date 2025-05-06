@@ -24,8 +24,7 @@
     "sonner": "^1.7.0",
     "styled-components": "^6.1.13",
     "swiper": "^11.2.6",
-    "tailwind-clip-path": "^1.0.0",
-    "three": "^0.176.0"
+    "tailwind-clip-path": "^1.0.0"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",

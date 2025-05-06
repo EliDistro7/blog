@@ -1,21 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, Utensils, Share2, Mic2 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
-// Mock language hook since the actual one isn't available
-
-
 export default function ServicesVisualization() {
-  const mountRef = useRef(null);
   const containerRef = useRef(null);
   const { language, toggleLanguage } = useLanguage();
   const [activeService, setActiveService] = useState(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   
-  // Service data with much wider spacing
+  // Service data
   const services = [
     {
       id: 'web-design',
@@ -26,28 +20,26 @@ export default function ServicesVisualization() {
       },
       desc: {
         en: "Stunning, responsive websites tailored to your brand identity and business goals.",
-        sw: "Tovuti zenye kuvutia na zinazobadilika kulingana na kifaa, zilizobuniwa kwa kufuata utambulisho wa chapa yako na malengo ya biashara."
+        sw: "Tovuti zenye kuvutia na zinazobadilika kulingana na device, zilizobuniwa kwa kufuata utambulisho wa brand na malengo ya biashara."
       },
       icon: <Camera className="w-10 h-10" />,
       color: "#6366F1", // Brand accent (indigo)
-      position: new THREE.Vector3(3.5, 0, 0),
-      labelPosition: { x: 75, y: 50 }
+      position: { x: 75, y: 30 } // Percentage positions
     },
     {
       id: 'catering',
       link: '/services/catering',
       title: {
         en: "Catering Services",
-        sw: "Huduma za Chakula"
+        sw: "Huduma za Catering"
       },
       desc: {
         en: "Exquisite gourmet experiences and flawless event catering for memorable occasions.",
-        sw: "Uzoefu wa hali ya juu wa vyakula na huduma bora za chakula kwa hafla zisizosahaulika."
+        sw: "Uzoefu wa hali ya juu wa vyakula bora na huduma bora za chakula kwa hafla zisizosahaulika."
       },
       icon: <Utensils className="w-10 h-10" />,
       color: "#F97316", // Brand coral (orange)
-      position: new THREE.Vector3(-3.5, 0, 0),
-      labelPosition: { x: 25, y: 50 }
+      position: { x: 25, y: 30 }
     },
     {
       id: 'social-media',
@@ -58,28 +50,26 @@ export default function ServicesVisualization() {
       },
       desc: {
         en: "Strategic campaigns to amplify your digital presence and engagement.",
-        sw: "Kampeni za kimkakati za kuongeza uwepo wako mtandaoni."
+        sw: "Kampeni za kimkakati za kuongeza views, follows,likes, engagement mtandaoni."
       },
       icon: <Share2 className="w-10 h-10" />,
       color: "#0D9488", // Brand teal
-      position: new THREE.Vector3(0, 3.5, 0),
-      labelPosition: { x: 50, y: 20 }
+      position: { x: 75, y: 70 }
     },
     {
       id: 'mc',
       link: '/services/mc-services',
       title: {
         en: "Master of Ceremonies",
-        sw: "Mwenye Sherehe"
+        sw: "Washereheshaji"
       },
       desc: {
         en: "Charismatic hosts to elevate your events with professional flair.",
-        sw: "Wenyeji wenye ukarimu wa kuinua hafla zako kwa ufundi wa kitaaluma."
+        sw: "Washereheshaji wenye ubunifu wa kuinua hafla yako kuwa nyakati zisizosahaulika ."
       },
       icon: <Mic2 className="w-10 h-10" />,
       color: "#1E293B", // Brand deep
-      position: new THREE.Vector3(0, -3.5, 0),
-      labelPosition: { x: 50, y: 80 }
+      position: { x: 25, y: 70 }
     }
   ];
 
@@ -101,319 +91,6 @@ export default function ServicesVisualization() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Setup and animate 3D scene
-  useEffect(() => {
-    if (!mountRef.current || !dimensions.width) return;
-    
-    // Clean up any previous canvas
-    while (mountRef.current.firstChild) {
-      mountRef.current.removeChild(mountRef.current.firstChild);
-    }
-    
-    // Scene setup with better contrast
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x1E293B); // Dark blue background
-
-    // Create a gradient background using a fixed Color instead of texture
-    // This avoids potential immutable texture issues
-    scene.background = new THREE.Color(0x1E293B);
-    
-    // Camera with adjusted position for better view
-    const camera = new THREE.PerspectiveCamera(
-      60, 
-      dimensions.width / dimensions.height, 
-      0.1, 
-      1000
-    );
-    camera.position.set(0, 0, 8); // Position further back
-    
-    // High-quality renderer with proper parameters
-    const renderer = new THREE.WebGLRenderer({ 
-      antialias: true,
-      powerPreference: "high-performance",
-      alpha: true
-    });
-    renderer.setSize(dimensions.width, dimensions.height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio to prevent performance issues
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    
-    // Add renderer canvas to DOM
-    mountRef.current.appendChild(renderer.domElement);
-    
-    // Controls with limits to prevent disorientation
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.1;
-    controls.maxDistance = 15;
-    controls.minDistance = 4;
-    controls.maxPolarAngle = Math.PI * 0.7; // Limit vertical rotation
-    
-    // Improved lighting for better visibility
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambientLight);
-    
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
-    directionalLight.position.set(5, 10, 7);
-    directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = 1024;
-    directionalLight.shadow.mapSize.height = 1024;
-    scene.add(directionalLight);
-    
-    // Add a point light at center for better illumination
-    const pointLight = new THREE.PointLight(0x3B82F6, 1.5, 10);
-    pointLight.position.set(0, 0, 0);
-    scene.add(pointLight);
-    
-    // Company center sphere with glow effect
-    const companyGeometry = new THREE.SphereGeometry(0.8, 32, 32);
-    const companyMaterial = new THREE.MeshPhongMaterial({ 
-      color: 0x3B82F6, // Brand blue
-      emissive: 0x1E40AF,
-      shininess: 90,
-      transparent: true,
-      opacity: 0.9
-    });
-    const companySphere = new THREE.Mesh(companyGeometry, companyMaterial);
-    companySphere.castShadow = true;
-    companySphere.receiveShadow = true;
-    scene.add(companySphere);
-    
-    // Add glow effect for company sphere
-    const glowGeometry = new THREE.SphereGeometry(1.0, 32, 32);
-    const glowMaterial = new THREE.MeshBasicMaterial({
-      color: 0x3B82F6,
-      transparent: true,
-      opacity: 0.15,
-      side: THREE.BackSide
-    });
-    const glowSphere = new THREE.Mesh(glowGeometry, glowMaterial);
-    scene.add(glowSphere);
-    
-    // Service nodes with text labels
-    const serviceNodes = [];
-    const serviceConnections = [];
-    
-    services.forEach((service) => {
-      // Create larger service sphere with custom shader for better visibility
-      const geometry = new THREE.SphereGeometry(0.7, 32, 32);
-      const material = new THREE.MeshPhongMaterial({ 
-        color: new THREE.Color(service.color),
-        emissive: new THREE.Color(service.color).multiplyScalar(0.4),
-        shininess: 70,
-        transparent: true,
-        opacity: 0.9
-      });
-      const sphere = new THREE.Mesh(geometry, material);
-      sphere.position.copy(service.position);
-      sphere.userData = { id: service.id };
-      sphere.castShadow = true;
-      sphere.receiveShadow = true;
-      scene.add(sphere);
-      serviceNodes.push(sphere);
-      
-      // Add subtle glow to each service node
-      const serviceGlowGeometry = new THREE.SphereGeometry(0.85, 32, 32);
-      const serviceGlowMaterial = new THREE.MeshBasicMaterial({
-        color: new THREE.Color(service.color),
-        transparent: true,
-        opacity: 0.15,
-        side: THREE.BackSide
-      });
-      const serviceGlow = new THREE.Mesh(serviceGlowGeometry, serviceGlowMaterial);
-      serviceGlow.position.copy(service.position);
-      scene.add(serviceGlow);
-      
-      // Create thicker connection line
-      const curve = new THREE.QuadraticBezierCurve3(
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(
-          service.position.x * 0.5, 
-          service.position.y * 0.5,
-          service.position.z * 0.5
-        ),
-        service.position
-      );
-      
-      const points = curve.getPoints(20);
-      const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-      const lineMaterial = new THREE.LineBasicMaterial({ 
-        color: new THREE.Color(service.color),
-        linewidth: 1, // WebGL only supports linewidth of 1
-        opacity: 0.7,
-        transparent: true
-      });
-      const line = new THREE.Line(lineGeometry, lineMaterial);
-      scene.add(line);
-      serviceConnections.push(line);
-    });
-    
-    // Particle system for background effect
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particleCount = 200;
-    
-    const positions = new Float32Array(particleCount * 3);
-    const colors = new Float32Array(particleCount * 3);
-    
-    for (let i = 0; i < particleCount; i++) {
-      // Position particles in a sphere around the scene
-      const radius = 15 + Math.random() * 10;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.random() * Math.PI;
-      
-      positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-      positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-      positions[i * 3 + 2] = radius * Math.cos(phi);
-      
-      // Random subtle colors
-      colors[i * 3] = 0.5 + Math.random() * 0.5;
-      colors[i * 3 + 1] = 0.5 + Math.random() * 0.5;
-      colors[i * 3 + 2] = 0.5 + Math.random() * 0.5;
-    }
-    
-    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    
-    const particlesMaterial = new THREE.PointsMaterial({
-      size: 0.05,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.5
-    });
-    
-    const particleSystem = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particleSystem);
-    
-    // Raycaster for better interaction
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    
-    function onMouseMove(event) {
-      // Calculate mouse position in normalized device coordinates
-      const rect = renderer.domElement.getBoundingClientRect();
-      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-      
-      // Update the raycaster
-      raycaster.setFromCamera(mouse, camera);
-      
-      // Check for intersections with service nodes
-      const intersects = raycaster.intersectObjects(serviceNodes);
-      
-      if (intersects.length > 0) {
-        const hoveredService = intersects[0].object;
-        document.body.style.cursor = 'pointer';
-        
-        // Scale up hovered service node
-        hoveredService.scale.set(1.1, 1.1, 1.1);
-        
-        if (activeService !== hoveredService.userData.id) {
-          setActiveService(hoveredService.userData.id);
-        }
-      } else {
-        document.body.style.cursor = 'auto';
-        
-        // Reset scale of all service nodes
-        serviceNodes.forEach(node => {
-          node.scale.set(1, 1, 1);
-        });
-        
-        if (activeService !== null) {
-          setActiveService(null);
-        }
-      }
-    }
-    
-    function onClick(event) {
-      // Same calculation as in onMouseMove
-      const rect = renderer.domElement.getBoundingClientRect();
-      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-      
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(serviceNodes);
-      
-      if (intersects.length > 0) {
-        const clickedService = intersects[0].object;
-        setActiveService(clickedService.userData.id);
-      }
-    }
-    
-    renderer.domElement.addEventListener('mousemove', onMouseMove);
-    renderer.domElement.addEventListener('click', onClick);
-    
-    // Better animation with time-based movement
-    const clock = new THREE.Clock();
-    
-    const animate = () => {
-      requestAnimationFrame(animate);
-      
-      const elapsedTime = clock.getElapsedTime();
-      
-      // Rotate company sphere
-      companySphere.rotation.y = elapsedTime * 0.5;
-      glowSphere.rotation.y = elapsedTime * 0.25;
-      
-      // Rotate particle system slowly
-      particleSystem.rotation.y = elapsedTime * 0.025;
-      
-      // Animate service nodes with different phases
-      serviceNodes.forEach((node, index) => {
-        const offset = index * (Math.PI / 2);
-        node.position.y = services[index].position.y + Math.sin(elapsedTime + offset) * 0.2;
-        
-        // Update connection lines
-        const curve = new THREE.QuadraticBezierCurve3(
-          new THREE.Vector3(0, 0, 0),
-          new THREE.Vector3(
-            services[index].position.x * 0.5, 
-            services[index].position.y * 0.5 + Math.sin(elapsedTime + offset) * 0.1,
-            services[index].position.z * 0.5
-          ),
-          node.position
-        );
-        
-        const points = curve.getPoints(20);
-        serviceConnections[index].geometry.setFromPoints(points);
-      });
-      
-      controls.update();
-      renderer.render(scene, camera);
-    };
-    
-    animate();
-    
-    // Cleanup
-    return () => {
-      if (mountRef.current) {
-        renderer.domElement.removeEventListener('mousemove', onMouseMove);
-        renderer.domElement.removeEventListener('click', onClick);
-      }
-      
-      // Properly dispose of Three.js resources
-      serviceNodes.forEach((node) => {
-        node.geometry.dispose();
-        node.material.dispose();
-      });
-      
-      serviceConnections.forEach((line) => {
-        line.geometry.dispose();
-        line.material.dispose();
-      });
-      
-      particlesGeometry.dispose();
-      particlesMaterial.dispose();
-      
-      companySphere.geometry.dispose();
-      companySphere.material.dispose();
-      glowSphere.geometry.dispose();
-      glowMaterial.dispose();
-      
-      controls.dispose();
-      renderer.dispose();
-    };
-  }, [dimensions, services, language, activeService]);
-  
   // Find active service details
   const activeServiceDetails = activeService 
     ? services.find(service => service.id === activeService) 
@@ -426,81 +103,203 @@ export default function ServicesVisualization() {
           {language === 'en' ? 'Our Services' : 'Huduma Zetu'}
         </h2>
         <button 
-          onClick={()=>{}}
+          onClick={toggleLanguage}
           className="px-6 py-3 text-base font-semibold text-white bg-brand-blue rounded-lg hover:bg-blue-700 transition-colors shadow-wave"
         >
           {language === 'en' ? 'Royal Services' : 'Hudumiwa Kama Mfalme'}
         </button>
       </div>
       
-      <div className="relative w-full">
-        {/* Service labels positioned around the 3D canvas */}
-        <div 
-          ref={mountRef} 
-          className="w-full rounded-xl shadow-depth mb-8 overflow-hidden"
-          style={{ height: `${dimensions.height}px` }}
-        />
+      <div className="relative w-full bg-gradient-to-b from-blue-900 to-gray-900 rounded-xl shadow-depth mb-8 overflow-hidden" 
+           style={{ height: `${dimensions.height}px` }}>
+        {/* Central company node */}
+        <motion.div 
+          className="absolute rounded-full bg-blue-500 shadow-glow"
+          style={{ 
+            width: 80, 
+            height: 80, 
+            left: '50%', 
+            top: '50%',
+            x: -40,
+            y: -40,
+            boxShadow: '0 0 20px 5px rgba(59, 130, 246, 0.5)'
+          }}
+          animate={{
+            scale: [1, 1.05, 1],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          <div className="w-full h-full flex items-center justify-center text-white font-bold">
+            {language === 'en' ? 'ROYAL' : 'FALME'}
+          </div>
+        </motion.div>
         
-        {/* Overlay text labels for services */}
-        <div className="absolute inset-0 pointer-events-none">
-          {services.map((service) => (
-            <div 
-              key={service.id}
-              className={`absolute transform ${activeService === service.id ? 'scale-110' : ''} transition-transform`}
-              style={{ 
-                left: `${service.labelPosition.x}%`, 
-                top: `${service.labelPosition.y}%`,
-                transform: 'translate(-50%, -50%)'
-              }}
-            >
-              <div 
-                className={`flex items-center justify-center p-2 rounded-lg shadow-md bg-white bg-opacity-90 border-l-4`}
-                style={{ borderLeftColor: service.color }}
+        {/* Animated background particles */}
+        {[...Array(50)].map((_, i) => (
+          <motion.div
+            key={`particle-${i}`}
+            className="absolute rounded-full bg-white opacity-30"
+            style={{
+              width: Math.random() * 5 + 1,
+              height: Math.random() * 5 + 1,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              opacity: [0.1, 0.3, 0.1],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: Math.random() * 3 + 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+            }}
+          />
+        ))}
+        
+        {/* Service nodes with connections */}
+        {services.map((service) => {
+          const isActive = activeService === service.id;
+          
+          return (
+            <React.Fragment key={service.id}>
+              {/* Connection line */}
+              <motion.div
+                className="absolute bg-gradient-to-r z-10"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  width: '20%',
+                  height: 3,
+                  backgroundColor: service.color,
+                  transformOrigin: '0 0',
+                  opacity: 0.7,
+                  rotate: Math.atan2(
+                    service.position.y - 50,
+                    service.position.x - 50
+                  ) * (180 / Math.PI),
+                  scale: Math.sqrt(
+                    Math.pow(service.position.x - 50, 2) + 
+                    Math.pow(service.position.y - 50, 2)
+                  ) / 10
+                }}
+                animate={{
+                  opacity: isActive ? 1 : 0.7,
+                  height: isActive ? 5 : 3,
+                }}
+                transition={{
+                  duration: 0.3
+                }}
+              />
+              
+              {/* Service node */}
+              <motion.div
+                className="absolute rounded-full cursor-pointer z-20 flex items-center justify-center"
+                style={{
+                  backgroundColor: service.color,
+                  width: 60,
+                  height: 60,
+                  left: `${service.position.x}%`,
+                  top: `${service.position.y}%`,
+                  x: -30,
+                  y: -30,
+                  boxShadow: `0 0 15px 2px ${service.color}80`
+                }}
+                whileHover={{ 
+                  scale: 1.1,
+                  boxShadow: `0 0 20px 5px ${service.color}80` 
+                }}
+                animate={{
+                  y: [-30, -35, -30],
+                }}
+                transition={{
+                  y: {
+                    duration: 2 + Math.random(),
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: Math.random() * 2
+                  }
+                }}
+                onClick={() => setActiveService(prev => prev === service.id ? null : service.id)}
               >
-                <span className="font-bold text-gray-900">
+                {React.cloneElement(service.icon, { className: "w-8 h-8 text-white" })}
+              </motion.div>
+              
+              {/* Service label */}
+              <motion.div
+                className="absolute bg-white bg-opacity-90 rounded-lg px-3 py-1 z-10 shadow-md border-l-4 pointer-events-none"
+                style={{
+                  left: `${service.position.x}%`,
+                  top: `${service.position.y}%`,
+                  y: 40,
+                  x: -60,
+                  borderLeftColor: service.color,
+                  width: 120
+                }}
+                animate={{
+                  scale: isActive ? 1.1 : 1,
+                  y: isActive ? 50 : 40,
+                }}
+              >
+                <span className="font-bold text-gray-900 text-sm">
                   {service.title[language]}
                 </span>
-              </div>
-            </div>
-          ))}
-        </div>
+              </motion.div>
+            </React.Fragment>
+          );
+        })}
       </div>
       
-      {activeServiceDetails && (
-        <div className="w-full p-6 rounded-xl bg-white shadow-layer border-l-4 mb-8 transition-all duration-300 transform hover:shadow-glow"
-             style={{ borderLeftColor: activeServiceDetails.color }}>
-          <div className="flex items-center mb-4">
-            <div className="p-3 rounded-full mr-4" style={{ backgroundColor: activeServiceDetails.color }}>
-              {React.cloneElement(activeServiceDetails.icon, { className: "w-12 h-12 text-white" })}
+      {/* Active service details */}
+      <AnimatePresence>
+        {activeServiceDetails && (
+          <motion.div 
+            className="w-full p-6 rounded-xl bg-white shadow-layer border-l-4 mb-8"
+            style={{ borderLeftColor: activeServiceDetails.color }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="flex flex-col md:flex-row items-start md:items-center mb-4 gap-4">
+              <div className="p-3 rounded-full" style={{ backgroundColor: activeServiceDetails.color }}>
+                {React.cloneElement(activeServiceDetails.icon, { className: "w-12 h-12 text-white" })}
+              </div>
+              <div>
+                <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
+                  {activeServiceDetails.title[language]}
+                </h3>
+                <p className="text-lg text-gray-600">
+                  {activeServiceDetails.desc[language]}
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
-                {activeServiceDetails.title[language]}
-              </h3>
-              <p className="text-lg text-gray-600">
-                {activeServiceDetails.desc[language]}
-              </p>
+            
+            <div className="mt-6 flex flex-wrap gap-4">
+              <motion.a 
+                href={activeServiceDetails.link} 
+                className="px-6 py-3 rounded-lg text-lg font-semibold text-white transition-all shadow-md hover:shadow-lg"
+                style={{ backgroundColor: activeServiceDetails.color }}
+                whileHover={{ scale: 1.05, y: -5 }}
+              >
+                {language === 'en' ? 'Get Quote' : 'Pata Bei'}
+              </motion.a>
+              <motion.a 
+                href={activeServiceDetails.link} 
+                className="px-6 py-3 rounded-lg text-lg font-semibold border-2 transition-all hover:bg-gray-50"
+                style={{ borderColor: activeServiceDetails.color, color: activeServiceDetails.color }}
+                whileHover={{ scale: 1.05, y: -5 }}
+              >
+                {language === 'en' ? 'Learn more →' : 'Jifunze zaidi →'}
+              </motion.a>
             </div>
-          </div>
-          
-          <div className="mt-6 flex flex-wrap gap-4">
-            <a 
-              href={activeServiceDetails.link} 
-              className="px-6 py-3 rounded-lg text-lg font-semibold text-white transition-all shadow-md hover:shadow-lg transform hover:-translate-y-1"
-              style={{ backgroundColor: activeServiceDetails.color }}
-            >
-              {language === 'en' ? 'Get Quote' : 'Pata Bei'}
-            </a>
-            <a 
-              href={activeServiceDetails.link} 
-              className="px-6 py-3 rounded-lg text-lg font-semibold border-2 transition-all hover:bg-gray-50 transform hover:-translate-y-1"
-              style={{ borderColor: activeServiceDetails.color, color: activeServiceDetails.color }}
-            >
-              {language === 'en' ? 'Learn more →' : 'Jifunze zaidi →'}
-            </a>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
       
       <div className="mb-8 p-4 bg-gray-100 rounded-lg border border-gray-200 w-full">
         <h3 className="font-bold text-lg mb-2 text-gray-800">
@@ -509,18 +308,13 @@ export default function ServicesVisualization() {
         <ul className="list-disc pl-5 text-gray-700 space-y-2">
           <li>
             {language === 'en' 
-              ? 'Click on a service sphere to view detailed information' 
-              : 'Bofya kwenye duara la huduma kuona maelezo zaidi'}
+              ? 'Click on a service node to view detailed information' 
+              : 'Bofya kwenye kitovu cha huduma kuona maelezo zaidi'}
           </li>
           <li>
             {language === 'en' 
-              ? 'Drag to rotate the 3D view for different perspectives' 
-              : 'Buruta kubadilisha mtazamo wa 3D kwa mitazamo tofauti'}
-          </li>
-          <li>
-            {language === 'en' 
-              ? 'Use mouse wheel to zoom in/out' 
-              : 'Tumia gurudumu la kipanya kuzoom ndani/nje'}
+              ? 'Hover over nodes to see highlights' 
+              : 'Pitisha kipanya juu ya vitovu kuona maboresho'}
           </li>
         </ul>
       </div>
