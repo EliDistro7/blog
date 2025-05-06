@@ -67,7 +67,7 @@ export default function Header() {
   const navItems = [
     {
       name: "Portfolio",
-      path: "/portfolio",
+      path: "/portifolio",
       icon: <Share2 className="w-5 h-5" />
     },
     {
