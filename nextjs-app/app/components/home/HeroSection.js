@@ -62,7 +62,7 @@ export default function HeroSection() {
   const { language } = useLanguage();
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative flex items-center overflow-hidden">
       {/* Organic Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-br from-brand-dark via-brand-deep/90 to-brand-teal/30">
         <div className="absolute inset-0 opacity-30 [background:radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-brand-gold/20 via-transparent to-transparent" />

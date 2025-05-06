@@ -6,6 +6,7 @@ import ServicesGrid from "@/app/components/home/ServicesGrid";
 import TestimonialSection from "@/app/components/home/TestimonialSection";
 import CTASection from "@/app/components/home/CTASection";
 import Blog from "@/app/components/Blog";
+import ServicesVisualization from '@/app/components/home/Services'
 
 import Link from "next/link";
 import { ChevronRight, Rocket, Code, Zap } from "lucide-react";
@@ -73,7 +74,7 @@ const ExampleBlogPost = {
       */}
        </section>
 
-      <ServicesGrid />
+      <ServicesVisualization />
       <TestimonialSection />
       <CTASection />
     </div>

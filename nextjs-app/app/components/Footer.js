@@ -1,190 +1,97 @@
 'use client';
 
 import Link from 'next/link';
-import { Facebook, Instagram, Twitter, Linkedin, Youtube } from 'lucide-react';
+import { Facebook, Instagram, Twitter } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function Footer() {
   const { language } = useLanguage();
 
-  // Translation content
+  // Translation content - simplified for minimalistic design
   const content = {
     en: {
-      description: "Tanzania's premier multi-service provider bridging technology and hospitality for complete business solutions.",
-      servicesTitle: "Services",
-      companyTitle: "Company",
-      legalTitle: "Legal",
-      contactTitle: "Contact",
+      description: "Bridging technology and hospitality for complete business solutions.",
       copyright: "All rights reserved.",
-      services: [
-        { name: "Web Design", path: "/services/web-design" },
-        { name: "Catering", path: "/services/catering" },
-        { name: "Social Media", path: "/services/social-media" },
-        { name: "MC Services", path: "/services/mc-services" },
+      links: [
+        { name: "Services", path: "/services" },
+        { name: "About", path: "/about" },
         { name: "Portfolio", path: "/portfolio" },
-        { name: "Our Team", path: "/team" }
-      ],
-      company: [
-        { name: "About Us", path: "/about" },
-        { name: "Careers", path: "/careers" },
-        { name: "Blog", path: "/blog" },
-        { name: "Press", path: "/press" }
-      ],
-      legal: [
-        { name: "Terms of Service", path: "/terms" },
-        { name: "Privacy Policy", path: "/privacy" },
-        { name: "Cookie Policy", path: "/cookies" }
+        { name: "Contact", path: "/contact" },
       ]
     },
     sw: {
-      description: "Kampuni ya Tanzania inayotoa huduma mbalimbali zinazounganisha teknolojia na ukaribu kwa ajili ya ufumbuzi kamili wa biashara.",
-      servicesTitle: "Huduma",
-      companyTitle: "Kampuni",
-      legalTitle: "Kisheria",
-      contactTitle: "Mawasiliano",
+      description: "Teknolojia na ukarimu kwa ufumbuzi kamili wa biashara.",
       copyright: "Haki zote zimehifadhiwa.",
-      services: [
-        { name: "Uundaji wa Tovuti", path: "/services/web-design" },
-        { name: "Upishi", path: "/services/catering" },
-        { name: "Mitandao ya Kijamii", path: "/services/social-media" },
-        { name: "Huduma za MC", path: "/services/mc-services" },
+      links: [
+        { name: "Huduma", path: "/services" },
+        { name: "Kuhusu", path: "/about" },
         { name: "Portfolio", path: "/portfolio" },
-        { name: "Timu Yetu", path: "/team" }
-      ],
-      company: [
-        { name: "Kuhusu Sisi", path: "/about" },
-        { name: "Kazi", path: "/careers" },
-        { name: "Blogu", path: "/blog" },
-        { name: "Taarifa", path: "/press" }
-      ],
-      legal: [
-        { name: "Sheria za Huduma", path: "/terms" },
-        { name: "Sera ya Faragha", path: "/privacy" },
-        { name: "Sera ya Kuki", path: "/cookies" }
+        { name: "Mawasiliano", path: "/contact" },
       ]
     }
   };
 
   const socials = [
-    { icon: <Facebook className="w-5 h-5" />, path: "#" },
-    { icon: <Instagram className="w-5 h-5" />, path: "#" },
-    { icon: <Twitter className="w-5 h-5" />, path: "#" },
-  
+    { icon: <Facebook className="w-4 h-4" />, path: "#" },
+    { icon: <Instagram className="w-4 h-4" />, path: "#" },
+    { icon: <Twitter className="w-4 h-4" />, path: "#" },
   ];
 
   return (
-    <footer className="bg-brand-dark text-brand-foam border-t border-brand-medium/30">
-      <div className="container px-4 py-16 mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
-          {/* Logo and description */}
-          <div className="col-span-2 lg:col-span-1">
-            <Link href="/" className="flex items-center gap-3 mb-6 group">
-           
-              <span className="text-xl font-serif font-bold text-white group-hover:text-brand-accent transition-colors">
-                Future Holders
-              </span>
-            </Link>
-            <p className="text-brand-foam/80 mb-8 leading-relaxed">
-              {content[language].description}
-            </p>
-            <div className="flex gap-4">
-              {socials.map((social, index) => (
-                <a 
-                  key={index} 
-                  href={social.path} 
-                  className="text-brand-foam/70 hover:text-white transition-colors p-2 rounded-full hover:bg-brand-accent/20"
-                  aria-label={`${social.icon.type.name} social media`}
-                >
-                  {social.icon}
-                </a>
-              ))}
-            </div>
+    <footer className="bg-gradient-to-r from-brand-dark to-brand-deep text-brand-foam border-t border-brand-medium/20">
+      <div className="container px-4 py-8 mx-auto">
+        {/* Logo and description - simplified */}
+        <div className="flex flex-col items-center text-center mb-6">
+          <Link href="/" className="flex items-center gap-2 mb-3 group">
+            <span className="text-xl font-serif font-bold text-white group-hover:text-brand-accent transition-colors">
+              Future Holders
+            </span>
+          </Link>
+          <p className="text-brand-foam/70 text-sm max-w-md mb-4">
+            {content[language].description}
+          </p>
+          
+          {/* Simplified Links */}
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-6">
+            {content[language].links.map((link, index) => (
+              <Link 
+                key={index} 
+                href={link.path} 
+                className="text-brand-foam/80 hover:text-brand-accent transition-colors text-sm"
+              >
+                {link.name}
+              </Link>
+            ))}
           </div>
-
-          {/* Services */}
-          <div>
-            <h3 className="text-xl font-bold text-white mb-6">{content[language].servicesTitle}</h3>
-            <ul className="space-y-4">
-              {content[language].services.map((service, index) => (
-                <li key={index}>
-                  <Link 
-                    href={service.path} 
-                    className="text-brand-foam/70 hover:text-brand-accent transition-colors text-lg"
-                  >
-                    {service.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          
+          {/* Contact - simplified */}
+          <a href="mailto:info@futureholders.net" className="text-brand-foam/70 hover:text-brand-accent transition-colors text-sm mb-5">
+            info@futureholders.net
+          </a>
+          
+          {/* Social icons */}
+          <div className="flex gap-4 mb-6">
+            {socials.map((social, index) => (
+              <a 
+                key={index} 
+                href={social.path} 
+                className="text-brand-foam/70 hover:text-brand-accent transition-colors p-1.5 rounded-full hover:bg-brand-medium/30"
+                aria-label={`${social.icon.type.name} social media`}
+              >
+                {social.icon}
+              </a>
+            ))}
           </div>
-
-          {/* Company */}
-          <div>
-            <h3 className="text-xl font-bold text-white mb-6">{content[language].companyTitle}</h3>
-            <ul className="space-y-4">
-              {content[language].company.map((item, index) => (
-                <li key={index}>
-                  <Link 
-                    href={item.path} 
-                    className="text-brand-foam/70 hover:text-brand-accent transition-colors text-lg"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Legal + Contact */}
-          <div>
-            <h3 className="text-xl font-bold text-white mb-6">{content[language].legalTitle}</h3>
-            <ul className="space-y-4 mb-8">
-              {content[language].legal.map((item, index) => (
-                <li key={index}>
-                  <Link 
-                    href={item.path} 
-                    className="text-brand-foam/70 hover:text-brand-accent transition-colors text-lg"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-         
-          </div>
-          <div className='flex flex-col justify-content-center mb-12'>
-          <h3 className="text-md text-white mb-6">{content[language].contactTitle}</h3>
-            <ul className="space-y-4">
-              <li>
-                <a href="mailto:info@futureholders.co.tz" className="text-brand-foam/70 hover:text-brand-accent transition-colors text-lg">
-                  info@futureholders.net
-                </a>
-              </li>
-              <li>
-                <a href="tel:+255789000000" className="text-brand-foam/70 hover:text-brand-accent transition-colors text-lg">
-                  +255 793 151 051
-                </a>
-              </li>
-            </ul>
-            </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-brand-medium/30 my-20"></div>
+        {/* Divider - thinner */}
+        <div className="border-t border-brand-medium/20 my-4"></div>
 
-        {/* Bottom row */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-brand-foam/60 text-lg">
+        {/* Copyright - simplified */}
+        <div className="text-center">
+          <p className="text-brand-foam/50 text-xs">
             © {new Date().getFullYear()} Future Holders. {content[language].copyright}
           </p>
-          <div className="flex gap-8">
-            <Link href="/privacy" className="text-brand-foam/60 hover:text-brand-accent text-lg transition-colors">
-              {language === 'en' ? 'Privacy Policy' : 'Sera ya Faragha'}
-            </Link>
-            <Link href="/terms" className="text-brand-foam/60 hover:text-brand-accent text-lg transition-colors">
-              {language === 'en' ? 'Terms of Service' : 'Sheria za Huduma'}
-            </Link>
-          </div>
         </div>
       </div>
     </footer>
