@@ -3,17 +3,10 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { Camera, Utensils, Share2, Mic2 } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 // Mock language hook since the actual one isn't available
-const useLanguage = () => {
-  const [language, setLanguage] = useState('en');
-  
-  const toggleLanguage = () => {
-    setLanguage(prevLang => prevLang === 'en' ? 'sw' : 'en');
-  };
-  
-  return { language, toggleLanguage };
-};
+
 
 export default function ServicesVisualization() {
   const mountRef = useRef(null);
@@ -433,10 +426,10 @@ export default function ServicesVisualization() {
           {language === 'en' ? 'Our Services' : 'Huduma Zetu'}
         </h2>
         <button 
-          onClick={toggleLanguage}
+          onClick={()=>{}}
           className="px-6 py-3 text-base font-semibold text-white bg-brand-blue rounded-lg hover:bg-blue-700 transition-colors shadow-wave"
         >
-          {language === 'en' ? 'Switch to Swahili' : 'Switch to English'}
+          {language === 'en' ? 'Royal Services' : 'Hudumiwa Kama Mfalme'}
         </button>
       </div>
       
