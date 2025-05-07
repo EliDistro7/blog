@@ -183,7 +183,7 @@ export default function TestimonialCarousel() {
                   <p className="text-brand-accent font-medium text-center md:text-right">
                     {testimonial.title[language]}
                   </p>
-                  <p className="text-gray-600 text-sm text-center md:text-right">
+                  <p className="text-gray-500 text-sm text-center md:text-right">
                     {testimonial.company[language]}
                   </p>
                 </motion.div>
@@ -198,7 +198,7 @@ export default function TestimonialCarousel() {
                   <Quote size={38} className="absolute top-0 left-4 text-brand-blue/20 -translate-y-1/2" />
                   
                   <blockquote className={`text-xl md:text-2xl italic mb-8 leading-relaxed font-serif font-normal text-gray-300`}>
-                    "{testimonial.quote[language]}"
+                  &ldquo;{testimonial.quote[language]} &ldquo;
                   </blockquote>
                 </motion.div>
               </div>
@@ -207,19 +207,7 @@ export default function TestimonialCarousel() {
         </Swiper>
         
         {/* Testimonial Navigation Dots */}
-        <div className="flex justify-center mt-12 gap-3">
-          {testimonials.map((_, index) => (
-            <motion.div
-              key={index}
-              className={`w-3 h-3 rounded-full cursor-pointer ${
-                index === activeIndex % testimonials.length ? 'bg-brand-accent scale-125' : 'bg-gray-300'
-              }`}
-              whileHover={{ scale: 1.2 }}
-              onClick={() => document.querySelector('.swiper').swiper.slideTo(index)}
-              transition={{ duration: 0.2 }}
-            />
-          ))}
-        </div>
+      
       </div>
 
       {/* Custom pagination styling */}
