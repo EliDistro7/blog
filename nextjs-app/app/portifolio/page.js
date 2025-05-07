@@ -24,7 +24,7 @@ export default function Portfolio() {
               title="Pichazangu.store"
               description="Media storage platform for photographers"
               url="https://pichazangu.store"
-              image="/images/preview-pichazangu.png"
+              image="/images/preview-pichazangu.jpg"
               status="Live with paying users"
               metrics={["50+ users", "10TB stored"]}
             />
@@ -32,7 +32,7 @@ export default function Portfolio() {
               title="KKKTyombo.org"
               description="Church management system"
               url="https://kkktyombo.org"
-              image="/images/preview-yombo.png"
+              image="/images/preview-yombo.jpg"
               status="Pilot phase"
               metrics={["5 churches", "100% adoption"]}
             />
