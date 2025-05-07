@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Facebook, Instagram, Twitter } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function Footer() {
@@ -31,9 +31,10 @@ export default function Footer() {
   };
 
   const socials = [
-    { icon: <Facebook className="w-4 h-4" />, path: "#" },
-    { icon: <Instagram className="w-4 h-4" />, path: "#" },
-    { icon: <Twitter className="w-4 h-4" />, path: "#" },
+    { icon: <Facebook className="w-4 h-4" />, path: "https://www.facebook.com/f.hmarketers" },
+    { icon: <Instagram className="w-4 h-4" />, path: "https://www.instagram.com/fh_marketers/" },
+    { icon: <Twitter className="w-4 h-4" />, path: "https://x.com/fh_marketers" },
+    { icon: <Linkedin className='w-4 h-4' />, path:"https://www.linkedin.com/company/future-holders-company-limited/posts/?feedView=all"}
   ];
 
   return (
