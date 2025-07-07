@@ -16,7 +16,7 @@ const ServicesShowcase = () => {
       id: 'door-to-door',
       title: {
         en: "Door-to-Door Marketing",
-        sw: "Uuzaji Mlango kwa Mlango"
+        sw: "Uuzaji Door to Door"
       },
       subtitle: {
         en: "Personal Connection, Real Results",
@@ -153,17 +153,7 @@ const ServicesShowcase = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Service Cards Navigation */}
           <div className="space-y-4">
-            <div className="flex items-center gap-4 mb-6">
-              <h2 className="text-2xl font-bold text-white">
-                {language === 'en' ? 'Select Service' : 'Chagua Huduma'}
-              </h2>
-              <button
-                onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-                className="p-2 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-all"
-              >
-                {isAutoPlaying ? <Pause className="w-5 h-5 text-white" /> : <Play className="w-5 h-5 text-white" />}
-              </button>
-            </div>
+           
             
             {services.map((service, index) => {
               const ServiceIcon = service.icon;
