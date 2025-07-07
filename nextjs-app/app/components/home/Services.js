@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DoorOpen, Smartphone, Globe, Users, ChevronRight, ExternalLink } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext'; // Assuming you have a LanguageContext to manage language state
 
 const ServicesShowcase = () => {
-  const [language, setLanguage] = useState('en');
+  const {language} = useLanguage(); // Assuming you have a LanguageContext to manage language state
   const [activeService, setActiveService] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [hoveredService, setHoveredService] = useState(null);
