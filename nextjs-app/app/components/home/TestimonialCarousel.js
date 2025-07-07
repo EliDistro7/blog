@@ -8,8 +8,8 @@ export default function TestimonialCarousel() {
   const testimonials = [
     { 
       quote: {
-        en: "Future Holders built our website in just 10 days—absolutely flawless execution and stunning design. Their team's attention to detail made our brand shine online.",
-        sw: "Future Holders walijenga tovuti yetu kwa siku 10 pekee—utekelezaji bila hitilafu yoyote na muundo wa kuvutia. Umakini wa timu yao kwa maelezo ulifanya chapa yetu ing'ae mtandaoni."
+        en: "Future Holders built our website in just 10 days—absolutely flawless execution and stunning design. Their team&apos;s attention to detail made our brand shine online.",
+        sw: "Future Holders walijenga tovuti yetu kwa siku 10 pekee—utekelezaji bila hitilafu yoyote na muundo wa kuvutia. Umakini wa timu yao kwa maelezo ulifanya chapa yetu ing&apos;ae mtandaoni."
       },
       author: "Salila Mohammed",
       title: "Executive Director & Founder",
@@ -143,6 +143,7 @@ export default function TestimonialCarousel() {
                 <div className="relative inline-block mb-6">
                   <div className="absolute inset-0 rounded-full bg-gradient-to-br from-brand-accent via-brand-coral to-brand-teal transform rotate-12 scale-110 blur-sm opacity-60"></div>
                   <div className="relative w-32 h-32 rounded-full border-4 border-white/20 shadow-glow overflow-hidden mx-auto">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img 
                       src={testimonials[activeIndex].image} 
                       alt={testimonials[activeIndex].author}
@@ -189,7 +190,7 @@ export default function TestimonialCarousel() {
               <div className="lg:col-span-3 relative">
                 <Quote size={60} className="absolute -top-4 -left-4 text-brand-accent/20" />
                 <blockquote className="text-xl md:text-2xl lg:text-3xl font-light text-white leading-relaxed pl-8 pr-4">
-                  "{testimonials[activeIndex].quote.en}"
+                  &ldquo;{testimonials[activeIndex].quote.en}&rdquo;
                 </blockquote>
                 <div className="absolute bottom-0 right-0 w-16 h-1 bg-gradient-to-r from-brand-accent to-brand-coral rounded-full"></div>
               </div>
