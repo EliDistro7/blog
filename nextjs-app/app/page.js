@@ -55,7 +55,7 @@ const ExampleBlogPost = {
 
   return (
     <div>
-      <HeroSection />
+   
       
       <section className="py-8 container">
     {/*    <div className="mb-16">
