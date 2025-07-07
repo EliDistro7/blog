@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DoorOpen, Smartphone, Globe, Users, ChevronRight, Play, Pause, ExternalLink } from 'lucide-react';
-
+import { useLanguage } from '@/context/LanguageContext';
 // Mock language context
-const useLanguage = () => {
-  const [language, setLanguage] = useState('en');
-  return {
-    language,
-    toggleLanguage: () => setLanguage(prev => prev === 'en' ? 'sw' : 'en')
-  };
-};
 
 const ServicesShowcase = () => {
   const { language, toggleLanguage } = useLanguage();
