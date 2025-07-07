@@ -146,14 +146,7 @@ const ServicesShowcase = () => {
             </p>
           </motion.div>
           
-          <motion.button
-            onClick={toggleLanguage}
-            className="px-6 py-3 bg-white/10 backdrop-blur-sm rounded-lg text-white font-semibold hover:bg-white/20 transition-all border border-white/20"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            {language === 'en' ? 'Kiswahili' : 'English'}
-          </motion.button>
+        
         </div>
 
         {/* Main Content */}
