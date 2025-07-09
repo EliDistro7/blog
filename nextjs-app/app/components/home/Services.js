@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { DoorOpen, Smartphone, Globe, Users, ChevronRight, ExternalLink } from 'lucide-react';
-import { useLanguage } from '@/context/LanguageContext'; // Assuming you have a LanguageContext to manage language state
 
 const ServicesShowcase = () => {
-  const {language} = useLanguage(); // Assuming you have a LanguageContext to manage language state
+  const [language, setLanguage] = useState('en'); // Added language state
   const [activeService, setActiveService] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [hoveredService, setHoveredService] = useState(null);
@@ -123,58 +121,60 @@ const ServicesShowcase = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Parallax Background Layers */}
+      {/* Language Toggle */}
+      <div className="absolute top-4 right-4 z-50">
+        <button
+          onClick={() => setLanguage(language === 'en' ? 'sw' : 'en')}
+          className="px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-lg hover:bg-white/30 transition-all"
+        >
+          {language === 'en' ? 'SW' : 'EN'}
+        </button>
+      </div>
+
+      {/* Background Layers */}
       <div className="absolute inset-0">
-        {/* Layer 1: Far Background - City Skyline */}
-        <motion.div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        {/* City Skyline Background */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-1000"
           style={{
            backgroundImage: `url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')`,
            transform: `translateY(${scrollY * 0.5}px)`,
           }}
         />
         
-        {/* Layer 2: Mid Background - Modern Buildings */}
-        <motion.div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-80"
+        {/* Modern Buildings */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-80 transition-transform duration-1000"
           style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')`,
             transform: `translateY(${scrollY * 0.3}px)`,
           }}
         />
         
-        {/* Layer 3: Foreground - Business District */}
-        <motion.div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-60"
+        {/* Business District */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-60 transition-transform duration-1000"
           style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')`,
             transform: `translateY(${scrollY * 0.1}px)`,
           }}
         />
         
-        {/* Dynamic Overlay with Gradient */}
+        {/* Dynamic Overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900/70 via-blue-900/60 to-purple-900/70" />
         
         {/* Animated Light Rays */}
         <div className="absolute inset-0 pointer-events-none">
           {[...Array(6)].map((_, i) => (
-            <motion.div
+            <div
               key={i}
-              className="absolute w-1 bg-gradient-to-t from-transparent via-blue-400/20 to-transparent"
+              className="absolute w-1 bg-gradient-to-t from-transparent via-blue-400/20 to-transparent animate-pulse"
               style={{
                 left: `${15 + i * 15}%`,
                 height: '100%',
                 transform: 'rotate(15deg)',
-              }}
-              animate={{
-                opacity: [0.2, 0.6, 0.2],
-                scaleY: [0.8, 1.2, 0.8],
-              }}
-              transition={{
-                duration: 4 + i * 0.5,
-                repeat: Infinity,
-                delay: i * 0.5,
-                ease: "easeInOut"
+                animationDelay: `${i * 0.5}s`,
+                animationDuration: `${4 + i * 0.5}s`
               }}
             />
           ))}
@@ -183,61 +183,41 @@ const ServicesShowcase = () => {
         {/* Floating Business Elements */}
         <div className="absolute inset-0 pointer-events-none">
           {[...Array(20)].map((_, i) => (
-            <motion.div
+            <div
               key={i}
-              className="absolute"
+              className="absolute animate-bounce"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                y: [0, -100, 0],
-                x: [0, 50, 0],
-                rotate: [0, 360],
-                opacity: [0.3, 0.8, 0.3],
-                scale: [0.8, 1.5, 0.8],
-              }}
-              transition={{
-                duration: 8 + Math.random() * 4,
-                repeat: Infinity,
-                delay: Math.random() * 2,
-                ease: "easeInOut"
+                animationDelay: `${Math.random() * 2}s`,
+                animationDuration: `${8 + Math.random() * 4}s`
               }}
             >
               <div className="w-3 h-3 bg-gradient-to-r from-blue-400/60 to-purple-400/60 rounded-full backdrop-blur-sm shadow-lg" />
-            </motion.div>
+            </div>
           ))}
         </div>
         
         {/* Success Particles */}
         <div className="absolute inset-0 pointer-events-none">
           {[...Array(15)].map((_, i) => (
-            <motion.div
+            <div
               key={i}
-              className="absolute"
+              className="absolute animate-pulse"
               style={{
                 left: `${10 + i * 6}%`,
                 top: `${20 + i * 5}%`,
-              }}
-              animate={{
-                y: [0, -80, 0],
-                opacity: [0.4, 1, 0.4],
-                scale: [1, 1.8, 1],
-              }}
-              transition={{
-                duration: 6 + i * 0.8,
-                repeat: Infinity,
-                delay: i * 0.4,
-                ease: "easeInOut"
+                animationDelay: `${i * 0.4}s`,
+                animationDuration: `${6 + i * 0.8}s`
               }}
             >
               <div className="w-2 h-2 bg-yellow-400/70 rounded-full shadow-md backdrop-blur-sm" />
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
 
-      {/* Enhanced Grid Pattern */}
+      {/* Grid Pattern */}
       <div className="absolute inset-0 opacity-10 z-10">
         <div className="absolute inset-0" style={{
           backgroundImage: `
@@ -253,18 +233,14 @@ const ServicesShowcase = () => {
         {/* Header */}
         <div className="container mx-auto px-6 pt-8">
           <div className="flex justify-between items-center mb-12">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-            >
+            <div className="opacity-0 animate-fade-in">
               <h1 className="text-5xl md:text-6xl font-bold text-white drop-shadow-2xl">
                 {language === 'en' ? 'Our Services' : 'Huduma Zetu'}
               </h1>
-              <p className="text-2xl text-brand-coral mt-3 drop-shadow-lg">
+              <p className="text-2xl text-orange-400 mt-3 drop-shadow-lg">
                 {language === 'en' ? 'Complete Marketing Solutions' : 'Suluhisho Kamili za Uuzaji'}
               </p>
-            </motion.div>
+            </div>
           </div>
 
           {/* Main Content */}
@@ -277,18 +253,16 @@ const ServicesShowcase = () => {
                 const isHovered = hoveredService === index;
                 
                 return (
-                  <motion.div
+                  <div
                     key={service.id}
-                    className={`relative p-8 rounded-2xl cursor-pointer transition-all duration-500 backdrop-blur-md border-2 ${
+                    className={`relative p-8 rounded-2xl cursor-pointer transition-all duration-500 backdrop-blur-md border-2 transform hover:scale-105 hover:-translate-y-2 ${
                       isActive 
-                        ? 'bg-white/25 border-white/40 shadow-2xl transform scale-105' 
+                        ? 'bg-white/25 border-white/40 shadow-2xl scale-105' 
                         : 'bg-white/10 border-white/20 hover:bg-white/20 hover:border-white/30'
                     }`}
                     onClick={() => setActiveService(index)}
                     onMouseEnter={() => setHoveredService(index)}
                     onMouseLeave={() => setHoveredService(null)}
-                    whileHover={{ scale: 1.03, y: -5 }}
-                    whileTap={{ scale: 0.97 }}
                   >
                     <div className="flex items-center gap-6">
                       <div className={`p-4 rounded-2xl bg-gradient-to-r ${service.gradient} shadow-xl ${isActive ? 'shadow-2xl' : ''}`}>
@@ -298,7 +272,7 @@ const ServicesShowcase = () => {
                         <h3 className="font-bold text-white text-xl mb-1 drop-shadow-lg">
                           {service.title[language]}
                         </h3>
-                        <p className="text-brand-coral drop-shadow-md">
+                        <p className="text-orange-400 drop-shadow-md">
                           {service.subtitle[language]}
                         </p>
                       </div>
@@ -309,111 +283,123 @@ const ServicesShowcase = () => {
                     
                     {/* Glow effect for active card */}
                     {isActive && (
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl blur-xl"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                      />
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl blur-xl animate-pulse" />
                     )}
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
 
             {/* Active Service Details */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeService}
-                initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -30, scale: 0.9 }}
-                transition={{ duration: 0.6, ease: "easeInOut" }}
-                className="bg-white/20 backdrop-blur-md rounded-3xl p-10 border-2 border-white/30 shadow-2xl"
-              >
-                {/* Service Icon */}
-                <div className={`inline-flex p-6 rounded-2xl bg-gradient-to-r ${currentService.gradient} mb-8 shadow-2xl`}>
-                  <IconComponent className="w-16 h-16 text-white" />
-                </div>
+            <div
+              key={activeService}
+              className="bg-white/20 backdrop-blur-md rounded-3xl p-10 border-2 border-white/30 shadow-2xl transform transition-all duration-600 opacity-0 translate-y-8 animate-fade-in-up"
+            >
+              {/* Service Icon */}
+              <div className={`inline-flex p-6 rounded-2xl bg-gradient-to-r ${currentService.gradient} mb-8 shadow-2xl`}>
+                <IconComponent className="w-16 h-16 text-white" />
+              </div>
 
-                {/* Service Title */}
-                <h3 className="text-4xl font-bold text-white mb-3 drop-shadow-lg">
-                  {currentService.title[language]}
-                </h3>
+              {/* Service Title */}
+              <h3 className="text-4xl font-bold text-white mb-3 drop-shadow-lg">
+                {currentService.title[language]}
+              </h3>
+              
+              <p className="text-2xl text-orange-400 mb-6 drop-shadow-md">
+                {currentService.subtitle[language]}
+              </p>
+
+              {/* Description */}
+              <p className="text-gray-200 text-lg mb-8 leading-relaxed drop-shadow-md">
+                {currentService.description[language]}
+              </p>
+
+              {/* Features */}
+              <div className="mb-10">
+                <h4 className="text-xl font-semibold text-white mb-4 drop-shadow-lg">
+                  {language === 'en' ? 'Key Features' : 'Vipengele Muhimu'}
+                </h4>
+                <div className="grid grid-cols-1 gap-4">
+                  {currentService.features.map((feature, idx) => (
+                    <div 
+                      key={idx} 
+                      className="flex items-center gap-3 p-3 bg-white/10 rounded-xl backdrop-blur-sm transform transition-all duration-300 hover:bg-white/20 hover:scale-105"
+                    >
+                      <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full shadow-md animate-pulse"></div>
+                      <span className="text-gray-200 font-medium drop-shadow-sm">{feature[language]}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button
+                  className={`flex-1 px-8 py-4 bg-gradient-to-r ${currentService.gradient} text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all flex items-center justify-center gap-3 transform hover:scale-105 hover:-translate-y-1`}
+                >
+                  {language === 'en' ? 'Get Started' : 'Anza Sasa'}
+                  <ExternalLink className="w-5 h-5" />
+                </button>
                 
-                <p className="text-2xl text-brand-coral mb-6 drop-shadow-md">
-                  {currentService.subtitle[language]}
-                </p>
-
-                {/* Description */}
-                <p className="text-gray-200 text-lg mb-8 leading-relaxed drop-shadow-md">
-                  {currentService.description[language]}
-                </p>
-
-                {/* Features */}
-                <div className="mb-10">
-                  <h4 className="text-xl font-semibold text-white mb-4 drop-shadow-lg">
-                    {language === 'en' ? 'Key Features' : 'Vipengele Muhimu'}
-                  </h4>
-                  <div className="grid grid-cols-1 gap-4">
-                    {currentService.features.map((feature, idx) => (
-                      <motion.div 
-                        key={idx} 
-                        className="flex items-center gap-3 p-3 bg-white/10 rounded-xl backdrop-blur-sm"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.1 }}
-                      >
-                        <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full shadow-md"></div>
-                        <span className="text-gray-200 font-medium drop-shadow-sm">{feature[language]}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <motion.button
-                    className={`flex-1 px-8 py-4 bg-gradient-to-r ${currentService.gradient} text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all flex items-center justify-center gap-3`}
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {language === 'en' ? 'Get Started' : 'Anza Sasa'}
-                    <ExternalLink className="w-5 h-5" />
-                  </motion.button>
-                  
-                  <motion.button
-                    className="flex-1 px-8 py-4 bg-white/15 backdrop-blur-md text-white font-bold rounded-xl hover:bg-white/25 transition-all border-2 border-white/30 shadow-lg"
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {language === 'en' ? 'Learn More' : 'Jifunze Zaidi'}
-                  </motion.button>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+                <button
+                  className="flex-1 px-8 py-4 bg-white/15 backdrop-blur-md text-white font-bold rounded-xl hover:bg-white/25 transition-all border-2 border-white/30 shadow-lg transform hover:scale-105 hover:-translate-y-1"
+                >
+                  {language === 'en' ? 'Learn More' : 'Jifunze Zaidi'}
+                </button>
+              </div>
+            </div>
           </div>
 
-          {/* Enhanced Progress Indicator */}
+          {/* Progress Indicator */}
           <div className="mt-16 flex justify-center pb-12">
             <div className="flex gap-3 p-4 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
               {services.map((_, index) => (
-                <motion.div
+                <div
                   key={index}
-                  className={`h-3 rounded-full cursor-pointer transition-all duration-300 ${
+                  className={`h-3 rounded-full cursor-pointer transition-all duration-300 transform hover:scale-150 ${
                     index === activeService 
                       ? 'bg-gradient-to-r from-blue-400 to-purple-400 w-12 shadow-lg' 
                       : 'bg-white/40 w-3 hover:bg-white/60'
                   }`}
                   onClick={() => setActiveService(index)}
-                  whileHover={{ scale: 1.3 }}
-                  whileTap={{ scale: 0.9 }}
                 />
               ))}
             </div>
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(30px) scale(0.9);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+        
+        .animate-fade-in {
+          animation: fade-in 0.6s ease-out forwards;
+        }
+        
+        .animate-fade-in-up {
+          animation: fade-in-up 0.6s ease-out forwards;
+        }
+      `}</style>
     </div>
   );
 };

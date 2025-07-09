@@ -40,7 +40,7 @@
     "app/components/Header.js",
     "app/contex/TranslateContext.js",
     "next.config.ts"
-, "app/components/StoriesSection.js", "app/components/Blog.js", "app/components/home/HeroSection.js", "app/components/services/ServiceHeader.js", "app/components/home/ServicesGrid.js", "app/components/home/CTASection.js", "app/components/Footer.js", "app/services/catering/page.js", "app/about/page.js", "app/contact/page.js", "app/services/social-media/page.js", "app/services/web-design/page.js", "app/components/services/ServiceProcess.js", "app/team/page.js", "app/portifolio/page.js", "app/services/mc-services/page.js", "tailwind.config.js"  ],
+, "app/components/StoriesSection.js", "app/components/Blog.js", "app/components/home/HeroSection.js", "app/components/services/ServiceHeader.js", "app/components/home/ServicesGrid.js", "app/components/home/CTASection.js", "app/components/Footer.js", "app/services/catering/page.js", "app/about/page.js", "app/contact/page.js", "app/services/social-media/page.js", "app/services/web-design/page.js", "app/components/services/ServiceProcess.js", "app/team/page.js", "app/portifolio/page.js", "app/services/mc-services/page.js", "tailwind.config.js", "app/components/chatBot/index4.tsx", "app/components/chatBot/hooks/sender/useMessageSender.js"  ],
   "exclude": [
     "node_modules"
   ]
