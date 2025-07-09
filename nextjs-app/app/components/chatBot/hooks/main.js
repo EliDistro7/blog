@@ -1,6 +1,5 @@
 // File: app/components/layout/ChatBot/hooks/useChatState.js
 import { useState, useCallback } from 'react';
-import { chatbotData } from '@/data/chat/index';
 import { createFreshServiceContext, createFreshConversationState } from '@/utils/serviceContextUtils';
 
 export const useChatState = (language) => {
@@ -30,7 +29,7 @@ export const useChatState = (language) => {
     userInteractionRate: 0
   });
 
-  const resetChatState = useCallback(() => {
+  const resetChatState = useCallback((chatbotData) => {
     const freshState = createFreshConversationState(chatbotData, language);
     setChatMessages(freshState.messages);
     setServiceContext(freshState.serviceContext);
@@ -72,7 +71,6 @@ export const useChatState = (language) => {
 
 // File: app/components/layout/ChatBot/hooks/useChatInitialization.js
 import { useEffect } from 'react';
-import { chatbotData } from '@/data/chat/index';
 import {
   restoreConversationState,
   createFreshConversationState,
@@ -82,6 +80,7 @@ import {
 
 export const useChatInitialization = (
   language,
+  chatbotData,
   setChatMessages,
   setServiceContext,
   setActiveService,
@@ -116,7 +115,7 @@ export const useChatInitialization = (
       setConversationStats(getConversationStats(freshState.messages, freshState.serviceContext));
       setConversationPatterns({});
     }
-  }, [language, setChatMessages, setServiceContext, setActiveService, setSuggestions, setConversationStats, setConversationPatterns]);
+  }, [language, chatbotData, setChatMessages, setServiceContext, setActiveService, setSuggestions, setConversationStats, setConversationPatterns]);
 };
 
 // File: app/components/layout/ChatBot/hooks/useChatAutoScroll.js
@@ -268,7 +267,6 @@ export const useScreenSize = () => {
 
 // File: app/components/layout/ChatBot/hooks/useConversationRestore.js
 import { useCallback } from 'react';
-import { chatbotData } from '@/data/chat/index';
 import {
   restoreConversationState,
   getConversationStats,
@@ -278,6 +276,7 @@ import {
 
 export const useConversationRestore = (
   language,
+  chatbotData,
   setChatMessages,
   setServiceContext,
   setActiveService,
@@ -317,8 +316,19 @@ export const useConversationRestore = (
     }
     
     return false;
-  }, [language, setChatMessages, setServiceContext, setActiveService, setSuggestions, setConversationStats, setConversationPatterns]);
+  }, [language, chatbotData, setChatMessages, setServiceContext, setActiveService, setSuggestions, setConversationStats, setConversationPatterns]);
 
   return { restorePreviousConversation };
 };
 
+// File: app/components/layout/ChatBot/hooks/index.js
+// Centralized export file for all hooks
+export { useChatState } from './useChatState';
+export { useChatInitialization } from './useChatInitialization';
+export { useChatAutoScroll } from './useChatAutoScroll';
+export { useChatFocus } from './useChatFocus';
+export { useChatCloseHandler } from './useChatCloseHandler';
+export { useChatKeyboardShortcuts } from './useChatKeyboardShortcuts';
+export { useChatOutsideClick } from './useChatOutsideClick';
+export { useScreenSize } from './useScreenSize';
+export { useConversationRestore } from './useConversationRestore';

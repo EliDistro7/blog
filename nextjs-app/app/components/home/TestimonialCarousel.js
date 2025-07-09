@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Star, Quote, ChevronLeft, ChevronRight, Globe, Users, Heart, Building } from 'lucide-react';
 
 export default function TestimonialCarousel() {
@@ -8,8 +8,8 @@ export default function TestimonialCarousel() {
   const testimonials = [
     { 
       quote: {
-        en: "Future Holders built our website in just 10 days—absolutely flawless execution and stunning design. Their team&apos;s attention to detail made our brand shine online.",
-        sw: "Future Holders walijenga tovuti yetu kwa siku 10 pekee—utekelezaji bila hitilafu yoyote na muundo wa kuvutia. Umakini wa timu yao kwa maelezo ulifanya chapa yetu ing&apos;ae mtandaoni."
+        en: "Future Holders built our website in just 10 days—absolutely flawless execution and stunning design. Their team's attention to detail made our brand shine online.",
+        sw: "Future Holders walijenga tovuti yetu kwa siku 10 pekee—utekelezaji bila hitilafu yoyote na muundo wa kuvutia. Umakini wa timu yao kwa maelezo ulifanya chapa yetu ing'ae mtandaoni."
       },
       author: "Salila Mohammed",
       title: "Executive Director & Founder",
@@ -92,20 +92,20 @@ export default function TestimonialCarousel() {
     }
   ];
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % testimonials.length);
-  };
+  }, [testimonials.length]);
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-  };
+  }, [testimonials.length]);
 
   useEffect(() => {
     if (isAutoPlaying) {
       const interval = setInterval(nextSlide, 6000);
       return () => clearInterval(interval);
     }
-  }, [isAutoPlaying, activeIndex]);
+  }, [isAutoPlaying, nextSlide]);
 
   return (
     <div className="relative w-full py-16 bg-gradient-to-br from-brand-dark via-brand-deep to-brand-medium overflow-hidden">
@@ -130,7 +130,7 @@ export default function TestimonialCarousel() {
             What Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-coral">Clients Say</span>
           </h2>
           <p className="text-xl text-brand-light max-w-2xl mx-auto">
-            Discover how we've transformed businesses across Tanzania with our digital solutions
+            Discover how we&apos;ve transformed businesses across Tanzania with our digital solutions
           </p>
         </div>
 
