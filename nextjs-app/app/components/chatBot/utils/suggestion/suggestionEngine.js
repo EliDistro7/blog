@@ -107,6 +107,49 @@ export const generateSmartSuggestions = (
 };
 
 /**
+ * Generate industry-specific suggestions
+ */
+export const generateIndustrySuggestions = (industry, language = 'en') => {
+  const industryMappings = {
+    'retail': ['Door to Door Sales', 'Social Media Management', 'Product & Service Branding'],
+    'manufacturing': ['Equipment Sales', 'Door to Door Sales', 'Public Tender Services'],
+    'service': ['Website & App Development', 'Social Media Management', 'Product & Service Branding'],
+    'startup': ['Website & App Development', 'Product & Service Branding', 'Social Media Management'],
+    'restaurant': ['Social Media Management', 'Product & Service Branding', 'Door to Door Sales'],
+    'healthcare': ['Website & App Development', 'Social Media Management', 'Equipment Sales'],
+    'education': ['Website & App Development', 'Social Media Management', 'Equipment Sales'],
+    'construction': ['Equipment Sales', 'Public Tender Services', 'Door to Door Sales'],
+    'technology': ['Website & App Development', 'Social Media Management', 'Product & Service Branding'],
+    'finance': ['Website & App Development', 'Social Media Management', 'Public Tender Services'],
+    'agriculture': ['Equipment Sales', 'Door to Door Sales', 'Social Media Management'],
+    'logistics': ['Equipment Sales', 'Public Tender Services', 'Website & App Development'],
+    'entertainment': ['Social Media Management', 'Product & Service Branding', 'Website & App Development'],
+    'automotive': ['Equipment Sales', 'Door to Door Sales', 'Social Media Management'],
+    'real-estate': ['Social Media Management', 'Product & Service Branding', 'Website & App Development']
+  };
+  
+  const relevantServices = industryMappings[industry?.toLowerCase()] || [];
+  
+  const suggestions = relevantServices.map(service => 
+    language === 'sw'
+      ? `Niambie kuhusu ${service} kwa ${industry}`
+      : `Tell me about ${service} for ${industry}`
+  );
+  
+  // Add general industry-specific questions
+  suggestions.push(
+    language === 'sw'
+      ? `Mnawakilisha sekta ya ${industry} vipi?`
+      : `How do you serve the ${industry} industry?`,
+    language === 'sw'
+      ? `Je, mna uzoefu wa ${industry}?`
+      : `Do you have experience in ${industry}?`
+  );
+  
+  return suggestions;
+};
+
+/**
  * Generate service-specific contextual suggestions
  */
 const generateServiceSpecificSuggestions = (
