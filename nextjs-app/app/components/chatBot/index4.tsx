@@ -1,7 +1,5 @@
-// ===== 1. MAIN CHATBOT COMPONENT (index.jsx) =====
+// ===== UPDATED CHATBOT COMPONENT (index.jsx) =====
 'use client';
-
-
 
 import { useState, useRef } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
@@ -9,7 +7,7 @@ import { chatbotData } from '@/data/chat/index';
 
 // Hooks
 import { useChatState } from './hooks/useChatState';
-import { useChatEffects } from './hooks/useChatEffects';
+import useChatEffects from './hooks/useChatEffects';
 import { useChatActions } from './hooks/useChatActions';
 import { useMessageSender } from './hooks/sender/useMessageSender';
 import { useConversationRestore } from './hooks/useConversationRestore';
@@ -30,9 +28,6 @@ export default function ChatBot() {
   const inputRef = useRef(null);
   const chatScrollRef = useRef(null);
 
-  
-
-  // Custom hooks for state management
   // Define a type for detection result
   type DetectionResult = {
     service?: string;
@@ -40,6 +35,7 @@ export default function ChatBot() {
     [key: string]: any;
   };
 
+  // Custom hooks for state management
   const {
     isChatOpen,
     setIsChatOpen,
@@ -74,6 +70,17 @@ export default function ChatBot() {
     currentDetectionResult: DetectionResult;
   };
 
+  // Restore previous conversation state
+  const { restorePreviousConversation } = useConversationRestore({
+    language,
+    setChatMessages,
+    setServiceContext,
+    setActiveService,
+    setSuggestions,
+    setConversationStats,
+    setConversationPatterns
+  });
+
   // Message sending logic
   const { handleMessageSend } = useMessageSender({
     language,
@@ -94,21 +101,8 @@ export default function ChatBot() {
     setConversationPatterns,
     maxMessages,
     chatEndRef,
-    pricingData:chatbotData.pricing
-  }
-  );
-
-
-      // Restore previous conversation state
-    const { restorePreviousConversation } = useConversationRestore({
-        language,
-        setChatMessages,
-        setServiceContext,
-        setActiveService,
-        setSuggestions,
-        setConversationStats,
-        setConversationPatterns
-    })
+    pricingData: chatbotData.pricing
+  });
 
   // Chat actions and handlers
   const chatActions = useChatActions({
@@ -136,40 +130,13 @@ export default function ChatBot() {
     setSuggestionAnalytics,
     handleMessageSend,
     setMessage,
-  
   });
 
   // Side effects (initialization, auto-scroll, etc.)
-  useChatEffects({
-    language,
-    isChatOpen,
-    chatMessages,
-    isTyping,
-    serviceContext,
-    activeService,
-    isClosing,
-    containerRef,
-    chatEndRef,
-    inputRef,
-    chatScrollRef,
-    handleCloseChat,
-    setChatMessages,
-    setServiceContext,
-    setActiveService,
-    setSuggestions,
-    setConversationStats,
-    setConversationPatterns,
-    setDetectionHistory,
-    currentDetectionResult,
-    detectionHistory,
-    maxMessages
-  });
-
-
-
+  useChatEffects();
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 " ref={containerRef}>
+    <div className="fixed bottom-6 right-6 z-50" ref={containerRef}>
       {!isChatOpen && (
         <FloatingButton onClick={chatActions.handleOpenChat} />
       )}
@@ -208,7 +175,6 @@ export default function ChatBot() {
               disabled={isClosing}
               insights={chatActions.getInsights()}
               currentDetection={currentDetectionResult}
-
               detectionConfidence={(currentDetectionResult as any).confidence || 0}
               onRegenerateSuggestions={chatActions.handleRegenerateSuggestions}
               onIndustrySuggestions={chatActions.handleIndustrySuggestions}
@@ -225,8 +191,8 @@ export default function ChatBot() {
               disabled={isClosing}
               detectionHint={(currentDetectionResult as any).service ? 
                 (language === 'sw' ? 
-                  `Kuhusu ${(currentDetectionResult as any)} (${Math.round((currentDetectionResult as any).confidence * 100)}% uhakika)` :
-                  `About ${(currentDetectionResult as any)} (${Math.round((currentDetectionResult as any).confidence * 100)}% confidence)`
+                  `Kuhusu ${(currentDetectionResult as any).service} (${Math.round((currentDetectionResult as any).confidence * 100)}% uhakika)` :
+                  `About ${(currentDetectionResult as any).service} (${Math.round((currentDetectionResult as any).confidence * 100)}% confidence)`
                 ) : null}
             />
             
