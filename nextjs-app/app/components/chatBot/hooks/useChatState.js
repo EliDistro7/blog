@@ -1,38 +1,28 @@
-// ===== 2. CHAT STATE HOOK (hooks/useChatState.js) =====
-import { useState, useEffect, useCallback } from 'react';
-import { chatbotData } from '@/data/chat/index';
-import {
-  restoreConversationState,
-  createFreshConversationState,
-  getConversationStats,
-  detectConversationPatterns
-} from '../utils/convo/conversationManager';
+// File: app/components/layout/ChatBot/hooks/useChatState.js
+import { useState, useCallback } from 'react';
 import { createFreshServiceContext } from '@/utils/context/serviceContextUtils';
+import { createFreshConversationState } from '../utils/convo/conversationManager';
 
-export function useChatState(language) {
-  // UI State
+export const useChatState = (language) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-
-  // Chat State
   const [chatMessages, setChatMessages] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [activeService, setActiveService] = useState(null);
-
-  // Service Context State
+  const [isClosing, setIsClosing] = useState(false);
+  
+  // Service context state
   const [serviceContext, setServiceContext] = useState(() => createFreshServiceContext());
+  
+  // Enhanced detection state
   const [detectionHistory, setDetectionHistory] = useState([]);
-  const [currentDetectionResult, setCurrentDetectionResult] = useState({
-  service: null,
-  confidence: 0
-});
-
-  // Analytics State
+  const [currentDetectionResult, setCurrentDetectionResult] = useState({confidence:0});
+  
+  // Conversation analytics state
   const [conversationStats, setConversationStats] = useState({});
   const [conversationPatterns, setConversationPatterns] = useState({});
+  const [maxMessages] = useState(50);
   const [suggestionAnalytics, setSuggestionAnalytics] = useState({
     totalGenerated: 0,
     smartSuggestionsUsed: 0,
@@ -40,87 +30,42 @@ export function useChatState(language) {
     userInteractionRate: 0
   });
 
-  // Constants
-  const [maxMessages] = useState(50);
-
-  // Screen size detection
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsSmallScreen(window.innerWidth < 640);
-    };
-    
-    checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-    
-    return () => window.removeEventListener('resize', checkScreenSize);
-  }, []);
-
-  // Initialize conversation state
-  useEffect(() => {
-    const restoredState = restoreConversationState(language);
-    
-    if (restoredState) {
-      setChatMessages(restoredState.messages);
-      setServiceContext(restoredState.serviceContext);
-      setActiveService(restoredState.activeService);
-      setSuggestions(restoredState.suggestions || chatbotData.prompts[language]);
-      setConversationStats(getConversationStats(restoredState.messages, restoredState.serviceContext));
-      setConversationPatterns(detectConversationPatterns(restoredState.messages));
-    } else {
-      const freshState = createFreshConversationState(chatbotData, language);
-      setChatMessages(freshState.messages);
-      setServiceContext(freshState.serviceContext);
-      setActiveService(freshState.activeService);
-      setSuggestions(freshState.suggestions);
-      setConversationStats(getConversationStats(freshState.messages, freshState.serviceContext));
-      setConversationPatterns({});
-    }
+  const resetChatState = useCallback((chatbotData) => {
+    const freshState = createFreshConversationState(chatbotData, language);
+    setChatMessages(freshState.messages);
+    setServiceContext(freshState.serviceContext);
+    setActiveService(null);
+    setSuggestions(freshState.suggestions);
+    setConversationStats({});
+    setConversationPatterns({});
+    setDetectionHistory([]);
+    setCurrentDetectionResult(null);
   }, [language]);
 
-  // Handle chat close with animation
-  const handleCloseChat = useCallback((withAnimation = true) => {
-    if (withAnimation) {
-      setIsClosing(true);
-      // Allow animation to complete before actually closing
-      setTimeout(() => {
-        setIsChatOpen(false);
-        setIsClosing(false);
-      }, 300); // Adjust timing to match your CSS animation duration
-    } else {
-      setIsChatOpen(false);
-      setIsClosing(false);
-    }
-  }, []);
-
   return {
-    isChatOpen,
-    setIsChatOpen,
-    message,
-    setMessage,
-    isTyping,
-    setIsTyping,
-    chatMessages,
-    setChatMessages,
-    suggestions,
-    setSuggestions,
-    activeService,
-    setActiveService,
-    isClosing,
-    setIsClosing,
-    serviceContext,
-    setServiceContext,
-    detectionHistory,
-    setDetectionHistory,
-    currentDetectionResult,
-    setCurrentDetectionResult,
-    conversationStats,
-    setConversationStats,
-    conversationPatterns,
-    setConversationPatterns,
-    suggestionAnalytics,
-    setSuggestionAnalytics,
+    // Basic chat state
+    isChatOpen, setIsChatOpen,
+    message, setMessage,
+    isTyping, setIsTyping,
+    chatMessages, setChatMessages,
+    suggestions, setSuggestions,
+    activeService, setActiveService,
+    isClosing, setIsClosing,
+    
+    // Service context state
+    serviceContext, setServiceContext,
+    
+    // Detection state
+    detectionHistory, setDetectionHistory,
+    currentDetectionResult, setCurrentDetectionResult,
+    
+    // Analytics state
+    conversationStats, setConversationStats,
+    conversationPatterns, setConversationPatterns,
     maxMessages,
-    isSmallScreen,
-    handleCloseChat // Add this to the return object
+    suggestionAnalytics, setSuggestionAnalytics,
+    
+    // Actions
+    resetChatState
   };
-}
+};

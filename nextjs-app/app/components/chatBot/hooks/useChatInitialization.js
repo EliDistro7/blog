@@ -1,13 +1,13 @@
-// File: app/components/layout/ChatBot/hooks/useConversationRestore.js
-import { useCallback } from 'react';
+// File: app/components/layout/ChatBot/hooks/useChatInitialization.js
+import { useEffect } from 'react';
 import {
   restoreConversationState,
+  createFreshConversationState,
   getConversationStats,
-  detectConversationPatterns,
-  addMessageToConversation
+  detectConversationPatterns
 } from '../utils/convo/conversationManager';
 
-export const useConversationRestore = (
+export const useChatInitialization = (
   language,
   chatbotData,
   setChatMessages,
@@ -17,7 +17,8 @@ export const useConversationRestore = (
   setConversationStats,
   setConversationPatterns
 ) => {
-  const restorePreviousConversation = useCallback(() => {
+  useEffect(() => {
+    // Try to restore conversation first
     const restoredState = restoreConversationState(language);
     
     if (restoredState) {
@@ -26,30 +27,22 @@ export const useConversationRestore = (
       setActiveService(restoredState.activeService);
       setSuggestions(restoredState.suggestions || chatbotData.prompts[language]);
       
-      // Update conversation analytics
+      // Update stats and patterns from restored conversation
       setConversationStats(getConversationStats(restoredState.messages, restoredState.serviceContext));
       setConversationPatterns(detectConversationPatterns(restoredState.messages));
       
-      // Add restoration message
-      const restoreMessage = language === 'sw' ? 
-        '↩️ Mazungumzo yako ya awali yamerejesha.' : 
-        '↩️ Your previous conversation has been restored.';
+      console.log('Conversation restored from storage');
+    } else {
+      // Create fresh conversation state
+      const freshState = createFreshConversationState(chatbotData, language);
+      setChatMessages(freshState.messages);
+      setServiceContext(freshState.serviceContext);
+      setActiveService(freshState.activeService);
+      setSuggestions(freshState.suggestions);
       
-      setTimeout(() => {
-        const restorationMsg = {
-          role: 'bot',
-          content: restoreMessage,
-          isSystemMessage: true
-        };
-        
-        setChatMessages(prev => addMessageToConversation(prev, restorationMsg));
-      }, 500);
-      
-      return true;
+      // Initialize stats for fresh conversation
+      setConversationStats(getConversationStats(freshState.messages, freshState.serviceContext));
+      setConversationPatterns({});
     }
-    
-    return false;
   }, [language, chatbotData, setChatMessages, setServiceContext, setActiveService, setSuggestions, setConversationStats, setConversationPatterns]);
-
-  return { restorePreviousConversation };
 };

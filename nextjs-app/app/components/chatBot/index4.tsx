@@ -11,6 +11,8 @@ import useChatEffects from './hooks/useChatEffects';
 import { useChatActions } from './hooks/useChatActions';
 import { useMessageSender } from './hooks/sender/useMessageSender';
 import { useConversationRestore } from './hooks/useConversationRestore';
+import { useChatCloseHandler } from './hooks/useCloseChatHandler';
+import { useScreenSize } from './hooks/useScreenSize';
 
 // Components
 import ChatContainer from './components/ChatContainer';
@@ -64,22 +66,37 @@ export default function ChatBot() {
     suggestionAnalytics,
     setSuggestionAnalytics,
     maxMessages,
-    isSmallScreen,
-    handleCloseChat
+    resetChatState
   } = useChatState(language) as ReturnType<typeof useChatState> & {
     currentDetectionResult: DetectionResult;
   };
 
-  // Restore previous conversation state
-  const { restorePreviousConversation } = useConversationRestore({
+  // Screen size detection
+  const { isSmallScreen } = useScreenSize();
+
+  // Chat close handler
+  const { handleCloseChat } = useChatCloseHandler(
+    chatMessages,
+    serviceContext,
+    activeService,
     language,
+    setIsClosing,
+    setIsTyping,
+    setMessage,
+    setIsChatOpen
+  );
+
+  // Restore previous conversation state
+  const { restorePreviousConversation } = useConversationRestore(
+    language,
+    chatbotData,
     setChatMessages,
     setServiceContext,
     setActiveService,
     setSuggestions,
     setConversationStats,
     setConversationPatterns
-  });
+  );
 
   // Message sending logic
   const { handleMessageSend } = useMessageSender({
