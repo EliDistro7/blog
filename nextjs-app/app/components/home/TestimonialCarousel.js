@@ -108,7 +108,7 @@ export default function TestimonialCarousel() {
   }, [isAutoPlaying, nextSlide]);
 
   return (
-    <div className="relative w-full py-16 bg-gradient-to-br from-brand-dark via-brand-deep to-brand-medium overflow-hidden">
+    <div className="relative w-full py-8 sm:py-16 bg-gradient-to-br from-brand-dark via-brand-deep to-brand-medium overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-brand-accent/20 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl animate-float"></div>
@@ -119,36 +119,33 @@ export default function TestimonialCarousel() {
       {/* Subtle Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
       
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative w-full px-2 sm:px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-brand-accent/10 backdrop-blur-sm rounded-full px-6 py-2 mb-6">
-            <Star className="w-5 h-5 text-brand-gold animate-pulse" />
-            <span className="text-brand-gold font-medium">Client Success Stories</span>
+        <div className="text-center mb-8 sm:mb-16 px-2">
+          <div className="inline-flex items-center gap-2 bg-brand-accent/10 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 mb-4 sm:mb-6">
+            <Star className="w-4 h-4 sm:w-5 sm:h-5 text-brand-gold animate-pulse" />
+            <span className="text-brand-gold font-medium text-sm sm:text-base">Client Success Stories</span>
           </div>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 px-2">
             What Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-coral">Clients Say</span>
           </h2>
-          <p className="text-xl text-brand-light max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-brand-light max-w-2xl mx-auto px-2">
             Discover how we&apos;ve transformed businesses across Tanzania with our digital solutions
           </p>
         </div>
 
         {/* Main Testimonial Display */}
         <div className="relative">
-          <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 md:p-12 border border-white/10 shadow-depth">
-            <div className="grid lg:grid-cols-5 gap-8 items-center">
+          <div className="bg-white/5 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-12 border border-white/10 shadow-depth mx-2 sm:mx-0">
+            <div className="grid lg:grid-cols-5 gap-6 sm:gap-8 items-center">
               {/* Profile Section */}
               <div className="lg:col-span-2 text-center lg:text-left">
-                <div className="relative inline-block mb-6">
+                <div className="relative inline-block mb-4 sm:mb-6">
                   <div className="absolute inset-0 rounded-full bg-gradient-to-br from-brand-accent via-brand-coral to-brand-teal transform rotate-12 scale-110 blur-sm opacity-60"></div>
-                  <div className="relative w-32 h-32 rounded-full border-4 border-white/20 shadow-glow overflow-hidden mx-auto">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img 
-                      src={testimonials[activeIndex].image} 
-                      alt={testimonials[activeIndex].author}
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-white/20 shadow-glow bg-gradient-to-br from-brand-accent to-brand-coral mx-auto flex items-center justify-center">
+                    <span className="text-white font-bold text-lg sm:text-2xl">
+                      {testimonials[activeIndex].author.split(' ').map(name => name.charAt(0)).join('')}
+                    </span>
                   </div>
                   <div className="absolute -bottom-2 -right-2 bg-brand-gold rounded-full p-2 shadow-lg">
                     {testimonials[activeIndex].icon}
@@ -159,28 +156,28 @@ export default function TestimonialCarousel() {
                   {[...Array(5)].map((_, i) => (
                     <Star 
                       key={i} 
-                      size={20} 
-                      className={`${i < testimonials[activeIndex].rating ? "fill-brand-gold text-brand-gold" : "text-brand-light/30"} transition-colors duration-300`}
+                      size={16} 
+                      className={`sm:w-5 sm:h-5 ${i < testimonials[activeIndex].rating ? "fill-brand-gold text-brand-gold" : "text-brand-light/30"} transition-colors duration-300`}
                     />
                   ))}
                 </div>
                 
-                <h3 className="text-2xl font-bold text-white mb-2">
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
                   {testimonials[activeIndex].author}
                 </h3>
-                <p className="text-brand-accent font-semibold mb-1">
+                <p className="text-brand-accent font-semibold mb-1 text-sm sm:text-base">
                   {testimonials[activeIndex].title}
                 </p>
-                <p className="text-brand-light mb-3">
+                <p className="text-brand-light mb-3 text-sm sm:text-base">
                   {testimonials[activeIndex].company}
                 </p>
-                <div className="inline-flex items-center gap-2 bg-brand-accent/10 rounded-full px-4 py-2">
-                  <span className="text-brand-gold text-sm font-medium">
+                <div className="inline-flex items-center gap-2 bg-brand-accent/10 rounded-full px-3 sm:px-4 py-2">
+                  <span className="text-brand-gold text-xs sm:text-sm font-medium">
                     {testimonials[activeIndex].category}
                   </span>
                 </div>
                 {testimonials[activeIndex].website !== "Private Client" && testimonials[activeIndex].website !== "Social Media Client" && (
-                  <p className="text-brand-coral text-sm mt-2 font-mono">
+                  <p className="text-brand-coral text-xs sm:text-sm mt-2 font-mono">
                     {testimonials[activeIndex].website}
                   </p>
                 )}
@@ -188,33 +185,33 @@ export default function TestimonialCarousel() {
               
               {/* Quote Section */}
               <div className="lg:col-span-3 relative">
-                <Quote size={60} className="absolute -top-4 -left-4 text-brand-accent/20" />
-                <blockquote className="text-xl md:text-2xl lg:text-3xl font-light text-white leading-relaxed pl-8 pr-4">
+                <Quote size={40} className="absolute -top-2 -left-2 sm:-top-4 sm:-left-4 text-brand-accent/20 sm:w-15 sm:h-15" />
+                <blockquote className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light text-white leading-relaxed pl-6 sm:pl-8 pr-2 sm:pr-4">
                   &ldquo;{testimonials[activeIndex].quote.en}&rdquo;
                 </blockquote>
-                <div className="absolute bottom-0 right-0 w-16 h-1 bg-gradient-to-r from-brand-accent to-brand-coral rounded-full"></div>
+                <div className="absolute bottom-0 right-0 w-12 sm:w-16 h-1 bg-gradient-to-r from-brand-accent to-brand-coral rounded-full"></div>
               </div>
             </div>
           </div>
 
           {/* Navigation Buttons */}
-          <div className="flex justify-between items-center mt-8">
+          <div className="flex justify-between items-center mt-6 sm:mt-8 px-2 sm:px-0">
             <button
               onClick={prevSlide}
               onMouseEnter={() => setIsAutoPlaying(false)}
               onMouseLeave={() => setIsAutoPlaying(true)}
-              className="group flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 text-white transition-all duration-300 border border-white/20 hover:border-brand-accent/50"
+              className="group flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 text-white transition-all duration-300 border border-white/20 hover:border-brand-accent/50"
             >
-              <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-              <span className="hidden sm:inline">Previous</span>
+              <ChevronLeft size={18} className="sm:w-5 sm:h-5 group-hover:-translate-x-1 transition-transform" />
+              <span className="hidden sm:inline text-sm sm:text-base">Previous</span>
             </button>
 
-            <div className="flex gap-3">
+            <div className="flex gap-2 sm:gap-3">
               {testimonials.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setActiveIndex(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
                     index === activeIndex 
                       ? 'bg-brand-accent scale-125 shadow-glow' 
                       : 'bg-white/20 hover:bg-white/40'
@@ -227,28 +224,28 @@ export default function TestimonialCarousel() {
               onClick={nextSlide}
               onMouseEnter={() => setIsAutoPlaying(false)}
               onMouseLeave={() => setIsAutoPlaying(true)}
-              className="group flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 text-white transition-all duration-300 border border-white/20 hover:border-brand-accent/50"
+              className="group flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 text-white transition-all duration-300 border border-white/20 hover:border-brand-accent/50"
             >
-              <span className="hidden sm:inline">Next</span>
-              <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              <span className="hidden sm:inline text-sm sm:text-base">Next</span>
+              <ChevronRight size={18} className="sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>
 
         {/* Stats Section */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mt-12 sm:mt-16 px-2 sm:px-0">
           {[
-            { label: "Websites Delivered", value: "50+", icon: <Globe className="w-6 h-6" /> },
-            { label: "Happy Clients", value: "40+", icon: <Users className="w-6 h-6" /> },
-            { label: "Projects Completed", value: "60+", icon: <Building className="w-6 h-6" /> },
-            { label: "Years Experience", value: "5+", icon: <Star className="w-6 h-6" /> }
+            { label: "Websites Delivered", value: "50+", icon: <Globe className="w-5 h-5 sm:w-6 sm:h-6" /> },
+            { label: "Happy Clients", value: "40+", icon: <Users className="w-5 h-5 sm:w-6 sm:h-6" /> },
+            { label: "Projects Completed", value: "60+", icon: <Building className="w-5 h-5 sm:w-6 sm:h-6" /> },
+            { label: "Years Experience", value: "5+", icon: <Star className="w-5 h-5 sm:w-6 sm:h-6" /> }
           ].map((stat, index) => (
-            <div key={index} className="text-center bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-brand-accent/30 transition-all duration-300 group">
+            <div key={index} className="text-center bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-4 sm:p-6 border border-white/10 hover:border-brand-accent/30 transition-all duration-300 group">
               <div className="text-brand-gold mb-2 flex justify-center group-hover:scale-110 transition-transform">
                 {stat.icon}
               </div>
-              <div className="text-2xl md:text-3xl font-bold text-white mb-1">{stat.value}</div>
-              <div className="text-brand-light text-sm">{stat.label}</div>
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1">{stat.value}</div>
+              <div className="text-brand-light text-xs sm:text-sm">{stat.label}</div>
             </div>
           ))}
         </div>

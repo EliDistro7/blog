@@ -7,6 +7,7 @@ export const useChatFocus = (isChatOpen, inputRef) => {
       setTimeout(() => {
         inputRef.current.focus();
       }, 300);
+      
     }
   }, [isChatOpen, inputRef]);
 };
