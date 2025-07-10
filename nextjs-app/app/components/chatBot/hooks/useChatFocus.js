@@ -1,4 +1,4 @@
-/ File: app/components/layout/ChatBot/hooks/useChatFocus.js
+// File: app/components/layout/ChatBot/hooks/useChatFocus.js
 import { useEffect } from 'react';
 
 export const useChatFocus = (isChatOpen, inputRef) => {
