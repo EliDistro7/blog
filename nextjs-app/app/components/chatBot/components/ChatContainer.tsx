@@ -1,17 +1,24 @@
-// File: app/components/layout/chatBot/components/ChatContainer.jsx
+// File: app/components/layout/chatBot/components/ChatContainer.tsx
 'use client';
 
+import { ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { chatContainerVariants } from '../animations';
+
+interface ChatContainerProps {
+  children: ReactNode;
+  isSmallScreen: boolean;
+  isClosing: boolean;
+}
 
 /**
  * Main chat container with responsive design, spacious layout, and modern styling
  */
 export default function ChatContainer({ 
-  children, 
-  isSmallScreen, 
-  isClosing 
-}) {
+  children,
+  isSmallScreen,
+  isClosing
+}: ChatContainerProps) {
   return (
     <motion.div
       variants={chatContainerVariants}
@@ -20,7 +27,7 @@ export default function ChatContainer({
       exit="exit"
       className={`
         ${isSmallScreen ? 
-          'fixed inset-0 w-full h-full max-h-full rounded-none' : 
+          'fixed inset-0 w-full h-full max-h-full rounded-none z-50' : 
           'w-96 md:w-[28rem] lg:w-[32rem] h-[36rem] max-h-[90vh] rounded-3xl'
         } 
         bg-gradient-to-br from-gray-900/95 via-slate-900/95 to-gray-800/95 

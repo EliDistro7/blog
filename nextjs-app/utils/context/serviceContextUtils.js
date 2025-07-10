@@ -96,25 +96,65 @@ export const isDetectionReliable = (detectionResult) => {
  * @param {string} userMessage - User's message
  * @returns {Object} - Updated service context
  */
-export const updateServiceContext = (currentContext, detectedService, userMessage) => {
+export const updateServiceContext = (currentContext, detectedService, userMessage, options = {}) => {
   const newContext = { ...currentContext };
   const timestamp = new Date().toISOString();
+  
+  // Extract options with defaults
+  const {
+    preservePrevious = false,
+    confidenceThreshold = 0.5,
+    forceUpdate = false
+  } = options;
 
   if (detectedService) {
-    // New service detected
-    newContext.currentService = detectedService;
-    newContext.lastServiceMention = timestamp;
-    
-    // Add to history if not already present
-    if (!newContext.serviceHistory.includes(detectedService)) {
-      newContext.serviceHistory.push(detectedService);
-    }
-    
-    // Reset or increment conversation depth
-    if (newContext.currentService !== detectedService) {
-      newContext.conversationDepth = 1;
+    // Check if we should preserve previous context for low confidence detections
+    if (preservePrevious && newContext.currentService && newContext.currentService !== detectedService) {
+      // Only update if confidence is above threshold or force update is true
+      if (forceUpdate || !confidenceThreshold) {
+        // New service detected - update normally
+        newContext.currentService = detectedService;
+        newContext.lastServiceMention = timestamp;
+        
+        // Add to history if not already present
+        if (!newContext.serviceHistory.includes(detectedService)) {
+          newContext.serviceHistory.push(detectedService);
+        }
+        
+        // Reset conversation depth for new service
+        newContext.conversationDepth = 1;
+      } else {
+        // Preserve previous service but increment depth
+        newContext.conversationDepth = Math.min(newContext.conversationDepth + 1, 10);
+        
+        // Still add the detected service to history for reference
+        if (!newContext.serviceHistory.includes(detectedService)) {
+          newContext.serviceHistory.push(detectedService);
+        }
+        
+        // Add a note about the alternative service detected
+        newContext.alternativeServiceDetected = {
+          service: detectedService,
+          timestamp,
+          confidence: confidenceThreshold
+        };
+      }
     } else {
-      newContext.conversationDepth = Math.min(newContext.conversationDepth + 1, 10);
+      // New service detected or same service - update normally
+      newContext.currentService = detectedService;
+      newContext.lastServiceMention = timestamp;
+      
+      // Add to history if not already present
+      if (!newContext.serviceHistory.includes(detectedService)) {
+        newContext.serviceHistory.push(detectedService);
+      }
+      
+      // Reset or increment conversation depth
+      if (currentContext.currentService !== detectedService) {
+        newContext.conversationDepth = 1;
+      } else {
+        newContext.conversationDepth = Math.min(newContext.conversationDepth + 1, 10);
+      }
     }
   } else if (newContext.currentService) {
     // Continue with current service context
@@ -127,7 +167,12 @@ export const updateServiceContext = (currentContext, detectedService, userMessag
     timestamp,
     userMessage: userMessage.substring(0, 100), // Truncate for storage
     detectedService,
-    contextService: newContext.currentService
+    contextService: newContext.currentService,
+    options: {
+      preservePrevious,
+      confidenceThreshold,
+      forceUpdate
+    }
   });
 
   // Keep only last 20 interactions
@@ -135,9 +180,21 @@ export const updateServiceContext = (currentContext, detectedService, userMessag
     newContext.conversationFlow = newContext.conversationFlow.slice(-20);
   }
 
+  // Clean up old alternative service detections (keep only last 3)
+  if (newContext.alternativeServiceDetected) {
+    newContext.alternativeServiceHistory = newContext.alternativeServiceHistory || [];
+    newContext.alternativeServiceHistory.push(newContext.alternativeServiceDetected);
+    
+    if (newContext.alternativeServiceHistory.length > 3) {
+      newContext.alternativeServiceHistory = newContext.alternativeServiceHistory.slice(-3);
+    }
+    
+    // Clear the current alternative detection
+    delete newContext.alternativeServiceDetected;
+  }
+
   return newContext;
 };
-
 /**
  * Generate contextual prompts based on service and conversation depth
  * @param {string} serviceName - Current service

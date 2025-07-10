@@ -36,6 +36,90 @@ import {
   pruneConversation
 } from '../../utils/convo/conversationManager';
 
+type PricingDataType = {
+  [service: string]: {
+    price: number;
+    currency: string;
+    [key: string]: any;
+  };
+};
+
+// Define ServiceContext type
+type ServiceContext = {
+  currentService: string | null;
+  lastServiceMention: string;
+  serviceHistory: string[];
+  conversationDepth: number;
+  conversationFlow: Array<{
+    timestamp: string;
+    userMessage: string;
+    detectedService: string | null;
+    contextService: string | null;
+    options?: {
+      preservePrevious?: boolean;
+      confidenceThreshold?: number;
+      forceUpdate?: boolean;
+    };
+  }>;
+  alternativeServiceDetected?: {
+    service: string;
+    timestamp: string;
+    confidence: number;
+  };
+  alternativeServiceHistory?: Array<{
+    service: string;
+    timestamp: string;
+    confidence: number;
+  }>;
+  lastResponse?: {
+    type: string;
+    service: string | null;
+    text: string;
+    timestamp: string;
+  };
+  [key: string]: any; // Allow for additional properties
+};
+
+// Define a type for service detection result
+type ServiceDetectionResult = {
+  service: string | null;
+  confidence: number;
+  matchedTerms: string[];
+  alternativeServices: { service: string; confidence: number }[];
+  detectionMethod: string;
+  contextInfluence?: any;
+};
+
+// Define DetectionRecord type
+type DetectionRecord = {
+  message: string;
+  timestamp: string;
+  detection: ServiceDetectionResult;
+  language: string;
+};
+
+interface UseMessageSenderProps {
+  language: string;
+  message: string;
+  setMessage: (msg: string) => void;
+  isClosing: boolean;
+  serviceContext: ServiceContext;
+  setServiceContext: (ctx: ServiceContext) => void;
+  chatMessages: any[];
+  setChatMessages: (msgs: any[]) => void;
+  setIsTyping: (typing: boolean) => void;
+  setSuggestions: (sugs: any[]) => void;
+  setActiveService: (service: string) => void;
+  detectionHistory: DetectionRecord[];
+  setDetectionHistory: (history: DetectionRecord[] | ((prev: DetectionRecord[]) => DetectionRecord[])) => void;
+  setCurrentDetectionResult: (result: any) => void;
+  setConversationStats: (stats: any) => void;
+  setConversationPatterns: (patterns: any) => void;
+  maxMessages: number;
+  chatEndRef: React.RefObject<HTMLDivElement>;
+  pricingData: PricingDataType;
+}
+
 export const useMessageSender = ({
   language,
   message,
@@ -56,15 +140,14 @@ export const useMessageSender = ({
   maxMessages,
   chatEndRef,
   pricingData,
-}
-) => {
+}: UseMessageSenderProps) => {
   const handleMessageSend = useCallback(() => {
     if (!message.trim() || isClosing) return;
     
     const userMessage = message.trim();
     
     // Use detectLanguage utility to detect language from user message
-    const detectedLang = detectLanguage(userMessage, null, language);
+    const detectedLang = detectLanguage(userMessage, undefined, language);
     
     // Enhanced service detection with confidence scoring
     const enhancedServiceDetection = detectServiceWithConfidence(
@@ -72,28 +155,35 @@ export const useMessageSender = ({
       detectedLang, 
       chatbotData.serviceKeywords,
       serviceContext
-    );
-    
-  // Validate the enhanced detection result
-if (!validateServiceDetection(enhancedServiceDetection)) {
-  console.warn('Enhanced service detection failed, falling back to basic detection');
-  const basicDetection = detectServiceFromMessage(userMessage, detectedLang);
-  enhancedServiceDetection.service = basicDetection.service;
-  enhancedServiceDetection.confidence = basicDetection.confidence || 0.5;
-  enhancedServiceDetection.matchedTerms = basicDetection.matchedTerms || [];
-  enhancedServiceDetection.alternativeServices = [];
-  enhancedServiceDetection.detectionMethod = 'fallback_basic';
-}
+    ) as ServiceDetectionResult;
+
+    // Validate the enhanced detection result
+    if (!validateServiceDetection(enhancedServiceDetection)) {
+      console.warn('Enhanced service detection failed, falling back to basic detection');
+      const basicDetection = detectServiceFromMessage(userMessage, detectedLang) as {
+        service: string | null;
+        confidence?: number;
+        matchedTerms?: string[];
+      };
+      // Reassign enhancedServiceDetection as a typed object to avoid property errors
+      Object.assign(enhancedServiceDetection as ServiceDetectionResult, {
+        service: basicDetection.service,
+        confidence: basicDetection.confidence || 0.5,
+        matchedTerms: basicDetection.matchedTerms || [],
+        alternativeServices: [],
+        detectionMethod: 'fallback_basic'
+      });
+    }
     
     // Update detection history
-    const detectionRecord = {
+    const detectionRecord: DetectionRecord = {
       message: userMessage,
       timestamp: new Date().toISOString(),
       detection: enhancedServiceDetection,
       language: detectedLang
     };
     
-    setDetectionHistory(prev => [...prev.slice(-9), detectionRecord]);
+    setDetectionHistory((prev: DetectionRecord[]) => [...prev.slice(-9), detectionRecord]);
     setCurrentDetectionResult(enhancedServiceDetection);
     
     // Enhanced debug logging for development
@@ -183,19 +273,15 @@ if (!validateServiceDetection(enhancedServiceDetection)) {
     // Enhanced response generation with confidence-aware processing
     setTimeout(() => {
       try {
-
-         
- 
         const generatedResponse = generateContextualResponse({
           userMessage,
-          serviceDetection:enhancedServiceDetection,
+          serviceDetection: enhancedServiceDetection,
           intentAnalysis,
           chatbotData,
-          language:detectedLang,
-          serviceContext:updatedServiceContext,
-          pricingData:pricingData
-        }
-        );
+          language: detectedLang,
+          serviceContext: updatedServiceContext,
+          pricingData: pricingData
+        });
 
         // Update service context with last response for contextual follow-ups
         const contextWithLastResponse = {
@@ -437,4 +523,3 @@ if (!validateServiceDetection(enhancedServiceDetection)) {
 
   return { handleMessageSend };
 };
-
