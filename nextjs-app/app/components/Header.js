@@ -120,7 +120,7 @@ export default function Header() {
 
   return (
     <header 
-      className={`fixed z-40 w-full transition-all duration-300 ${
+      className={` w-full transition-all duration-300 ${
         scrolled 
           ? 'h-16 bg-brand-dark/95 backdrop-blur-md shadow-depth border-b border-brand-gold/20' 
           : 'h-20 bg-brand-dark/80 backdrop-blur-sm border-b border-brand-medium/20'

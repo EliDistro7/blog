@@ -1,32 +1,36 @@
-// File: app/components/layout/ChatBot/utils/responseGenerator.js
+// File: app/components/layout/ChatBot/utils/utils.ts
+
+import { 
+  ResponseObject, 
+  ServiceDetection, 
+
+  ServiceContext, 
+  IntentAnalysis, 
+  ConversationInsights,
+ 
+  SuggestedAction,
+  Language
+} from './types';
+import { PricingData } from '@/data/chat/index';
+
+
+
 
 import { 
   getServiceResponse,
   findFaqMatch,
-  isAskingForContact,
   getContactResponse
 } from '@/utils/ChatBotUtils';
 
 import { 
   generatePricingResponse,
-  isPricingInquiry,
   getConversationInsights
 } from '@/utils/context/serviceContextUtils';
 
-// Import common questions functionality
 import {
-  handleCommonQuestions,
   formatResponseForDisplay,
-  generateServicesResponse,
   generatePricingResponse as generateCommonPricingResponse,
-  generateMethodologyResponse,
-  generateMoreInfoResponse,
-  
-    generateContactResponse as generateCommonContactResponse,
-  generateTimelineResponse,
-  generateLocationResponse,
-  generateQualificationsResponse
-
+  CommonQuestionResponse,
 } from '@/utils/context/common-questions/index';
 
 import { 
@@ -37,101 +41,95 @@ import {
   generateServiceElaboration,
   generatePricingElaboration,
   generateGeneralGuidance
-} from "./helpers"
+} from "../helpers";
 
-import {
-  analyzeMessageIntent,
-  detectQuestionType
-} from "./intent";
+import { chatBotData, ChatbotData } from '@/data/chat/index';
 
-export {analyzeMessageIntent};
-
-import { analyzeCasualInteraction, generateCasualResponse } from '../casual/casualInteractionUtils';
+// Helper function to create a ResponseObject with backward compatibility
+export const createResponseObject = (
+  data: Partial<ResponseObject> & { 
+    text: string; 
+    type: string; 
+  }
+): ResponseObject => {
+  const baseResponse: ResponseObject = {
+    text: data.text,
+    type: data.type,
+    service: data.service,
+    confidence: data.confidence,
+    questionType: data.questionType ?? null, // Ensure null instead of undefined
+    serviceContext: data.serviceContext,
+    suggestedActions: data.suggestedActions || [],
+    metadata: data.metadata || {},
+    matched: data.matched ?? false,
+    hasInsights: data.hasInsights ?? false,
+    
+    // New properties
+    response: data.response || null,
+    serviceConfidence: data.serviceConfidence || 0,
+    language: data.language || 'en',
+    formattedText: data.formattedText,
+    actionButtons: data.actionButtons || [],
+    responseMetadata: {
+      generatedAt: new Date(),
+      processingTime: 0,
+      detectionResults: data.responseMetadata?.detectionResults,
+      fallbackUsed: data.responseMetadata?.fallbackUsed ?? false,
+      responseSource: data.responseMetadata?.responseSource || 'structured',
+      ...data.responseMetadata
+    }
+  };
+  
+  return baseResponse;
+};
 
 /**
- * Generate contextual response based on service detection and user intent
- * Enhanced with common questions functionality
- * @param {string} userMessage - User's message
- * @param {Object} serviceDetection - Service detection result
- * @param {Object} intentAnalysis - Message intent analysis
- * @param {Object} chatbotData - Chatbot configuration data
- * @param {string} language - Current language
- * @param {Object} serviceContext - Current service context
- * @param {Object} pricingData - Pricing information
- * @returns {Object} Generated response
+ * Convert CommonQuestionResponse to ResponseObject format
  */
-export function generateContextualResponse({
-  userMessage, 
-  serviceDetection, 
-  intentAnalysis, 
-  chatbotData, 
-  language, 
-  serviceContext, 
-  pricingData
-}) {
-  // Priority 0: Handle casual interactions (greetings, goodbyes, appreciation)
-  const casualAnalysis = analyzeCasualInteraction(userMessage, language);
-  if (casualAnalysis.isCasualInteraction) {
-    return generateCasualResponse(casualAnalysis, serviceContext, language);
-  }
-
-  // Priority 0.5: Handle common questions using the dedicated handler
-  const commonQuestionResponse = handleCommonQuestions(userMessage, language);
-  if (commonQuestionResponse.questionType !== 'unknown' && commonQuestionResponse.confidence > 0.6) {
-    return formatCommonQuestionResponse(commonQuestionResponse, serviceContext, language);
-  }
-
-  // Priority 1: Handle contextual follow-ups (yes/no, tell me more)
-  if (intentAnalysis.isContextualResponse) {
-    const contextualResponse = generateContextualFollowUp(serviceContext, intentAnalysis, chatbotData, language);
-    if (contextualResponse) {
-      return contextualResponse;
+export function convertCommonQuestionToResponseObject(
+  commonQuestionResponse: any,
+  serviceContext: ServiceContext,
+  language: string
+): ResponseObject {
+  // First format the CommonQuestionResponse for display
+  const formattedText = formatResponseForDisplay(commonQuestionResponse);
+  
+  return createResponseObject({
+    text: formattedText,
+    type: 'common_question',
+    questionType: commonQuestionResponse.questionType || null,
+    confidence: commonQuestionResponse.confidence,
+    serviceContext: commonQuestionResponse.serviceContext,
+    suggestedActions: commonQuestionResponse.suggestedActions,
+    language: language as Language,
+    formattedText: formattedText,
+    metadata: {
+      originalQuestionType: commonQuestionResponse.questionType,
+      detectedService: commonQuestionResponse.serviceContext,
+      conversationDepth: serviceContext.conversationDepth,
+      serviceHistory: serviceContext.serviceHistory,
+      sourceType: 'common_question'
     }
-  }
-
-  // Priority 2: Handle contact requests
-  if (intentAnalysis.isContactRequest) {
-    return generateContactResponse(serviceContext, chatbotData, language);
-  }
-  
-  // Priority 3: Handle pricing inquiries (enhanced with common questions)
-  if (intentAnalysis.isPricingInquiry) {
-    return generateEnhancedPricingResponse(serviceDetection.service, language, pricingData, serviceContext);
-  }
-  
-  // Priority 4: Handle service-specific inquiries
-  if (serviceDetection.service && serviceDetection.confidence > 0.5) {
-    return generateServiceResponse(serviceDetection, chatbotData, language, serviceContext);
-  }
-  
-  // Priority 5: Handle FAQ matches
-  const faqResponse = generateFaqResponse(userMessage, chatbotData, language);
-  if (faqResponse.matched) {
-    return faqResponse;
-  }
-  
-  // Priority 6: Handle conversation insights
-  const insightsResponse = generateInsightsResponse(serviceContext, language);
-  if (insightsResponse.hasInsights) {
-    return insightsResponse;
-  }
-  
-  // Priority 7: Generate fallback response
-  return generateFallbackResponse(userMessage, intentAnalysis, chatbotData, language, serviceContext);
+  });
 }
 
 /**
  * Format common question response for the chatbot system
- * @param {Object} commonQuestionResponse - Response from handleCommonQuestions
- * @param {Object} serviceContext - Current service context
- * @param {string} language - Current language
- * @returns {Object} Formatted response object
  */
-function formatCommonQuestionResponse(commonQuestionResponse, serviceContext, language) {
-  const formattedText = formatResponseForDisplay(commonQuestionResponse, language);
+export function formatCommonQuestionResponse(
+  commonQuestionResponse: ResponseObject, 
+  serviceContext: ServiceContext, 
+  language: string
+): ResponseObject {
+  // Convert to ResponseObject first
+  const baseResponse = convertCommonQuestionToResponseObject(
+    commonQuestionResponse, 
+    serviceContext, 
+    language
+  );
   
-  // Enhance with service context if available
-  let enhancedText = formattedText;
+  // Now enhance with contextual information
+  let enhancedText = baseResponse.text;
   
   // Add contextual notes based on conversation history
   if (serviceContext.conversationDepth > 2 && commonQuestionResponse.questionType === 'pricing') {
@@ -148,29 +146,26 @@ function formatCommonQuestionResponse(commonQuestionResponse, serviceContext, la
     enhancedText += historyNote;
   }
 
-  return {
+  return createResponseObject({
+    ...baseResponse,
     text: enhancedText,
-    type: 'common_question',
-    questionType: commonQuestionResponse.questionType,
-    confidence: commonQuestionResponse.confidence,
-    serviceContext: commonQuestionResponse.serviceContext,
-    suggestedActions: commonQuestionResponse.suggestedActions,
+    formattedText: enhancedText,
     metadata: {
-      originalQuestionType: commonQuestionResponse.questionType,
-      detectedService: commonQuestionResponse.serviceContext,
-      conversationDepth: serviceContext.conversationDepth,
-      serviceHistory: serviceContext.serviceHistory
+      ...baseResponse.metadata,
+      enhanced: true,
+      enhancementType: 'contextual'
     }
-  };
+  });
 }
-
-
-
 
 /**
  * Enhanced contact response generator that includes address information
  */
-function generateContactResponse(serviceContext, chatbotData, language) {
+export function generateContactResponse(
+  serviceContext: ServiceContext, 
+  chatbotData: ChatbotData, 
+  language: string
+): ResponseObject {
   let contactResponse = getContactResponse(chatbotData.contactInfo, language);
   
   // Add location/address information prominently for location-based queries
@@ -197,34 +192,63 @@ function generateContactResponse(serviceContext, chatbotData, language) {
     contactResponse += summaryNote;
   }
   
-  return {
+  return createResponseObject({
     text: contactResponse,
     type: 'contact',
     serviceContext: serviceContext.currentService,
+    language: language as Language,
+    formattedText: contactResponse,
     metadata: {
       conversationDepth: serviceContext.conversationDepth,
       servicesDiscussed: serviceContext.serviceHistory,
       isLocationQuery: serviceContext.isLocationQuery,
       locationPattern: serviceContext.matchedLocationPattern
     }
-  };
+  });
 }
 
 /**
  * Generate enhanced pricing response with context
  * Enhanced with common questions pricing logic
  */
-function generateEnhancedPricingResponse(service, language, pricingData, serviceContext) {
-  // Use common questions pricing response as base
+export function generateEnhancedPricingResponse(
+  service: string | null, 
+  language: "en" | "sw" | undefined, 
+  pricingData: PricingData,
+  confidence: number,
+  serviceConfidence:0, 
+  serviceContext: ServiceContext
+): ResponseObject {
+  // Get common questions pricing response
   const commonPricingResponse = generateCommonPricingResponse(service, language);
-  let enhancedResponse = formatResponseForDisplay({ response: commonPricingResponse }, language);
+  
+  // Create a CommonQuestionResponse-like object to format properly
+  const commonQuestionObj: CommonQuestionResponse = {
+    response: commonPricingResponse,
+    questionType: 'pricing',
+    serviceConfidence,
+     confidence,
+    serviceContext: service ?? null,
+    suggestedActions: ['contact_us', 'view_services']
+  };
+
+  
+  
+  // Convert to ResponseObject
+  const baseResponse = convertCommonQuestionToResponseObject(
+    commonQuestionObj,
+    serviceContext,
+    language || 'en'
+  );
+  
+  let enhancedText = baseResponse.text;
   
   // Add contextual pricing notes based on conversation history
   if (serviceContext.conversationDepth > 2) {
     const contextNote = language === 'sw' ? 
       `\n\n💡 Kwa bei maalum na mipango ya malipo, wasiliana nasi kwa mazungumzo ya kibinafsi.` :
       `\n\n💡 For custom pricing and payment plans, contact us for a personal consultation.`;
-    enhancedResponse += contextNote;
+    enhancedText += contextNote;
   }
   
   // Add comparison note if multiple services discussed
@@ -232,26 +256,35 @@ function generateEnhancedPricingResponse(service, language, pricingData, service
     const comparisonNote = language === 'sw' ? 
       `\n\n📊 Tunaweza kutengeneza kifurushi cha huduma kwa bei bora zaidi.` :
       `\n\n📊 We can create a service package for better value.`;
-    enhancedResponse += comparisonNote;
+    enhancedText += comparisonNote;
   }
   
-  return {
-    text: enhancedResponse,
+  return createResponseObject({
+    ...baseResponse,
+    text: enhancedText,
     type: 'pricing',
-    service: service,
+    service: service || undefined,
+    formattedText: enhancedText,
     metadata: {
+      ...baseResponse.metadata,
       conversationDepth: serviceContext.conversationDepth,
       multipleServices: serviceContext.serviceHistory.length > 1,
-      usedCommonQuestions: true
+      usedCommonQuestions: true,
+      enhanced: true
     }
-  };
+  });
 }
 
 /**
  * Generate service-specific response with confidence scoring
  */
-function generateServiceResponse(serviceDetection, chatbotData, language, serviceContext) {
-  const baseServiceResponse = getServiceResponse(serviceDetection.service, chatbotData, language);
+export function generateServiceResponse(
+  serviceDetection: ServiceDetection, 
+  chatbotData: ChatbotData, 
+  language: string, 
+  serviceContext: ServiceContext
+): ResponseObject {
+  const baseServiceResponse = getServiceResponse(serviceDetection.service, chatBotData, language);
   
   let enhancedResponse = baseServiceResponse;
   
@@ -284,60 +317,78 @@ function generateServiceResponse(serviceDetection, chatbotData, language, servic
     enhancedResponse += followUpNote;
   }
   
-  return {
+  return createResponseObject({
     text: enhancedResponse,
     type: 'service',
-    service: serviceDetection.service,
+    service: serviceDetection.service || undefined,
     confidence: serviceDetection.confidence,
+    language: language as Language,
+    formattedText: enhancedResponse,
     metadata: {
       matchedTerms: serviceDetection.matchedTerms,
       alternatives: serviceDetection.alternativeServices,
       detectionMethod: serviceDetection.detectionMethod
     }
-  };
+  });
 }
 
 /**
  * Generate FAQ response with context awareness
  */
-function generateFaqResponse(userMessage, chatbotData, language) {
+export function generateFaqResponse(
+  userMessage: string, 
+  chatbotData: ChatbotData, 
+  language: string
+): ResponseObject {
   const faqAnswer = findFaqMatch(userMessage, chatbotData.faqs, language);
   
   if (faqAnswer) {
-    return {
+    return createResponseObject({
       text: faqAnswer,
       type: 'faq',
       matched: true,
+      language: language as Language,
+      formattedText: faqAnswer,
       metadata: {
         trigger: 'faq_match',
         originalQuery: userMessage
       }
-    };
+    });
   }
   
-  return { matched: false };
+  return createResponseObject({ 
+    text: '',
+    type: 'faq',
+    matched: false,
+    language: language as Language
+  });
 }
 
 /**
  * Generate response based on conversation insights
  */
-function generateInsightsResponse(serviceContext, language) {
-  const insights = getConversationInsights(serviceContext);
+export function generateInsightsResponse(
+  serviceContext: ServiceContext, 
+  language: string
+): ResponseObject {
+  const insights: ConversationInsights = getConversationInsights(serviceContext);
   
   if (insights.insights.includes('Deep engagement detected')) {
     const engagementResponse = language === 'sw' ? 
       '💡 Ninaona una maswali mengi. Je, ungependa kuongea na mtaalamu wetu moja kwa moja?' :
       '💡 I can see you have many questions. Would you like to speak with our specialist directly?';
     
-    return {
+    return createResponseObject({
       text: engagementResponse,
       type: 'insights',
       hasInsights: true,
+      language: language as Language,
+      formattedText: engagementResponse,
       metadata: {
         insights: insights.insights,
         conversationDepth: serviceContext.conversationDepth
       }
-    };
+    });
   }
   
   if (insights.insights.includes('Multiple services explored')) {
@@ -345,35 +396,47 @@ function generateInsightsResponse(serviceContext, language) {
       '🔄 Umeuliza kuhusu huduma nyingi. Je, ungependa kifurushi cha huduma mojawapo?' :
       '🔄 You\'ve asked about multiple services. Would you like a service package?';
     
-    return {
+    return createResponseObject({
       text: multiServiceResponse,
       type: 'insights',
       hasInsights: true,
+      language: language as Language,
+      formattedText: multiServiceResponse,
       metadata: {
         insights: insights.insights,
         servicesDiscussed: serviceContext.serviceHistory
       }
-    };
+    });
   }
   
-  return { hasInsights: false };
+  return createResponseObject({ 
+    text: '',
+    type: 'insights',
+    hasInsights: false,
+    language: language as Language
+  });
 }
 
 /**
  * Generate fallback response when no specific match is found
  * Enhanced with common questions suggestions
  */
-function generateFallbackResponse(userMessage, intentAnalysis, chatbotData, language, serviceContext) {
+export function generateFallbackResponse(
+  userMessage: string, 
+  intentAnalysis: IntentAnalysis, 
+  chatbotData: ChatbotData, 
+  language: string, 
+  serviceContext: ServiceContext
+): ResponseObject {
   // Use existing fallback from base processing
-  const baseFallback = chatbotData.fallback && chatbotData.fallback[language] ? 
-    chatbotData.fallback[language] : 
+  const baseFallback = 
     (language === 'sw' ? 
       'Samahani, sijaelewa vizuri. Je, unaweza kueleza zaidi?' : 
       'I\'m sorry, I didn\'t understand that well. Could you please explain more?');
   
   let enhancedFallback = baseFallback;
   
-  // Add helpful context based on conversation history;
+  // Add helpful context based on conversation history
   if (serviceContext.serviceHistory.length > 0) {
     const historyNote = language === 'sw' ? 
       `\n\nTumeongea kuhusu: ${serviceContext.serviceHistory.join(', ')}. Je, unahitaji msaada zaidi kwa mojawapo ya hizi?` :
@@ -381,7 +444,7 @@ function generateFallbackResponse(userMessage, intentAnalysis, chatbotData, lang
     enhancedFallback += historyNote;
   }
   
-  // Add common questions suggestions;
+  // Add common questions suggestions
   if (serviceContext.conversationDepth === 0) {
     const suggestionsNote = language === 'sw' ? 
       `\n\n🔍 Unaweza kuuliza:\n• "Huduma gani mnazotoa?"\n• "Bei zenu ni ngapi?"\n• "Mnafanyaje mafunzo?"\n• "Nataka maelezo zaidi"` :
@@ -389,9 +452,11 @@ function generateFallbackResponse(userMessage, intentAnalysis, chatbotData, lang
     enhancedFallback += suggestionsNote;
   }
   
-  return {
+  return createResponseObject({
     text: enhancedFallback,
     type: 'fallback',
+    language: language as Language,
+    formattedText: enhancedFallback,
     metadata: {
       originalMessage: userMessage,
       intentAnalysis: intentAnalysis,
@@ -399,13 +464,13 @@ function generateFallbackResponse(userMessage, intentAnalysis, chatbotData, lang
       serviceHistory: serviceContext.serviceHistory,
       suggestedActions: ['show_services', 'show_pricing', 'book_consultation']
     }
-  };
+  });
 }
 
 /**
  * Validate response object structure
  */
-export function validateResponse(response) {
+export function validateResponse(response: any): response is ResponseObject {
   if (!response || typeof response !== 'object') {
     return false;
   }
@@ -414,4 +479,53 @@ export function validateResponse(response) {
          response.hasOwnProperty('type') && 
          typeof response.text === 'string' &&
          response.text.length > 0;
+}
+
+/**
+ * Ensure any response is properly formatted as ResponseObject
+ */
+export function ensureResponseObject(
+  response: any, 
+  fallbackType: string = 'unknown',
+  language: string = 'en'
+): ResponseObject {
+  if (validateResponse(response)) {
+    return response as ResponseObject;
+  }
+  
+  // Handle CommonQuestionResponse conversion
+  if (response && typeof response === 'object' && response.hasOwnProperty('response')) {
+    const formattedText = formatResponseForDisplay(response);
+    return createResponseObject({
+      text: formattedText,
+      type: 'common_question',
+      questionType: response.questionType || null,
+      confidence: response.confidence,
+      serviceContext: response.serviceContext,
+      suggestedActions: response.suggestedActions,
+      language: language as Language,
+      formattedText: formattedText
+    });
+  }
+  
+  // Handle string responses
+  if (typeof response === 'string') {
+    return createResponseObject({
+      text: response,
+      type: fallbackType,
+      language: language as Language,
+      formattedText: response
+    });
+  }
+  
+  // Fallback for invalid responses
+  return createResponseObject({
+    text: language === 'sw' ? 'Kuna hitilafu. Jaribu tena.' : 'Something went wrong. Please try again.',
+    type: 'error',
+    language: language as Language,
+    metadata: {
+      originalResponse: response,
+      error: 'Invalid response format'
+    }
+  });
 }

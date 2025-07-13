@@ -102,10 +102,10 @@ export default function QuickPrompts({
   // Confidence display
   const getConfidenceDisplay = () => {
     if (effectiveConfidence > 0.8) {
-      return { text: 'High relevance', color: 'text-green-400', bgColor: 'bg-green-500/10' };
+      return { text: 'High relevance', color: 'text-cyan-400', bgColor: 'bg-green-500/10' };
     }
     if (effectiveConfidence > 0.6) {
-      return { text: 'Good relevance', color: 'text-blue-400', bgColor: 'bg-blue-500/10' };
+      return { text: 'Good relevance', color: 'text-cyan-400', bgColor: 'bg-blue-500/10' };
     }
     if (effectiveConfidence > 0.3) {
       return { text: 'Some relevance', color: 'text-yellow-400', bgColor: 'bg-yellow-500/10' };
@@ -151,7 +151,7 @@ export default function QuickPrompts({
         {/* Compact context indicators */}
         <div className="flex items-center gap-1">
           {serviceContext?.currentService && (
-            <div className="text-xs text-blue-400 font-medium truncate max-w-[100px]">
+            <div className="text-xs text-cyan-400 font-medium truncate max-w-[100px]">
               {serviceContext.currentService}
             </div>
           )}
@@ -198,7 +198,7 @@ export default function QuickPrompts({
                     whileHover="hover"
                     whileTap="tap"
                     onClick={() => onSelect(prompt)}
-                    className={`px-2.5 py-1 text-xs text-blue-100 rounded-full transition-all border flex items-center gap-1 ${
+                    className={`px-2.5 py-1 text-xs text-gray-400 rounded-full transition-all border flex items-center gap-1 ${
                       styling.gradient
                     } ${
                       disabled 
@@ -219,7 +219,7 @@ export default function QuickPrompts({
                       } flex-shrink-0`}
                     />
                     <span 
-                      className="truncate max-w-[140px] sm:max-w-[120px]"
+                      className="truncate max-w-[140px] sm:max-w-[120px] text-gray-40"
                       style={{
                         fontWeight: styling.priority === 'high' ? '500' : '400'
                       }}
@@ -229,7 +229,7 @@ export default function QuickPrompts({
                     
                     {/* Priority indicator */}
                     {styling.priority === 'high' && (
-                      <div className="w-1 h-1 bg-green-400 rounded-full flex-shrink-0 animate-pulse" />
+                      <div className="w-1 h-1 bg-cyan-400 rounded-full flex-shrink-0 animate-pulse" />
                     )}
                   </motion.button>
                 );
@@ -241,7 +241,7 @@ export default function QuickPrompts({
               <div className="flex justify-center mt-2">
                 <motion.button
                   onClick={() => setShowAll(!showAll)}
-                  className="text-xs text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1"
+                  className="text-xs text-gray-400 hover:text-blue-300 transition-colors flex items-center gap-1"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

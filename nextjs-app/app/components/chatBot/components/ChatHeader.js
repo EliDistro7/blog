@@ -1,7 +1,7 @@
 // ===== 4. ENHANCED CHAT HEADER COMPONENT (components/ChatHeader.jsx) =====
 import { Sparkles, X, Minimize2 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { chatbotData } from '@/data/chat/index';
+import {chatBotData as chatbotData } from '@/data/chat/index';
 
 export default function ChatHeader({
   language,

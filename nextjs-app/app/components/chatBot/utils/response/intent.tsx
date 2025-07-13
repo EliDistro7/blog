@@ -1,6 +1,6 @@
-import { analyzeCasualInteraction } from "../casual/casualInteractionUtils";
+import { analyzeCasualInteraction, CasualInteractionAnalysis } from "../casual/casualInteractionUtils";
 import { calculateIntentStrength, getSuggestedAction } from "./helpers";
-import { detectQuestionType } from "@/utils/context/common-questions/helpers";
+import { detectQuestionType, QuestionTypeAnalysis,QuestionMatch } from "@/utils/context/common-questions/helpers";
 
 import {
      contactIndicators,
@@ -12,62 +12,161 @@ import {
      bookingIndicators,
      urgencyIndicators,
      confirmationIndicators,
-} from "./indicators"
+} from "./indicators";
 
 import {
    servicePatterns,
    locationContactPatterns,
 } from "./patterns";
 
+// Type definitions
+interface LanguageIndicators {
+  [language: string]: string[];
+}
+
+interface LanguagePatterns {
+  [language: string]: RegExp[];
+}
+
+interface EnhancedIntentFlags {
+  isContactRequest: boolean;
+  isPricingInquiry: boolean;
+  isServiceInquiry: boolean;
+  isInfoSeeking: boolean;
+  isBookingRequest: boolean;
+}
+
+interface IntentStrengthParams {
+  isContactRequest: boolean;
+  isLocationRequest: boolean;
+  isPricingInquiry: boolean;
+  isInfoSeeking: boolean;
+  isServiceInquiry: boolean;
+  isBookingRequest: boolean;
+  isUrgent: boolean;
+  matchesLocationContactPattern: boolean;
+  matchesServicePattern: boolean;
+  questionTypeConfidence: number;
+}
+
+interface DetectedPatterns {
+  location: boolean;
+  service: boolean;
+  casual: boolean;
+  questionType: string | null;
+}
+
+interface QuestionTypeAnalysisMetadata {
+  type: string | null;
+  confidence: number;
+  matches: QuestionMatch[] | undefined; // Allow undefined
+}
+
+interface IntentAlignment {
+  questionTypeMatchesIntent: boolean;
+  confidenceBoostApplied: boolean;
+}
+
+interface IntentAnalysisMetadata {
+  language: string;
+  messageLength: number;
+  hasMultipleIntents: boolean;
+  detectedPatterns: DetectedPatterns;
+  questionTypeAnalysis: QuestionTypeAnalysisMetadata;
+  intentAlignment: IntentAlignment;
+}
+
+export interface IntentAnalysisResult {
+  // Core intent flags (enhanced)
+  isContactRequest: boolean;
+  isLocationRequest: boolean;
+  isPricingInquiry: boolean;
+  isInfoSeeking: boolean;
+  isServiceInquiry: boolean;
+  isBookingRequest: boolean;
+  isUrgent: boolean;
+  isQuestion: boolean;
+  
+  // Question type analysis results
+  questionType: string | null;
+  questionTypeConfidence: number;
+  questionMatches: any[];
+  
+  // Casual interaction analysis
+  isCasualInteraction: boolean;
+  casualType: string | null;
+  
+  // Primary classification
+  primaryIntent: string;
+  confidence: number;
+  intentStrength: number;
+  
+  // Contextual responses
+  isConfirmation: boolean;
+  isElaborationRequest: boolean;
+  isContextualResponse: boolean;
+  
+  // Pattern matching results
+  matchedLocationPattern: boolean;
+  matchedServicePattern: boolean;
+  
+  // Additional context
+  requiresImmediateAttention: boolean;
+  suggestedAction: string;
+  
+  // Enhanced metadata for analytics
+  metadata: IntentAnalysisMetadata;
+}
+
 /**
  * Analyze message intent for better response generation with enhanced question type detection
- * @param {string} message - User message
- * @param {string} language - Current language
- * @returns {Object} Intent analysis result
+ * @param message - User message
+ * @param language - Current language
+ * @returns Intent analysis result
  */
-export function analyzeMessageIntent(message, language) {
-  const messageText = message.toLowerCase().trim();
-  const casualAnalysis = analyzeCasualInteraction(message, language);
+export function analyzeMessageIntent(message: string, language: string): IntentAnalysisResult {
+  const messageText: string = message.toLowerCase().trim();
+  const casualAnalysis: CasualInteractionAnalysis = analyzeCasualInteraction(message, language);
   
   // Detect question type using your existing detector
-  const questionTypeAnalysis = detectQuestionType(message, language);
-  const isQuestion = questionTypeAnalysis.type !== null || message.includes('?');
+  const questionTypeAnalysis: QuestionTypeAnalysis = detectQuestionType(message, language);
+  const isQuestion: boolean = questionTypeAnalysis.type !== null || message.includes('?');
   
   // Get language-specific indicators
-  const langContactIndicators = contactIndicators[language] || contactIndicators['en'];
-  const langLocationIndicators = locationIndicators[language] || locationIndicators['en'];
-  const langPricingIndicators = pricingIndicators[language] || pricingIndicators['en'];
-  const langInfoIndicators = infoIndicators[language] || infoIndicators['en'];
-  const langServiceIndicators = serviceIndicators[language] || serviceIndicators['en'];
-  const langBookingIndicators = bookingIndicators[language] || bookingIndicators['en'];
-  const langUrgencyIndicators = urgencyIndicators[language] || urgencyIndicators['en'];
-  const langConfirmationIndicators = confirmationIndicators[language] || confirmationIndicators['en'];
-  const langElaborationIndicators = elaborationIndicators[language] || elaborationIndicators['en'];
+  const langContactIndicators: string[] = (contactIndicators as LanguageIndicators)[language] || (contactIndicators as LanguageIndicators)['en'];
+  const langLocationIndicators: string[] = (locationIndicators as LanguageIndicators)[language] || (locationIndicators as LanguageIndicators)['en'];
+  const langPricingIndicators: string[] = (pricingIndicators as LanguageIndicators)[language] || (pricingIndicators as LanguageIndicators)['en'];
+  const langInfoIndicators: string[] = (infoIndicators as LanguageIndicators)[language] || (infoIndicators as LanguageIndicators)['en'];
+  const langServiceIndicators: string[] = (serviceIndicators as LanguageIndicators)[language] || (serviceIndicators as LanguageIndicators)['en'];
+  const langBookingIndicators: string[] = (bookingIndicators as LanguageIndicators)[language] || (bookingIndicators as LanguageIndicators)['en'];
+  const langUrgencyIndicators: string[] = (urgencyIndicators as LanguageIndicators)[language] || (urgencyIndicators as LanguageIndicators)['en'];
+  const langConfirmationIndicators: string[] = (confirmationIndicators as LanguageIndicators)[language] || (confirmationIndicators as LanguageIndicators)['en'];
+  const langElaborationIndicators: string[] = (elaborationIndicators as LanguageIndicators)[language] || (elaborationIndicators as LanguageIndicators)['en'];
 
   // Basic intent detection
-  const isContactRequest = langContactIndicators.some(indicator => messageText.includes(indicator));
-  const isLocationRequest = langLocationIndicators.some(indicator => messageText.includes(indicator));
-  const isPricingInquiry = langPricingIndicators.some(indicator => messageText.includes(indicator));
-  const isInfoSeeking = langInfoIndicators.some(indicator => messageText.includes(indicator));
-  const isServiceInquiry = langServiceIndicators.some(indicator => messageText.includes(indicator));
-  const isBookingRequest = langBookingIndicators.some(indicator => messageText.includes(indicator));
-  const isUrgent = langUrgencyIndicators.some(indicator => messageText.includes(indicator));
-  const isConfirmation = langConfirmationIndicators.some(indicator => 
+  const isContactRequest: boolean = langContactIndicators.some((indicator: string) => messageText.includes(indicator));
+  const isLocationRequest: boolean = langLocationIndicators.some((indicator: string) => messageText.includes(indicator));
+  const isPricingInquiry: boolean = langPricingIndicators.some((indicator: string) => messageText.includes(indicator));
+  const isInfoSeeking: boolean = langInfoIndicators.some((indicator: string) => messageText.includes(indicator));
+  const isServiceInquiry: boolean = langServiceIndicators.some((indicator: string) => messageText.includes(indicator));
+  const isBookingRequest: boolean = langBookingIndicators.some((indicator: string) => messageText.includes(indicator));
+  const isUrgent: boolean = langUrgencyIndicators.some((indicator: string) => messageText.includes(indicator));
+  const isConfirmation: boolean = langConfirmationIndicators.some((indicator: string) => 
     messageText === indicator || messageText.startsWith(indicator)
   );
-  const isElaborationRequest = langElaborationIndicators.some(indicator => 
+  const isElaborationRequest: boolean = langElaborationIndicators.some((indicator: string) => 
     messageText.includes(indicator)
   );
 
   // Pattern matching
-  const langLocationPatterns = locationContactPatterns[language] || locationContactPatterns['en'];
-  const langServicePatterns = servicePatterns[language] || servicePatterns['en'];
+  const langLocationPatterns: RegExp[] = (locationContactPatterns as LanguagePatterns)[language] || (locationContactPatterns as LanguagePatterns)['en'];
+  const langServicePatterns: RegExp[] = (servicePatterns as LanguagePatterns)[language] || (servicePatterns as LanguagePatterns)['en'];
   
-  const matchesLocationContactPattern = langLocationPatterns.some(pattern => pattern.test(messageText));
-  const matchesServicePattern = langServicePatterns.some(pattern => pattern.test(messageText));
+  const matchesLocationContactPattern: boolean = langLocationPatterns.some((pattern: RegExp) => pattern.test(messageText));
+  const matchesServicePattern: boolean = langServicePatterns.some((pattern: RegExp) => pattern.test(messageText));
   
   // Enhanced intent detection using question type analysis
-  let enhancedIntentFlags = {
+  let enhancedIntentFlags: EnhancedIntentFlags = {
     isContactRequest: isContactRequest || isLocationRequest || matchesLocationContactPattern || isBookingRequest,
     isPricingInquiry: isPricingInquiry,
     isServiceInquiry: isServiceInquiry || matchesServicePattern,
@@ -103,8 +202,8 @@ export function analyzeMessageIntent(message, language) {
   }
 
   // Determine primary intent with enhanced logic
-  let primaryIntent = 'general';
-  let confidence = 0.5;
+  let primaryIntent: string = 'general';
+  let confidence: number = 0.5;
   
   if (casualAnalysis.isCasualInteraction) {
     primaryIntent = 'casual';
@@ -144,7 +243,7 @@ export function analyzeMessageIntent(message, language) {
   }
   
   // Calculate intent strength based on multiple indicators
-  const intentStrength = calculateIntentStrength({
+  const intentStrengthParams: IntentStrengthParams = {
     isContactRequest: enhancedIntentFlags.isContactRequest,
     isLocationRequest,
     isPricingInquiry: enhancedIntentFlags.isPricingInquiry,
@@ -155,7 +254,9 @@ export function analyzeMessageIntent(message, language) {
     matchesLocationContactPattern,
     matchesServicePattern,
     questionTypeConfidence: questionTypeAnalysis.confidence
-  });
+  };
+
+  const intentStrength: number = calculateIntentStrength(intentStrengthParams);
 
   return {
     // Core intent flags (enhanced)
@@ -171,7 +272,7 @@ export function analyzeMessageIntent(message, language) {
     // Question type analysis results
     questionType: questionTypeAnalysis.type,
     questionTypeConfidence: questionTypeAnalysis.confidence,
-    questionMatches: questionTypeAnalysis.matches,
+    questionMatches: questionTypeAnalysis.matches ?? [],
     
     // Casual interaction analysis
     isCasualInteraction: casualAnalysis.isCasualInteraction,
@@ -217,7 +318,7 @@ export function analyzeMessageIntent(message, language) {
         matches: questionTypeAnalysis.matches
       },
       intentAlignment: {
-        questionTypeMatchesIntent: questionTypeAnalysis.type && 
+        questionTypeMatchesIntent: questionTypeAnalysis.type !== null && 
           ((questionTypeAnalysis.type === 'services' && enhancedIntentFlags.isServiceInquiry) ||
            (questionTypeAnalysis.type === 'pricing' && enhancedIntentFlags.isPricingInquiry) ||
            (questionTypeAnalysis.type === 'methodology' && enhancedIntentFlags.isInfoSeeking)),

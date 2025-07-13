@@ -1,24 +1,35 @@
-// File: app/components/layout/ChatBot/hooks/sender/useMessageSender.js
+// File: app/components/layout/ChatBot/hooks/sender/useMessageSender.ts
 import { useCallback } from 'react';
-import { chatbotData } from '@/data/chat/index';
+import { chatBotData as chatbotData, PricingData } from '@/data/chat/index';
 import {
   detectLanguage,
   processUserMessage,
   isPricingQuery as isPricingInquiry,
-  getServiceResponse
+  getServiceResponse,
+  ChatbotData
 } from '@/utils/ChatBotUtils';
 import {
   detectServiceFromMessage,
   updateServiceContext,
   generatePricingResponse,
   getConversationInsights,
-  createFreshServiceContext
+  createFreshServiceContext,
+  ServiceContext  
 } from '@/utils/context/serviceContextUtils';
 import {
   generateContextualResponse,
   analyzeMessageIntent,
-  validateResponse
-} from '../../utils/response/responseGenerator';
+
+  ResponseObject as GeneratedResponse,
+} from '../../utils/response/generator/responseGenerator';
+
+import {
+
+  validateResponse,
+
+} from '../../utils/response/generator/utils';
+
+
 import {
   detectServiceWithConfidence,
   validateServiceDetection,
@@ -35,89 +46,96 @@ import {
   detectConversationPatterns,
   pruneConversation
 } from '../../utils/convo/conversationManager';
+import { IntentAnalysisResult } from '../../utils/response/intent';
 
-type PricingDataType = {
+
+
+// Type definitions
+interface PricingDataType {
   [service: string]: {
     price: number;
     currency: string;
     [key: string]: any;
   };
-};
+}
 
-// Define ServiceContext type
-type ServiceContext = {
-  currentService: string | null;
-  lastServiceMention: string;
-  serviceHistory: string[];
-  conversationDepth: number;
-  conversationFlow: Array<{
-    timestamp: string;
-    userMessage: string;
-    detectedService: string | null;
-    contextService: string | null;
-    options?: {
-      preservePrevious?: boolean;
-      confidenceThreshold?: number;
-      forceUpdate?: boolean;
-    };
-  }>;
-  alternativeServiceDetected?: {
-    service: string;
-    timestamp: string;
-    confidence: number;
-  };
-  alternativeServiceHistory?: Array<{
-    service: string;
-    timestamp: string;
-    confidence: number;
-  }>;
-  lastResponse?: {
-    type: string;
-    service: string | null;
-    text: string;
-    timestamp: string;
-  };
-  [key: string]: any; // Allow for additional properties
-};
+export type Language = 'en' | 'sw';
 
-// Define a type for service detection result
-type ServiceDetectionResult = {
+interface ServiceDetectionResult {
   service: string | null;
   confidence: number;
   matchedTerms: string[];
   alternativeServices: { service: string; confidence: number }[];
   detectionMethod: string;
   contextInfluence?: any;
-};
+}
 
-// Define DetectionRecord type
-type DetectionRecord = {
+export interface DetectionRecord {
   message: string;
   timestamp: string;
   detection: ServiceDetectionResult;
   language: string;
-};
+}
+
+interface ChatMessage {
+  role: 'user' | 'bot';
+  content: string;
+  timestamp: string;
+  language: string;
+  [key: string]: any;
+}
+
+
+
+interface IntentAnalysis {
+  intent: string;
+  confidence: number;
+  [key: string]: any;
+}
+
+export interface ConversationStats {
+  totalMessages: number;
+  userMessages: number;
+  botMessages: number;
+  conversationDepth: number;
+  servicesDiscussed: number;
+  currentService: string | null;
+  duration: number;
+  messageTypes: Record<string, number>;
+  languages: Record<string, number>;
+  //insights: string[];
+}
+
+interface ConversationPatterns {
+  isRepetitive: boolean;
+  hasLongMessages: boolean;
+  hasShortMessages: boolean;
+  switchesLanguages: boolean;
+  asksMultipleQuestions: boolean;
+  showsDeepEngagement: boolean;
+}
+
 
 interface UseMessageSenderProps {
-  language: string;
+  language: Language;
   message: string;
   setMessage: (msg: string) => void;
   isClosing: boolean;
   serviceContext: ServiceContext;
   setServiceContext: (ctx: ServiceContext) => void;
-  chatMessages: any[];
-  setChatMessages: (msgs: any[]) => void;
+  chatMessages: ChatMessage[];
+  setChatMessages: (msgs: ChatMessage[] | ((prev: ChatMessage[]) => ChatMessage[])) => void;
   setIsTyping: (typing: boolean) => void;
-  setSuggestions: (sugs: any[]) => void;
+  setSuggestions: (sugs: string[]) => void;
   setActiveService: (service: string) => void;
   detectionHistory: DetectionRecord[];
   setDetectionHistory: (history: DetectionRecord[] | ((prev: DetectionRecord[]) => DetectionRecord[])) => void;
-  setCurrentDetectionResult: (result: any) => void;
-  setConversationStats: (stats: any) => void;
-  setConversationPatterns: (patterns: any) => void;
+  setCurrentDetectionResult: (result: ServiceDetectionResult) => void;
+  setConversationStats: (stats: ConversationStats) => void;
+  setConversationPatterns: (patterns: ConversationPatterns) => void;
   maxMessages: number;
   chatEndRef: React.RefObject<HTMLDivElement>;
-  pricingData: PricingDataType;
+  pricingData: PricingData;
 }
 
 export const useMessageSender = ({
@@ -147,7 +165,7 @@ export const useMessageSender = ({
     const userMessage = message.trim();
     
     // Use detectLanguage utility to detect language from user message
-    const detectedLang = detectLanguage(userMessage, undefined, language);
+    const detectedLang: Language = detectLanguage(userMessage, undefined, language);
     
     // Enhanced service detection with confidence scoring
     const enhancedServiceDetection = detectServiceWithConfidence(
@@ -166,7 +184,7 @@ export const useMessageSender = ({
         matchedTerms?: string[];
       };
       // Reassign enhancedServiceDetection as a typed object to avoid property errors
-      Object.assign(enhancedServiceDetection as ServiceDetectionResult, {
+      Object.assign(enhancedServiceDetection, {
         service: basicDetection.service,
         confidence: basicDetection.confidence || 0.5,
         matchedTerms: basicDetection.matchedTerms || [],
@@ -196,27 +214,27 @@ export const useMessageSender = ({
     }
     
     // Analyze message intent
-    const intentAnalysis = analyzeMessageIntent(userMessage, detectedLang);
+    const intentAnalysis: IntentAnalysisResult = analyzeMessageIntent(userMessage, detectedLang);
     
     // Enhanced service context update with confidence-based logic
-    let updatedServiceContext;
+    let updatedServiceContext: ServiceContext;
     if (enhancedServiceDetection.confidence > 0.7) {
       updatedServiceContext = updateServiceContext(
         serviceContext, 
-        enhancedServiceDetection.service, 
+        enhancedServiceDetection.service ?? '', 
         userMessage
       );
     } else if (enhancedServiceDetection.confidence > 0.4) {
       updatedServiceContext = updateServiceContext(
         serviceContext, 
-        enhancedServiceDetection.service, 
+        enhancedServiceDetection.service ?? '', 
         userMessage,
         { preservePrevious: true, confidenceThreshold: 0.4 }
       );
     } else {
       updatedServiceContext = updateServiceContext(
         serviceContext, 
-        null,
+        '', // fallback to empty string for null
         userMessage
       );
     }
@@ -224,7 +242,7 @@ export const useMessageSender = ({
     setServiceContext(updatedServiceContext);
     
     // Create user message object with comprehensive metadata
-    const userMessageObj = {
+    const userMessageObj: ChatMessage = {
       role: 'user', 
       content: userMessage,
       timestamp: new Date().toISOString(),
@@ -245,7 +263,7 @@ export const useMessageSender = ({
     setChatMessages(prev => addMessageToConversation(prev, userMessageObj));
     
     // Prune conversation if it gets too long
-    setChatMessages(prev => pruneConversation(prev, maxMessages));
+    setChatMessages((prev: ChatMessage[]) => pruneConversation(prev, maxMessages));
     
     setMessage('');
     setIsTyping(true);
@@ -273,7 +291,7 @@ export const useMessageSender = ({
     // Enhanced response generation with confidence-aware processing
     setTimeout(() => {
       try {
-        const generatedResponse = generateContextualResponse({
+        const generatedResponse: GeneratedResponse = generateContextualResponse({
           userMessage,
           serviceDetection: enhancedServiceDetection,
           intentAnalysis,
@@ -284,14 +302,9 @@ export const useMessageSender = ({
         });
 
         // Update service context with last response for contextual follow-ups
-        const contextWithLastResponse = {
+        const contextWithLastResponse: ServiceContext = {
           ...updatedServiceContext,
-          lastResponse: {
-            type: generatedResponse.type,
-            service: generatedResponse.service,
-            text: generatedResponse.text,
-            timestamp: new Date().toISOString()
-          }
+          lastResponse:generatedResponse.text,
         };
 
         setServiceContext(contextWithLastResponse);
@@ -337,7 +350,7 @@ export const useMessageSender = ({
         }
         
         // Create bot message object with comprehensive metadata
-        const botMessageObj = {
+        const botMessageObj: ChatMessage = {
           role: 'bot', 
           content: finalResponse,
           timestamp: new Date().toISOString(),
@@ -358,7 +371,7 @@ export const useMessageSender = ({
           const updatedMessages = addMessageToConversation(prev, botMessageObj);
           
           // Auto-save conversation after bot response
-          saveConversationState(updatedMessages, updatedServiceContext, setActiveService, detectedLang);
+          saveConversationState(updatedMessages, updatedServiceContext, null, detectedLang);
           
           // Update stats after bot response
           const newStats = getConversationStats(updatedMessages, updatedServiceContext);
@@ -377,11 +390,13 @@ export const useMessageSender = ({
           detectedLang,
           userMessage,
           chatMessages,
-          Object.keys(chatbotData.services || {})
+          
+Object.keys(chatbotData.serviceKeywords?.[language] || chatbotData.serviceKeywords?.en || {})
+
         );
 
         // Generate follow-up suggestions based on bot response
-        let followUpSuggestions = [];
+        let followUpSuggestions: string[] = [];
         if (finalResponse) {
           followUpSuggestions = generateFollowUpSuggestions(
             finalResponse,
@@ -432,10 +447,10 @@ export const useMessageSender = ({
         
         // Enhanced response with service context and pricing information (fallback)
         if (enhancedServiceDetection.service && isPricingInquiry(userMessage, detectedLang)) {
-          const pricingResponse = generatePricingResponse(enhancedServiceDetection.service, detectedLang, pricingData);
+          const pricingResponse = generatePricingResponse(enhancedServiceDetection.service ?? '', detectedLang, pricingData);
           finalResponse = pricingResponse;
         } else if (enhancedServiceDetection.service && !isPricingInquiry(userMessage, detectedLang)) {
-          const serviceResponse = getServiceResponse(enhancedServiceDetection.service, chatbotData, detectedLang);
+          const serviceResponse = getServiceResponse(enhancedServiceDetection.service ?? '', chatbotData, detectedLang);
           if (serviceResponse && serviceResponse !== responseData.text) {
             finalResponse = serviceResponse;
           }
@@ -451,20 +466,15 @@ export const useMessageSender = ({
         }
         
         // Update service context with fallback response info
-        const fallbackContextWithLastResponse = {
+        const fallbackContextWithLastResponse: ServiceContext = {
           ...updatedServiceContext,
-          lastResponse: {
-            type: 'fallback',
-            service: enhancedServiceDetection.service,
-            text: finalResponse,
-            timestamp: new Date().toISOString()
-          }
+          lastResponse: finalResponse
         };
 
         setServiceContext(fallbackContextWithLastResponse);
         
         // Enhanced fallback message with detection info using conversation manager
-        const fallbackBotMessageObj = {
+        const fallbackBotMessageObj: ChatMessage = {
           role: 'bot', 
           content: finalResponse,
           timestamp: new Date().toISOString(),
@@ -482,7 +492,7 @@ export const useMessageSender = ({
           const updatedMessages = addMessageToConversation(prev, fallbackBotMessageObj);
           
           // Auto-save even on fallback
-          saveConversationState(updatedMessages, updatedServiceContext, setActiveService, detectedLang);
+          saveConversationState(updatedMessages, updatedServiceContext, null, detectedLang);
           
           // Update stats after fallback response
           const newStats = getConversationStats(updatedMessages, updatedServiceContext);
@@ -501,14 +511,14 @@ export const useMessageSender = ({
           detectedLang,
           userMessage,
           chatMessages,
-          Object.keys(chatbotData.services || {})
+          Object.keys(chatbotData.serviceKeywords || {})
         );
 
         setSuggestions(fallbackSuggestions.length > 0 ? 
           fallbackSuggestions : 
           (responseData.suggestions || chatbotData.prompts[detectedLang])
         );
-        setActiveService(enhancedServiceDetection.service || updatedServiceContext.currentService);
+        setActiveService(enhancedServiceDetection.service || updatedServiceContext.currentService || '');
       }
       
       setIsTyping(false);

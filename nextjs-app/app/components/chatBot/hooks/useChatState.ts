@@ -2,13 +2,18 @@
 import { useState, useCallback } from 'react';
 import { createFreshServiceContext } from '@/utils/context/serviceContextUtils';
 import { createFreshConversationState } from '../utils/convo/conversationManager';
+import { DetectionRecord } from './sender/useMessageSender';
+import { Language } from '@/utils/ChatBotUtils';
+import { ChatbotData } from '@/data/chat/types';
+import { ChatMessage } from '../utils/convo/conversationManager';
+import { DetectionResult } from '../ChatHeader';
 
-export const useChatState = (language) => {
+export const useChatState = (language:Language) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [chatMessages, setChatMessages] = useState([]);
-  const [suggestions, setSuggestions] = useState([]);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [suggestions, setSuggestions] = useState<string[] | undefined>([]);
   const [activeService, setActiveService] = useState(null);
   const [isClosing, setIsClosing] = useState(false);
   
@@ -16,8 +21,10 @@ export const useChatState = (language) => {
   const [serviceContext, setServiceContext] = useState(() => createFreshServiceContext());
   
   // Enhanced detection state
-  const [detectionHistory, setDetectionHistory] = useState([]);
+  const [detectionHistory, setDetectionHistory] = useState<DetectionRecord[]>([]);
   const [currentDetectionResult, setCurrentDetectionResult] = useState({confidence:0});
+
+ 
   
   // Conversation analytics state
   const [conversationStats, setConversationStats] = useState({});
@@ -30,7 +37,7 @@ export const useChatState = (language) => {
     userInteractionRate: 0
   });
 
-  const resetChatState = useCallback((chatbotData) => {
+  const resetChatState = useCallback((chatbotData:ChatbotData) => {
     const freshState = createFreshConversationState(chatbotData, language);
     setChatMessages(freshState.messages);
     setServiceContext(freshState.serviceContext);
@@ -39,7 +46,7 @@ export const useChatState = (language) => {
     setConversationStats({});
     setConversationPatterns({});
     setDetectionHistory([]);
-    setCurrentDetectionResult(null);
+    setCurrentDetectionResult(currentDetectionResult);
   }, [language]);
 
   return {

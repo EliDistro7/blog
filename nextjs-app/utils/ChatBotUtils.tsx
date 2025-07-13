@@ -1,13 +1,93 @@
-// app/utils/chatbotUtils.js
+// app/utils/chatbotUtils.ts
+
+import { ContactInfo } from "@/app/components/chatBot/utils/response/generator/types";
+
+import {  ChatbotData, UIText } from '@/data/chat/index';
+import {
+  ServiceDescription,
+  ServicePricing,
+  PricingData
+  
+} from '@/data/chat/types';
+
+// Type definitions
+interface ServiceKeywords {
+  [language: string]: {
+    [serviceTitle: string]: string[];
+  };
+}
+
+
+
+interface ServiceDescriptions {
+  [language: string]: {
+    [serviceTitle: string]: ServiceDescription;
+  };
+}
+
+interface FAQ {
+  question: string;
+  answer: string;
+}
+
+interface FAQs {
+  [language: string]: FAQ[];
+}
+
+
+
+interface UITexts {
+  [language: string]: {
+    moreInfo?: string;
+    pricingInfo?: string;
+  };
+}
+
+interface BookingInfo {
+  [language: string]: {
+    title: string;
+    instructions: string;
+    contactDetails: string;
+  };
+}
+
+interface PricingPackage {
+  name: string;
+  price: number;
+  billingCycle: string;
+  description: string;
+  features?: string[];
+  popular?: boolean;
+}
+
+
+
+
+
+
+
+
+interface ProcessMessageResponse {
+  text: string;
+  suggestions: string[];
+}
+
+interface LanguageKeywords {
+  [language: string]: string[];
+}
 
 /**
  * Find matching service based on user message
- * @param {string} message - User message
- * @param {object} serviceKeywords - Keywords mapping for different services
- * @param {string} language - Current language
- * @returns {string|null} - Matching service title or null if no match
+ * @param message - User message
+ * @param serviceKeywords - Keywords mapping for different services
+ * @param language - Current language
+ * @returns Matching service title or null if no match
  */
-export const findMatchingService = (message, serviceKeywords, language) => {
+export const findMatchingService = (
+  message: string,
+  serviceKeywords: ServiceKeywords,
+  language: string
+): string | null => {
   if (!message || !serviceKeywords || !serviceKeywords[language]) {
     console.log('Missing parameters in findMatchingService:', { message, serviceKeywords, language });
     return null;
@@ -55,18 +135,22 @@ export const findMatchingService = (message, serviceKeywords, language) => {
 
 /**
  * Get service response based on service title
- * @param {string} serviceTitle - Title of the service
- * @param {object} chatData - Chatbot text data
- * @param {string} language - Current language
- * @returns {string} - Response message
+ * @param serviceTitle - Title of the service
+ * @param chatData - Chatbot text data
+ * @param language - Current language
+ * @returns Response message
  */
-export const getServiceResponse = (serviceTitle, chatData, language) => {
+export const getServiceResponse = (
+  serviceTitle: string | null,
+  chatData: ChatbotData,
+  language: string
+): string => {
   console.log('getServiceResponse called with:', { serviceTitle, language });
-  
-  if (!serviceTitle || !chatData || !language) {
-    console.error('Missing required parameters:', { serviceTitle, chatData, language });
-    return chatData?.defaultResponse?.[language] || 'Sorry, I could not process your request.';
-  }
+let res = chatData?.defaultResponse;
+if (!serviceTitle || !chatData || !language) {
+  console.error('Missing required parameters:', { serviceTitle, chatData, language });
+  return res?.[language] || 'Sorry, I could not process your request.';
+}
 
   if (chatData.serviceDescriptions && 
       chatData.serviceDescriptions[language] && 
@@ -75,7 +159,7 @@ export const getServiceResponse = (serviceTitle, chatData, language) => {
     const service = chatData.serviceDescriptions[language][serviceTitle];
     
     // Build response with rich markdown formatting
-    const sections = [];
+    const sections: string[] = [];
     
     // Title section
     sections.push(`# ${service.title || serviceTitle}`);
@@ -92,7 +176,7 @@ export const getServiceResponse = (serviceTitle, chatData, language) => {
     }
     
     // Service details section
-    const details = [];
+    const details: string[] = [];
     if (service.deliveryFormats && service.deliveryFormats.length > 0) {
       details.push(`**Available as:** ${service.deliveryFormats.join(', ')}`);
     }
@@ -125,12 +209,16 @@ export const getServiceResponse = (serviceTitle, chatData, language) => {
 
 /**
  * Look for FAQ matches in user message
- * @param {string} message - User message
- * @param {object} faqs - FAQ data
- * @param {string} language - Current language
- * @returns {string|null} - FAQ answer or null if no match
+ * @param message - User message
+ * @param faqs - FAQ data
+ * @param language - Current language
+ * @returns FAQ answer or null if no match
  */
-export const findFaqMatch = (message, faqs, language) => {
+export const findFaqMatch = (
+  message: string,
+  faqs: FAQs,
+  language: string
+): string | null => {
   if (!faqs || !faqs[language] || !Array.isArray(faqs[language])) {
     console.log('No FAQ data available for language:', language);
     return null;
@@ -162,16 +250,16 @@ export const findFaqMatch = (message, faqs, language) => {
 
 /**
  * Check if user is asking for contact information
- * @param {string} message - User message
- * @param {string} language - Current language
- * @returns {boolean} - True if asking for contact info
+ * @param message - User message
+ * @param language - Current language
+ * @returns True if asking for contact info
  */
-export const isAskingForContact = (message, language) => {
+export const isAskingForContact = (message: string, language: string): boolean => {
   if (!message) return false;
   
   const lowerMsg = message.toLowerCase();
   
-  const contactKeywords = {
+  const contactKeywords: LanguageKeywords = {
     en: ['contact', 'email', 'phone', 'call', 'reach', 'address', 'location', 'hours', "nawezaje kukupata",
             'how to contact', 'get in touch', 'where are you', 'what is your email', 'what is your phone number'],
     
@@ -187,63 +275,75 @@ export const isAskingForContact = (message, language) => {
 
 /**
  * Format contact information response
- * @param {object} contactInfo - Contact info data
- * @param {string} language - Current language
- * @returns {string} - Formatted contact info
+ * @param contactInfo - Contact info data
+ * @param language - Current language
+ * @returns Formatted contact info
  */
-export const getContactResponse = (contactInfo, language) => {
-  if (!contactInfo || !contactInfo[language]) {
+export const getContactResponse = (
+  contactInfo: ContactInfo,
+  language: string
+): string => {
+  if (!contactInfo) {
     return 'Contact information is currently unavailable.';
   }
 
-  const info = contactInfo[language];
+  const info = contactInfo;
   
   return `**Contact Information:**\n\n` +
     `📧 Email: ${info.email || 'N/A'}\n` +
     `📞 Phone: ${info.phone || 'N/A'}\n` +
     `📍 Address: ${info.address || 'N/A'}\n` +
-    `🕓 Business Hours: ${info.hours || 'N/A'}`;
+    `📍 Address: ${info.whatsapp || 'N/A'}\n` +
+    `🕓 Business Hours: ${info.website || 'N/A'} 
+    `;
 };
 
 /**
  * Detect language from user message
- * @param {string} message - User message
- * @param {object} langKeywords - Language detection keywords
- * @param {string} currentLanguage - Current language (fallback)
- * @returns {string} - Detected language code (default: 'en')
+ * @param message - User message
+ * @param langKeywords - Language detection keywords
+ * @param currentLanguage - Current language (fallback)
+ * @returns Detected language code (default: 'en')
  */
-export const detectLanguage = (message, langKeywords = null, currentLanguage = 'en') => {
+
+export type Language = 'en' | 'sw';
+
+export const detectLanguage = (
+  message: string,
+  langKeywords: LanguageKeywords | null = null,
+  currentLanguage: Language = 'en'
+): Language => {
   if (!message || message.trim() === '') return currentLanguage;
   
   // Default language detection keywords if not provided
   const keywords = langKeywords || {
     sw: ['habari', 'jambo', 'nafanya', 'nini', 'asante', 'shikamoo', 'tafadhali', 
          'kuhusu', 'huduma', 'bei', 'gani', 'tovuti', 'msaada', 'wasiliana'],
-    fr: ['bonjour', 'merci', 'comment', 'ça va', 'salut', 'au revoir', 'oui', 'non'],
-    es: ['hola', 'gracias', 'cómo', 'buenos días', 'buenas tardes', 'sí', 'no', 'por favor'],
   };
   
   const lowerMsg = message.toLowerCase();
   
-  // Check for keywords in each language
-  for (const [lang, langKeywords] of Object.entries(keywords)) {
-    if (langKeywords.some(keyword => lowerMsg.includes(keyword))) {
-      return lang;
-    }
+  // Check for Swahili keywords
+  if (keywords.sw && keywords.sw.some(keyword => lowerMsg.includes(keyword))) {
+    return 'sw';
   }
   
-  // Default to current language
+  // Default to current language (which will be 'en' or 'sw')
   return currentLanguage;
 };
 
 /**
  * Generate suggestions based on user interaction context
- * @param {string} serviceTitle - Current service being discussed
- * @param {object} chatData - Chatbot data
- * @param {string} language - Current language
- * @returns {Array} - List of suggestion prompts
+ * @param serviceTitle - Current service being discussed
+ * @param chatData - Chatbot data
+ * @param language - Current language
+ * @returns List of suggestion prompts
  */
-export const generateSuggestions = (serviceTitle, chatData, language) => {
+export const generateSuggestions = (
+  serviceTitle: string | null,
+  chatData: ChatbotData,
+  language: string
+): string[] => {
   // If discussing a specific service, offer related questions
   if (serviceTitle && chatData.ui) {
     const pricingInfo = chatData.ui.pricingInfo?.[language] || 'What are the prices for';
@@ -262,16 +362,16 @@ export const generateSuggestions = (serviceTitle, chatData, language) => {
 
 /**
  * Check if user is asking about booking/appointment
- * @param {string} message - User message
- * @param {string} language - Current language
- * @returns {boolean} - True if asking about booking
+ * @param message - User message
+ * @param language - Current language
+ * @returns True if asking about booking
  */
-export const isBookingQuery = (message, language) => {
+export const isBookingQuery = (message: string, language: string): boolean => {
   if (!message) return false;
   
   const lowerMsg = message.toLowerCase();
   
-  const bookingKeywords = {
+  const bookingKeywords: LanguageKeywords = {
     en: [
       'book', 'booking',"time", 'appointment', 'schedule', 'reserve',
       'how to book', 'book dr', 'doctor appointment', 'consultation',
@@ -291,27 +391,75 @@ export const isBookingQuery = (message, language) => {
 
 /**
  * Get booking response
- * @param {object} chatData - Chatbot data
- * @param {string} language - Current language
- * @returns {string} - Booking response
+ * @param chatData - Chatbot data
+ * @param language - Current language
+ * @returns Booking response
  */
-export const getBookingResponse = (chatData, language) => {
-  // Check if booking info exists in chatData
-  if (chatData.booking && chatData.booking[language]) {
-    const bookingInfo = chatData.booking[language];
-    return `**${bookingInfo.title}**\n\n${bookingInfo.instructions}\n\n${bookingInfo.contactDetails}`;
+
+/**
+ * Get booking response
+ * @param chatData - Chatbot data
+ * @param language - Current language
+ * @returns Booking response
+ */
+export const getBookingResponse = (chatData: ChatbotData, language: string): string => {
+  // Get contact info from the existing chatData structure
+  const contactInfo = chatData.getResponseByLang<ContactInfo>('contactInfo', language);
+  const uiText = chatData.getResponseByLang<UIText>('ui', language);
+  
+  if (contactInfo) {
+    // Build booking response using existing contact data
+    // Fix: Access uiText properties directly as strings, not nested objects
+    const bookingTitle = uiText?.bookingTitle || 
+                        (language === 'sw' ? 'Jinsi ya Kuagiza Ushauri' : 'How to Book a Consultation');
+    
+    const bookingInstructions = uiText?.bookingInstructions || 
+                               (language === 'sw' ? 'Kupanga ushauri, tafadhali:' : 'To schedule a consultation, please:');
+    
+    let response = `**${bookingTitle}**\n\n${bookingInstructions}\n\n`;
+    
+    // Add contact details from contactInfo
+    if (contactInfo.phone) {
+      const phoneLabel = uiText?.phoneLabel || (language === 'sw' ? 'Piga simu' : 'Call us');
+      response += `📞 **${phoneLabel}:** ${contactInfo.phone}\n`;
+    }
+    
+    if (contactInfo.email) {
+      const emailLabel = uiText?.emailLabel || (language === 'sw' ? 'Barua pepe' : 'Email');
+      response += `📧 **${emailLabel}:** ${contactInfo.email}\n`;
+    }
+    
+    if (contactInfo.address) {
+      const addressLabel = uiText?.addressLabel || (language === 'sw' ? 'Anwani' : 'Address');
+      response += `📍 **${addressLabel}:** ${contactInfo.address}\n`;
+    }
+    
+    // Fix: Check if workingHours exists on contactInfo (it's not in the interface)
+    if ('workingHours' in contactInfo && contactInfo.workingHours) {
+      const hoursLabel = uiText?.hoursLabel || (language === 'sw' ? 'Saa za Ofisi' : 'Office Hours');
+      response += `🕒 **${hoursLabel}:** ${contactInfo.workingHours}\n`;
+    }
+    
+    // Add closing message
+    const closingMessage = uiText?.bookingClosingMessage || (language === 'sw' ? 
+      '\nTimu yetu itakusaidia kupata wakati bora wa kujadili mahitaji ya biashara yako na jinsi tunavyoweza kukusaidia kukua.' :
+      '\nOur team will help you find the best time to discuss your business needs and how we can help you grow.');
+    
+    response += closingMessage;
+    
+    return response;
   }
   
-  // Default booking response for Future Holders
-  const defaultBookingResponses = {
-    en: `**How to Book a Consultation with Future Holders Company Limited**\n\n` +
+  // Fallback to default booking responses if no contact info exists
+  const defaultBookingResponses: { [key: string]: string } = {
+    en: `**How to Book a Consultation**\n\n` +
          `To schedule a consultation, please:\n\n` +
          `📞 **Call us:** +255 123 456 789\n` +
          `📧 **Email:** info@futureholders.co.tz\n` +
          `🕒 **Office Hours:** Monday - Friday: 8:00 AM - 6:00 PM\n\n` +
          `Our team will help you find the best time to discuss your business needs and how we can help you grow.`,
     
-    sw: `**Jinsi ya Kuagiza Ushauri na Future Holders Company Limited**\n\n` +
+    sw: `**Jinsi ya Kuagiza Ushauri**\n\n` +
          `Kupanga ushauri, tafadhali:\n\n` +
          `📞 **Piga simu:** +255 123 456 789\n` +
          `📧 **Barua pepe:** info@futureholders.co.tz\n` +
@@ -324,16 +472,16 @@ export const getBookingResponse = (chatData, language) => {
 
 /**
  * Check if user is asking about pricing
- * @param {string} message - User message
- * @param {string} language - Current language
- * @returns {boolean} - True if asking about pricing
+ * @param message - User message
+ * @param language - Current language
+ * @returns True if asking about pricing
  */
-export const isPricingQuery = (message, language) => {
+export const isPricingQuery = (message: string, language: string): boolean => {
   if (!message) return false;
   
   const lowerMsg = message.toLowerCase();
   
-  const pricingKeywords = {
+  const pricingKeywords: LanguageKeywords = {
     en: [
       'price','prices', 'pricing', 'cost', 'fee', 'charge', 'rate', 'budget',
       'how much', 'what does it cost', 'pricing for', 'cost of',
@@ -351,57 +499,127 @@ export const isPricingQuery = (message, language) => {
   return keywords.some(keyword => lowerMsg.includes(keyword.toLowerCase()));
 };
 
+
+
+
+
+
 /**
  * Get pricing response for a specific service or general pricing
- * @param {string} message - User message to detect specific service
- * @param {object} chatData - Chatbot data
- * @param {string} language - Current language
- * @returns {string} - Pricing response
+ * @param message - User message to detect specific service
+ * @param chatData - Chatbot data
+ * @param language - Current language
+ * @returns Pricing response
  */
-export const getPricingResponse = (message, chatData, language) => {
+export const getPricingResponse = (
+  message: string,
+  chatData: ChatbotData,
+  language: string
+): string => {
   // Try to find which service they're asking about
-  const serviceMatch = findMatchingService(message, chatData.serviceKeywords, language);
+  const serviceMatch = findMatchingService(message, chatData.serviceKeywords || {}, language);
   
-  if (serviceMatch && chatData.pricing && chatData.pricing[language] && chatData.pricing[language][serviceMatch]) {
-    const servicePricing = chatData.pricing[language][serviceMatch];
+  if (serviceMatch && chatData.pricing) {
+    // Get the pricing data for the specific language
+    const languagePricing = chatData.pricing[language as 'en' | 'sw'] || chatData.pricing.en;
     
-    let response = `**${serviceMatch} - Pricing Information**\n\n`;
-    
-    // Add packages
-    if (servicePricing.packages && servicePricing.packages.length > 0) {
-      servicePricing.packages.forEach((pkg, index) => {
-        const popularBadge = pkg.popular ? ' ⭐ **POPULAR**' : '';
-        response += `### ${pkg.name}${popularBadge}\n`;
-        response += `💰 **${servicePricing.currency} ${pkg.price.toLocaleString()}** ${pkg.billingCycle}\n\n`;
-        response += `${pkg.description}\n\n`;
-        
-        // Add key features (limit to 5 for brevity)
-        if (pkg.features && pkg.features.length > 0) {
-          response += `**Key Features:**\n`;
-          pkg.features.slice(0, 5).forEach(feature => {
-            response += `• ${feature}\n`;
-          });
-          if (pkg.features.length > 5) {
-            response += `• ...and ${pkg.features.length - 5} more features\n`;
+    // Check if the service exists in the pricing data
+    if (languagePricing && serviceMatch in languagePricing) {
+      const servicePricing = languagePricing[serviceMatch];
+      
+      let response = `**${serviceMatch} - Pricing Information**\n\n`;
+      
+      // Add packages
+      if (servicePricing.packages && servicePricing.packages.length > 0) {
+        servicePricing.packages.forEach((pkg, index: number) => {
+          const popularBadge = pkg.popular ? ' ⭐ **POPULAR**' : '';
+          response += `### ${pkg.name}${popularBadge}\n`;
+          response += `💰 **${servicePricing.currency} ${pkg.price.toLocaleString()}** ${pkg.billingCycle}\n\n`;
+          response += `${pkg.description}\n\n`;
+          
+          // Add key features (limit to 5 for brevity)
+          if (pkg.features && pkg.features.length > 0) {
+            response += `**Key Features:**\n`;
+            pkg.features.slice(0, 5).forEach((feature: string) => {
+              response += `• ${feature}\n`;
+            });
+            if (pkg.features.length > 5) {
+              response += `• ...and ${pkg.features.length - 5} more features\n`;
+            }
           }
-        }
-        
-        response += '\n---\n\n';
-      });
+          
+          // Add optional package details
+          if (pkg.deliveryTime) {
+            response += `⏱️ **Delivery Time:** ${pkg.deliveryTime}\n`;
+          }
+          
+          if (pkg.coverage) {
+            response += `🌍 **Coverage:** ${pkg.coverage}\n`;
+          }
+          
+          if (pkg.revisions) {
+            response += `🔄 **Revisions:** ${pkg.revisions}\n`;
+          }
+          
+          if (pkg.warranty) {
+            response += `🛡️ **Warranty:** ${pkg.warranty}\n`;
+          }
+          
+          if (pkg.platforms) {
+            response += `📱 **Platforms:** ${pkg.platforms}\n`;
+          }
+          
+          if (pkg.support) {
+            response += `🎧 **Support:** ${pkg.support}\n`;
+          }
+          
+          if (pkg.maintenance) {
+            response += `🔧 **Maintenance:** ${pkg.maintenance}\n`;
+          }
+          
+          if (pkg.minimumTerm) {
+            response += `📅 **Minimum Term:** ${pkg.minimumTerm}\n`;
+          }
+          
+          if (pkg.audienceSize) {
+            response += `👥 **Audience Size:** ${pkg.audienceSize}\n`;
+          }
+          
+          if (pkg.maxParticipants) {
+            response += `👥 **Max Participants:** ${pkg.maxParticipants}\n`;
+          }
+          
+          if (pkg.sessionDuration) {
+            response += `⏰ **Session Duration:** ${pkg.sessionDuration}\n`;
+          }
+          
+          if (pkg.platform) {
+            response += `🖥️ **Platform:** ${pkg.platform}\n`;
+          }
+          
+          response += '\n---\n\n';
+        });
+      }
+      
+      // Add additional services if available (for Equipment Sales, etc.)
+      if (servicePricing.additionalServices && servicePricing.additionalServices.length > 0) {
+        response += `**Additional Services:**\n\n`;
+        servicePricing.additionalServices.forEach((service) => {
+          response += `### ${service.name}\n`;
+          response += `💰 **${servicePricing.currency} ${service.price.toLocaleString()}** ${service.billingCycle}\n`;
+          response += `${service.description}\n\n`;
+        });
+        response += '---\n\n';
+      }
+      
+      response += `For detailed quotes and customization, please contact us directly.`;
+      
+      return response;
     }
-    
-    // Add custom note if available
-    if (servicePricing.customNote) {
-      response += `**Important Note:** ${servicePricing.customNote}\n\n`;
-    }
-    
-    response += `For detailed quotes and customization, please contact us directly.`;
-    
-    return response;
   }
   
   // General pricing response if no specific service found
-  const generalPricingResponse = {
+  const generalPricingResponse: { [key: string]: string } = {
     en: `**Our Pricing Information**\n\n` +
          `We offer competitive rates for all our services:\n\n` +
          `• **Door to Door Sales**: Starting from $500/month\n` +
@@ -435,15 +653,18 @@ export const getPricingResponse = (message, chatData, language) => {
   
   return generalPricingResponse[language] || generalPricingResponse.en;
 };
-
 /**
  * Process user message and generate appropriate response
- * @param {string} message - User message
- * @param {object} chatData - Chatbot data
- * @param {string} language - Current language
- * @returns {object} - Response object with text and suggestions
+ * @param message - User message
+ * @param chatData - Chatbot data
+ * @param language - Current language
+ * @returns Response object with text and suggestions
  */
-export const processUserMessage = (message, chatData, language) => {
+export const processUserMessage = (
+  message: string,
+  chatData: ChatbotData,
+  language: string
+): ProcessMessageResponse => {
   console.log('Processing message:', { message, language });
   
   // If language is not specified, detect it
@@ -486,7 +707,7 @@ export const processUserMessage = (message, chatData, language) => {
   }
   
   // Check for FAQ match
-  const faqMatch = findFaqMatch(message, chatData.faqs, detectedLang);
+  const faqMatch = findFaqMatch(message, chatData.faqs || {}, detectedLang);
   if (faqMatch) {
     console.log('FAQ match found');
     return {
@@ -496,7 +717,7 @@ export const processUserMessage = (message, chatData, language) => {
   }
   
   // Check for service match
-  const serviceMatch = findMatchingService(message, chatData.serviceKeywords, detectedLang);
+  const serviceMatch = findMatchingService(message, chatData.serviceKeywords || {}, detectedLang);
   if (serviceMatch) {
     console.log('Service match found:', serviceMatch);
     return {
@@ -513,8 +734,8 @@ export const processUserMessage = (message, chatData, language) => {
   };
 };
 
-// Make sure all functions are exported
-export default {
+// Default export with all functions
+const chatbotUtils = {
   findMatchingService,
   getServiceResponse,
   findFaqMatch,
@@ -527,4 +748,24 @@ export default {
   isPricingQuery,
   getPricingResponse,
   processUserMessage
+};
+
+export default chatbotUtils;
+
+// Export types for external use
+export type {
+  ServiceKeywords,
+  ServiceDescription,
+  ServiceDescriptions,
+  FAQ,
+  FAQs,
+  ContactInfo,
+  UITexts,
+  BookingInfo,
+  PricingPackage,
+  ServicePricing,
+  PricingData,
+  ChatbotData,
+  ProcessMessageResponse,
+  LanguageKeywords
 };

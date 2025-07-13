@@ -3,7 +3,7 @@
 
 import { useState, useRef } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import { chatbotData } from '@/data/chat/index';
+import { ChatbotData, chatBotData  } from '@/data/chat/index';
 
 // Hooks
 import { useChatState } from './hooks/useChatState';
@@ -22,6 +22,28 @@ import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
 import QuickPrompts from './QuickPrompts';
 import ServiceIndicator from './components/ServiceIndicator';
+import { Language } from '@/utils/ChatBotUtils';
+
+// Types
+interface DetectionRecord {
+  message: string;
+  timestamp: string;
+  detection: ServiceDetectionResult;
+  language: string;
+}
+
+interface ServiceDetectionResult {
+  service?: string;
+  confidence?: number;
+  [key: string]: any;
+}
+
+// Define a type for detection result
+type DetectionResult = {
+  service?: string;
+  confidence?: number;
+  [key: string]: any;
+};
 
 export default function ChatBot() {
   const { language } = useLanguage();
@@ -29,13 +51,6 @@ export default function ChatBot() {
   const chatEndRef = useRef(null);
   const inputRef = useRef(null);
   const chatScrollRef = useRef(null);
-
-  // Define a type for detection result
-  type DetectionResult = {
-    service?: string;
-    confidence?: number;
-    [key: string]: any;
-  };
 
   // Custom hooks for state management
   const {
@@ -69,6 +84,10 @@ export default function ChatBot() {
     resetChatState
   } = useChatState(language) as ReturnType<typeof useChatState> & {
     currentDetectionResult: DetectionResult;
+    detectionHistory: DetectionRecord[];
+    setDetectionHistory: React.Dispatch<React.SetStateAction<DetectionRecord[]>>;
+    activeService: string | null;
+    setActiveService: React.Dispatch<React.SetStateAction<string | null>>;
   };
 
   // Screen size detection
@@ -89,7 +108,7 @@ export default function ChatBot() {
   // Restore previous conversation state
   const { restorePreviousConversation } = useConversationRestore(
     language,
-    chatbotData,
+    chatBotData,
     setChatMessages,
     setServiceContext,
     setActiveService,
@@ -98,7 +117,7 @@ export default function ChatBot() {
     setConversationPatterns
   );
 
-  // Message sending logic
+  // Message sending logic - Fixed with all required properties
   const { handleMessageSend } = useMessageSender({
     language,
     message,
@@ -110,7 +129,7 @@ export default function ChatBot() {
     setChatMessages,
     setIsTyping,
     setSuggestions,
-    setActiveService,
+    setActiveService: (service: string) => setActiveService(service),
     detectionHistory,
     setDetectionHistory,
     setCurrentDetectionResult,
@@ -118,7 +137,7 @@ export default function ChatBot() {
     setConversationPatterns,
     maxMessages,
     chatEndRef,
-    pricingData: chatbotData.pricing
+    pricingData: chatBotData.pricing
   });
 
   // Chat actions and handlers
@@ -153,7 +172,7 @@ export default function ChatBot() {
   useChatEffects();
 
   return (
-    <div className="fixed bottom-6 right-6 z-50" ref={containerRef}>
+    <div className="fixed bottom-6 right-6 z-[9999]" ref={containerRef}>
       {!isChatOpen && (
         <FloatingButton onClick={chatActions.handleOpenChat} />
       )}
@@ -172,18 +191,22 @@ export default function ChatBot() {
             onClose={handleCloseChat}
           />
           
-          <ChatMessages 
-            messages={chatMessages}
-            isTyping={isTyping}
-            chatEndRef={chatEndRef}
-            chatScrollRef={chatScrollRef}
-            serviceContext={serviceContext}
-            insights={chatActions.getInsights()}
-            currentDetection={currentDetectionResult}
-            detectionHistory={detectionHistory}
-          />
+          {/* ChatMessages with expanded height - takes most of the viewport */}
+          <div className="flex-1 overflow-hidden">
+            <ChatMessages 
+              messages={chatMessages}
+              isTyping={isTyping}
+              chatEndRef={chatEndRef}
+              chatScrollRef={chatScrollRef}
+              serviceContext={serviceContext}
+              insights={chatActions.getInsights()}
+              currentDetection={currentDetectionResult}
+              detectionHistory={detectionHistory}
+            />
+          </div>
           
-          <div className="border-t border-gray-700 p-4 space-y-3 bg-gradient-to-t from-gray-800/98 to-gray-900/95">
+          {/* Bottom section with reduced height */}
+          <div className="border-t border-gray-700 p-3 space-y-2 bg-gradient-to-t from-gray-800/98 to-gray-900/95 flex-shrink-0">
             <QuickPrompts 
               suggestions={suggestions} 
               onSelect={chatActions.handleQuickPrompt}
@@ -204,7 +227,7 @@ export default function ChatBot() {
               serviceContext={serviceContext}
               onSend={handleMessageSend}
               inputRef={inputRef}
-              placeholder={chatbotData.ui.inputPlaceholder[language as 'en' | 'sw']}
+              placeholder={chatBotData.ui.inputPlaceholder[language as 'en' | 'sw']}
               disabled={isClosing}
               detectionHint={(currentDetectionResult as any).service ? 
                 (language === 'sw' ? 

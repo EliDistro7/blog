@@ -1,4 +1,4 @@
-// File: app/components/layout/chatBot/components/ChatContainer.tsx
+// ===== UPDATED CHAT CONTAINER COMPONENT =====
 'use client';
 
 import { ReactNode } from 'react';
@@ -13,6 +13,7 @@ interface ChatContainerProps {
 
 /**
  * Main chat container with responsive design, spacious layout, and modern styling
+ * Updated to provide maximum viewport space for ChatMessages
  */
 export default function ChatContainer({ 
   children,
@@ -27,13 +28,13 @@ export default function ChatContainer({
       exit="exit"
       className={`
         ${isSmallScreen ? 
-          'fixed inset-0 w-full h-full max-h-full rounded-none z-50' : 
-          'w-96 md:w-[28rem] lg:w-[32rem] h-[36rem] max-h-[90vh] rounded-3xl'
+          'fixed inset-0 w-full h-full max-h-full rounded-none z-[9999]' : 
+          'w-96 md:w-[28rem] lg:w-[32rem] h-[85vh] max-h-[700px] rounded-3xl z-[9999]'
         } 
         bg-gradient-to-br from-gray-900/95 via-slate-900/95 to-gray-800/95 
         shadow-2xl overflow-hidden flex flex-col 
         border border-gray-700/50 backdrop-blur-xl
-        z-50 ${isClosing ? 'pointer-events-none' : ''}
+        ${isClosing ? 'pointer-events-none' : ''}
         transition-all duration-300 ease-out
       `}
       style={{
@@ -82,7 +83,7 @@ export default function ChatContainer({
         />
       )}
       
-      {/* Content with enhanced spacing */}
+      {/* Content with enhanced spacing optimized for ChatMessages */}
       <div className="relative z-10 flex flex-col h-full">
         {children}
       </div>

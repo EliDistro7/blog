@@ -1,6 +1,6 @@
 // File: app/components/layout/ChatBot/hooks/useChatActions.js
 import { useCallback, useMemo, useRef } from 'react';
-import { chatbotData } from '@/data/chat/index';
+import {  chatBotData as chatbotData } from '@/data/chat/index';
 import { getContactResponse } from '@/utils/ChatBotUtils';
 
 import {
@@ -70,7 +70,7 @@ export const useChatActions = ({
 
   // Memoize frequently used selectors
   const memoizedSelectors = useMemo(() => ({
-    availableServices: Object.keys(chatbotData.services || {}),
+    availableServices: Object.keys(chatbotData.serviceDescriptions || {}),
     currentService: serviceContext.currentService,
     conversationDepth: serviceContext.conversationDepth,
     hasDetectionResult: currentDetectionResult && currentDetectionResult.confidence > 0.6,

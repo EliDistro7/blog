@@ -1,10 +1,10 @@
-// File: utils/serviceContextUtils.js
+// File: utils/serviceContextUtils.ts
 // Future Holders Company Limited - Marketing Agency Services
 
 import { pricingData } from '@/data/chat/pricingData';
 import { serviceKeywords } from '@/data/chat/serviceKeywords';
 import { serviceDescriptions } from '@/data/chat/serviceDescriptions';
-import { serviceDetectionPatterns } from './patterns'
+import { serviceDetectionPatterns } from './patterns';
 import { stopWords } from './stopwords';
 import { preprocessMessage } from './helpers';
 import { calculateKeywordScore } from './helpers';
@@ -12,67 +12,91 @@ import { detectServiceFromMessage } from './detect-service/index';
 
 export { detectServiceFromMessage };
 
-/**
- * Get multiple service suggestions with confidence scores
- * @param {string} userMessage - The user's message
- * @param {string} language - Current language (en/sw)
- * @param {number} maxResults - Maximum number of results to return
- * @returns {Array} - Array of detection results
- */
-export const getMultipleServiceSuggestions = (userMessage, language = 'en', maxResults = 3) => {
-  if (!userMessage || typeof userMessage !== 'string') {
-    return [];
-  }
+// Type definitions
+export interface ServiceDetectionResult {
+  service: string;
+  confidence: number;
+  matchedTerms: string[];
+  details: {
+    keywordMatches: number;
+    patternMatches: number;
+    exactMatches?: number;
+    method: 'pattern+keyword' | 'keyword-only';
+  };
+}
 
-  const processedMessage = preprocessMessage(userMessage, language);
-  const detectedServices = [];
+import { ServiceContext as ServiceContext2 } from '@/app/components/chatBot/utils/response/generator/types';
 
-  Object.entries(serviceDetectionPatterns).forEach(([serviceName, serviceData]) => {
-    const langData = serviceData[language] || serviceData.en;
-    const { keywords, patterns, negativePatterns = [] } = langData;
+export interface ServiceContext {
+  currentService: string | null;
+  serviceHistory: string[];
+  lastServiceMention: string | null;
+  contextualPrompts: string[];
+  conversationDepth: number;
+  conversationFlow: ConversationFlowEntry[];
+  lastResponse: string | null;
+  companyName: string;
+  companyType: string;
+  alternativeServiceDetected?: AlternativeServiceDetection;
+  alternativeServiceHistory?: AlternativeServiceDetection[];
+}
 
-    const hasNegativeMatch = negativePatterns.some(pattern => 
-      pattern.test(userMessage) || pattern.test(processedMessage)
-    );
-    
-    if (hasNegativeMatch) return;
 
-    const keywordAnalysis = calculateKeywordScore(processedMessage, keywords, language);
-    
-    let patternMatches = 0;
-    patterns.forEach(pattern => {
-      if (pattern.test(userMessage) || pattern.test(processedMessage)) {
-        patternMatches++;
-      }
-    });
 
-    const confidence = keywordAnalysis.relevanceScore + (patternMatches * 5);
+export interface ConversationFlowEntry {
+  timestamp: string;
+  userMessage: string;
+  detectedService: string | null;
+  contextService: string | null;
+  options: UpdateContextOptions;
+}
 
-    if (confidence > 0) {
-      detectedServices.push({
-        service: serviceName,
-        confidence: Math.round(confidence * 100) / 100,
-        matchedTerms: keywordAnalysis.matchedKeywords,
-        details: {
-          keywordMatches: keywordAnalysis.totalMatches,
-          patternMatches,
-          method: patternMatches > 0 ? 'pattern+keyword' : 'keyword-only'
-        }
-      });
-    }
-  });
+export interface AlternativeServiceDetection {
+  service: string;
+  timestamp: string;
+  confidence: number;
+}
 
-  return detectedServices
-    .sort((a, b) => b.confidence - a.confidence)
-    .slice(0, maxResults);
-};
+export interface UpdateContextOptions {
+  preservePrevious?: boolean;
+  confidenceThreshold?: number;
+  forceUpdate?: boolean;
+}
+
+export interface ServicePackage {
+  name: string;
+  price: number | string;
+  billingCycle?: string;
+  description?: string;
+}
+
+export interface ServicePricingData {
+  currency?: string;
+  packages?: ServicePackage[];
+  customNote?: string;
+}
+
+import { ConversationInsights as ConversationInsight2 } from '@/app/components/chatBot/utils/response/generator/types';
+
+export interface ConversationInsights {
+  insights: string[];
+  recommendations: string[];
+}
+
+export interface KeywordAnalysis {
+  relevanceScore: number;
+  matchedKeywords: string[];
+  totalMatches: number;
+}
+
+export type Language = 'en' | 'sw';
+
+
 
 /**
  * Validate service detection result
- * @param {Object} detectionResult - Result from detectServiceFromMessage
- * @returns {boolean} - Whether the detection is reliable
  */
-export const isDetectionReliable = (detectionResult) => {
+export const isDetectionReliable = (detectionResult: ServiceDetectionResult | null): boolean => {
   if (!detectionResult || !detectionResult.service) {
     return false;
   }
@@ -85,19 +109,20 @@ export const isDetectionReliable = (detectionResult) => {
   // - Has multiple keyword matches or exact matches
   return confidence > 5 || 
          details.patternMatches > 0 || 
-         details.exactMatches > 0 ||
+         (details.exactMatches && details.exactMatches > 0) ||
          details.keywordMatches > 2;
 };
 
 /**
  * Update service context based on detected service and conversation history
- * @param {Object} currentContext - Current service context
- * @param {string} detectedService - Newly detected service
- * @param {string} userMessage - User's message
- * @returns {Object} - Updated service context
  */
-export const updateServiceContext = (currentContext, detectedService, userMessage, options = {}) => {
-  const newContext = { ...currentContext };
+export const updateServiceContext = (
+  currentContext: ServiceContext, 
+  detectedService: string | null, 
+  userMessage: string, 
+  options: UpdateContextOptions = {}
+): ServiceContext => {
+  const newContext: ServiceContext = { ...currentContext };
   const timestamp = new Date().toISOString();
   
   // Extract options with defaults
@@ -195,15 +220,16 @@ export const updateServiceContext = (currentContext, detectedService, userMessag
 
   return newContext;
 };
+
 /**
  * Generate contextual prompts based on service and conversation depth
- * @param {string} serviceName - Current service
- * @param {number} conversationDepth - Depth of current conversation
- * @param {string} language - Current language
- * @param {Object} serviceContext - Full service context
- * @returns {Array} - Array of contextual prompts
  */
-export const generateContextualPrompts = (serviceName, conversationDepth = 0, language = 'en', serviceContext = {}) => {
+export const generateContextualPrompts = (
+  serviceName: string | null, 
+  conversationDepth: number = 0, 
+  language: Language = 'en', 
+  serviceContext: ServiceContext = {} as ServiceContext
+): string[] => {
   if (!serviceName) {
     // Return general prompts about Future Holders services
     return language === 'sw' ? [
@@ -221,8 +247,16 @@ export const generateContextualPrompts = (serviceName, conversationDepth = 0, la
     ];
   }
 
-  const contextualPrompts = [];
-  const serviceData = pricingData[language] && pricingData[language][serviceName];
+  const contextualPrompts: string[] = [];
+  function getPricingDataForService(language: string, serviceName: string) {
+  const languageData = pricingData[language as keyof typeof pricingData];
+  if (!languageData || !serviceName) return null;
+  
+  return (languageData as Record<string, any>)[serviceName] || null;
+}
+
+// Then use:
+const serviceData = getPricingDataForService(language, serviceName);
 
   // Generate prompts based on conversation depth
   switch (conversationDepth) {
@@ -248,7 +282,7 @@ export const generateContextualPrompts = (serviceName, conversationDepth = 0, la
     case 3:
       // Follow-up questions
       if (serviceData && serviceData.packages) {
-        const packageNames = serviceData.packages.map(pkg => pkg.name);
+        const packageNames = serviceData.packages.map((pkg: ServicePackage) => pkg.name);
         contextualPrompts.push(
           ...(language === 'sw' ? [
             `Je, tofauti ni nini kati ya ${packageNames[0]} na ${packageNames[1] || 'vifurushi vingine'}?`,
@@ -295,13 +329,9 @@ export const generateContextualPrompts = (serviceName, conversationDepth = 0, la
 
 /**
  * Get service-specific contextual prompts for Future Holders services
- * @param {string} serviceName - Service name
- * @param {string} language - Language
- * @param {number} depth - Conversation depth
- * @returns {Array} - Service-specific prompts
  */
-const getServiceSpecificPrompts = (serviceName, language, depth) => {
-  const prompts = [];
+const getServiceSpecificPrompts = (serviceName: string, language: Language, depth: number): string[] => {
+  const prompts: string[] = [];
 
   switch (serviceName) {
     case 'Door to Door Sales':
@@ -446,11 +476,8 @@ const getServiceSpecificPrompts = (serviceName, language, depth) => {
 
 /**
  * Check if user is asking about pricing
- * @param {string} userMessage - User's message
- * @param {string} language - Current language
- * @returns {boolean} - Whether user is asking about pricing
  */
-export const isPricingInquiry = (userMessage, language = 'en') => {
+export const isPricingInquiry = (userMessage: string, language: Language = 'en'): boolean => {
   const pricingKeywords = language === 'sw' ? 
     ['bei', 'gharama', 'malipo', 'pesa', 'kiasi', 'ada', 'kodi', 'nauli'] : 
     ['price', 'cost', 'pricing', 'fee', 'rate', 'charge', 'expensive', 'cheap', 'affordable', 'budget'];
@@ -462,12 +489,12 @@ export const isPricingInquiry = (userMessage, language = 'en') => {
 
 /**
  * Generate pricing response for Future Holders services
- * @param {string} serviceName - Service name
- * @param {string} language - Language
- * @param {Object} customPricingData - Optional custom pricing data
- * @returns {string} - Formatted pricing response
  */
-export const generatePricingResponse = (serviceName, language = 'en', customPricingData = null) => {
+export const generatePricingResponse = (
+  serviceName: string, 
+  language:string , 
+  customPricingData: any = null
+): string => {
   const pricing = customPricingData || pricingData;
   
   if (!pricing[language] || !pricing[language][serviceName]) {
@@ -476,7 +503,7 @@ export const generatePricingResponse = (serviceName, language = 'en', customPric
       'Sorry, pricing information is not available right now. Please contact us for detailed information about Future Holders services.';
   }
 
-  const serviceData = pricing[language][serviceName];
+  const serviceData: ServicePricingData = pricing[language][serviceName];
   const currency = serviceData.currency || (language === 'sw' ? 'TSH' : 'USD');
   const packages = serviceData.packages || [];
 
@@ -484,7 +511,7 @@ export const generatePricingResponse = (serviceName, language = 'en', customPric
     `**💰 Bei za ${serviceName} - Future Holders**\n\n` :
     `**💰 ${serviceName} Pricing - Future Holders**\n\n`;
 
-  packages.forEach((pkg, index) => {
+  packages.forEach((pkg: ServicePackage, index: number) => {
     const price = typeof pkg.price === 'number' ? pkg.price.toLocaleString() : pkg.price;
     pricingResponse += language === 'sw' ? 
       `**${pkg.name}** - ${currency} ${price}${pkg.billingCycle ? ` ${pkg.billingCycle}` : ''}\n${pkg.description || ''}\n\n` :
@@ -507,28 +534,45 @@ export const generatePricingResponse = (serviceName, language = 'en', customPric
 
 /**
  * Get conversation insights from service context
- * @param {Object} serviceContext - Service context object
- * @returns {Object} - Conversation insights
  */
-export const getConversationInsights = (serviceContext) => {
-  if (!serviceContext) return { insights: [], recommendations: [] };
+/**
+ * Get conversation insights from service context
+ */
 
-  const insights = [];
-  const recommendations = [];
+
+export const getConversationInsights = (serviceContext: ServiceContext | null): ConversationInsight2 => {
+  if (!serviceContext) {
+    return { 
+      insights: [], 
+      conversationDepth: 0, 
+      servicesDiscussed: [],
+      userPreferences: {}
+    };
+  }
+
+  const insights: string[] = [];
+  const conversationDepth = serviceContext.conversationDepth || 0;
+  const servicesDiscussed = serviceContext.serviceHistory || [];
+  
+  // Initialize user preferences object
+  const userPreferences: {
+    preferredContactMethod?: string;
+    budget?: string;
+    timeline?: string;
+    location?: string;
+  } = {};
 
   // Analyze conversation depth
-  if (serviceContext.conversationDepth > 5) {
+  if (conversationDepth > 5) {
     insights.push('Deep engagement detected');
-    recommendations.push('Consider providing Future Holders contact information or scheduling consultation');
   }
 
   // Analyze service interest
-  if (serviceContext.serviceHistory && serviceContext.serviceHistory.length > 2) {
-    insights.push('Multiple services of interest');
-    recommendations.push('Suggest Future Holders integrated service packages or bundled solutions');
+  if (servicesDiscussed.length > 2) {
+    insights.push('Multiple services explored');
   }
 
-  // Analyze conversation flow
+  // Analyze conversation flow for pricing interest
   if (serviceContext.conversationFlow && serviceContext.conversationFlow.length > 0) {
     const recentInteractions = serviceContext.conversationFlow.slice(-5);
     const pricingMentions = recentInteractions.filter(interaction => 
@@ -537,18 +581,65 @@ export const getConversationInsights = (serviceContext) => {
 
     if (pricingMentions > 2) {
       insights.push('Strong pricing interest');
-      recommendations.push('Provide detailed pricing comparison or offer Future Holders consultation');
+      userPreferences.budget = 'price_conscious';
     }
   }
 
-  return { insights, recommendations };
+  /*
+  if (serviceContext.isLocationQuery || serviceContext.matchedLocationPattern) {
+    insights.push('Location-based inquiry');
+    userPreferences.location = 'location_sensitive';
+  }
+*/
+  // Analyze current service focus
+  if (serviceContext.currentService) {
+    insights.push(`Focused on ${serviceContext.currentService}`);
+  }
+
+  // Detect contact preference patterns
+  if (serviceContext.conversationFlow) {
+    const contactMentions = serviceContext.conversationFlow.filter(interaction => 
+      interaction.userMessage.toLowerCase().includes('contact') ||
+      interaction.userMessage.toLowerCase().includes('call') ||
+      interaction.userMessage.toLowerCase().includes('email') ||
+      interaction.userMessage.toLowerCase().includes('wasiliana') ||
+      interaction.userMessage.toLowerCase().includes('piga')
+    );
+
+    if (contactMentions.length > 0) {
+      insights.push('Contact preference indicated');
+      userPreferences.preferredContactMethod = 'direct_contact';
+    }
+  }
+
+  // Analyze urgency/timeline indicators
+  if (serviceContext.conversationFlow) {
+    const urgencyIndicators = serviceContext.conversationFlow.filter(interaction => 
+      interaction.userMessage.toLowerCase().includes('urgent') ||
+      interaction.userMessage.toLowerCase().includes('asap') ||
+      interaction.userMessage.toLowerCase().includes('immediately') ||
+      interaction.userMessage.toLowerCase().includes('haraka') ||
+      interaction.userMessage.toLowerCase().includes('sasa')
+    );
+
+    if (urgencyIndicators.length > 0) {
+      insights.push('Urgency indicated');
+      userPreferences.timeline = 'urgent';
+    }
+  }
+
+  return {
+    insights,
+    conversationDepth,
+    servicesDiscussed,
+    userPreferences
+  };
 };
 
 /**
  * Reset service context for Future Holders
- * @returns {Object} - Fresh service context
  */
-export const createFreshServiceContext = () => ({
+export const createFreshServiceContext = (): ServiceContext => ({
   currentService: null,
   serviceHistory: [],
   lastServiceMention: null,
@@ -562,10 +653,8 @@ export const createFreshServiceContext = () => ({
 
 /**
  * Validate service context object
- * @param {Object} context - Service context to validate
- * @returns {boolean} - Whether context is valid
  */
-export const validateServiceContext = (context) => {
+export const validateServiceContext = (context: any): context is ServiceContext => {
   if (!context || typeof context !== 'object') return false;
   
   const requiredFields = ['currentService', 'serviceHistory', 'conversationDepth'];
@@ -574,10 +663,8 @@ export const validateServiceContext = (context) => {
 
 /**
  * Get Future Holders company introduction
- * @param {string} language - Language preference
- * @returns {string} - Company introduction
  */
-export const getCompanyIntroduction = (language = 'en') => {
+export const getCompanyIntroduction = (language: Language = 'en'): string => {
   return language === 'sw' ? 
     `**🏢 Future Holders Company Limited**\n\nTunakaribishwa! Sisi ni kampuni ya uuzaji na uongozi ambayo tunasaidia biashara kukua. Huduma zetu ni pamoja na:\n\n• Uuzaji wa mlango hadi mlango\n• Utengenezaji wa tovuti na programu\n• Usimamizi wa mitandao ya kijamii\n• Utafutaji na maombi ya tender\n• Uuzaji wa vifaa\n• Uongozi wa chapa za bidhaa na huduma\n\nJe, ni huduma gani ungependa kujua zaidi?` :
     `**🏢 Future Holders Company Limited**\n\nWelcome! We are a marketing agency that helps businesses grow. Our services include:\n\n• Door to door sales\n• Website and application development\n• Social media management\n• Tender search and application\n• Equipment sales\n• Product and service branding\n\nWhich service would you like to know more about?`;

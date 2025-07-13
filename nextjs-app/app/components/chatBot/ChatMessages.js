@@ -1,3 +1,4 @@
+// ===== UPDATED SCROLLABLE CHAT MESSAGES COMPONENT =====
 import { Clock, Brain, Target, TrendingUp, ChevronDown, ChevronUp, BarChart2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
@@ -82,7 +83,7 @@ export default function ChatMessages({
   };
 
   return (
-    <div className="flex-1 overflow-hidden flex flex-col relative">
+    <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col relative">
       {/* Decorative background */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-blue-900/10 to-purple-900/10" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.05),transparent_50%)]" />
@@ -90,7 +91,7 @@ export default function ChatMessages({
 
       {/* Compact service context header */}
       {serviceContext && serviceContext.currentService && (
-        <div className="bg-gradient-to-r from-blue-900/20 to-purple-900/20 border-b border-blue-500/20 p-2 z-10">
+        <div className="bg-gradient-to-r from-blue-900/20 to-purple-900/20 border-b border-blue-500/20 p-2 z-10 flex-shrink-0">
           <div className="flex items-center justify-center gap-2 text-xs text-blue-300">
             <Target size={12} />
             <span>Focus: {serviceContext.currentService}</span>
@@ -101,7 +102,7 @@ export default function ChatMessages({
 
       {/* Compact conversation insights banner */}
       {insights && insights.insights && insights.insights.length > 0 && (
-        <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 border-b border-purple-500/20 p-1.5 z-10">
+        <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 border-b border-purple-500/20 p-1.5 z-10 flex-shrink-0">
           <div className="flex items-center justify-center gap-2 text-xs text-purple-300">
             <Brain size={10} />
             <span>{insights.insights[0]}</span>
@@ -112,10 +113,14 @@ export default function ChatMessages({
       {/* Scrollable messages container with better spacing */}
       <div 
         ref={chatScrollRef}
-        className="flex-1 overflow-y-auto scrollbar-thin px-3 py-2 z-10"
+        className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin px-3 py-2 z-10"
         style={{
           // Ensure messages are properly spaced and don't get cut off
-          paddingBottom: '60px' // Extra space at bottom to prevent last message from being obscured
+          paddingBottom: '60px', // Extra space at bottom to prevent last message from being obscured
+          scrollBehavior: 'smooth',
+          // Custom scrollbar styling
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#4B5563 #1F2937'
         }}
       >
         {messages && messages.length > 0 ? (
