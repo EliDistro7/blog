@@ -191,8 +191,7 @@ export default function ChatBot() {
             onClose={handleCloseChat}
           />
           
-          {/* ChatMessages with expanded height - takes most of the viewport */}
-          <div className="flex-1 overflow-hidden">
+        
             <ChatMessages 
               messages={chatMessages}
               isTyping={isTyping}
@@ -203,7 +202,7 @@ export default function ChatBot() {
               currentDetection={currentDetectionResult}
               detectionHistory={detectionHistory}
             />
-          </div>
+         
           
           {/* Bottom section with reduced height */}
           <div className="border-t border-gray-700 p-3 space-y-2 bg-gradient-to-t from-gray-800/98 to-gray-900/95 flex-shrink-0">
