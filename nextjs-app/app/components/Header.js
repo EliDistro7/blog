@@ -245,7 +245,7 @@ export default function Header() {
       <div
         id="mobile-menu"
         ref={mobileMenuRef}
-        className={`fixed inset-x-0 z-50 bg-brand-dark/95 backdrop-blur-md border-b border-brand-gold/20 shadow-depth lg:hidden transition-all duration-300 ease-in-out ${
+        className={` bg-brand-dark/95 backdrop-blur-md border-b border-brand-gold/20 shadow-depth lg:hidden transition-all duration-300 ease-in-out ${
           mobileMenuOpen
             ? 'translate-y-0 opacity-100'
             : '-translate-y-full opacity-0 pointer-events-none'
