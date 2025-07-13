@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useLanguage } from '@/context/LanguageContext'
+import { Language } from '@/utils/context/serviceContextUtils'
 
 export function LanguageSwitcher() {
   const { language, setLanguage } = useLanguage()
@@ -9,16 +10,15 @@ export function LanguageSwitcher() {
   const [isMounted, setIsMounted] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  const languages = [
+  const languages: { code: Language; name: string }[] = [
     { code: 'en', name: 'Eng' },
     { code: 'sw', name: 'Swa' }
   ]
 
   useEffect(() => {
-    setIsMounted(true) // Mark when component is mounted (client-side)
+    setIsMounted(true)
   }, [])
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -30,14 +30,12 @@ export function LanguageSwitcher() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  // Don't render anything until mounted to avoid hydration mismatch
   if (!isMounted) return null
 
   const selectedLanguage = languages.find(lang => lang.code === language) || languages[0]
 
   return (
     <div className="relative" ref={dropdownRef}>
-      {/* Rest of your component remains the same */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         aria-haspopup="true"
