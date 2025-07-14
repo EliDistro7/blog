@@ -177,7 +177,7 @@ export default function CTASection() {
                     {/* Business image with golden overlay */}
                     <div className="aspect-[4/3] relative overflow-hidden">
                       <img 
-                        src="/images/businessman.jpeg" 
+                        src="/images/client.jpeg" 
                         alt="Business professional" 
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />

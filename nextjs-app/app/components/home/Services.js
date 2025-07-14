@@ -74,7 +74,8 @@ const ServicesShowcase = () => {
       },
       icon: DoorOpen,
       gradient: "from-indigo-500 via-purple-500 to-pink-500",
-      image: "/images/door.jpeg",
+       image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
+     
       features: [
         { en: "Personal Engagement", sw: "Ushirikiano wa Binafsi" },
         { en: "Local Targeting", sw: "Lengo la Mtandaoni" },
