@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { DoorOpen, Smartphone, Globe, Users, ChevronRight, ExternalLink } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
-// Mock useLanguage hook for demonstration
-const useLanguage = () => {
-  const [language, setLanguage] = useState('en');
-  return { language, setLanguage };
-};
+
 
 const ServicesShowcase = () => {
   const { language } = useLanguage(); // language prop return either "sw" for swahili or "en" for english;
@@ -172,6 +169,7 @@ const ServicesShowcase = () => {
   const getLocalizedText = (textObj) => {
     console.log('textobj',textObj)
     console.log('local lang',textObj[language] )
+    console.log('language now', language)
     return textObj[language] || textObj.en;
   };
 
