@@ -278,7 +278,7 @@ const ServicesPage = () => {
             Ready to Transform Your Business?
           </h2>
           <p className="text-xl text-brand-foam mb-8 leading-relaxed">
-            Let's discuss how our comprehensive services can help you achieve your business goals and drive sustainable growth.
+            Lets discuss how our comprehensive services can help you achieve your business goals and drive sustainable growth.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="bg-yellow-500 hover:bg-yellow-600 text-slate-800 font-semibold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
