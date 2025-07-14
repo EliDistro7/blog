@@ -96,9 +96,9 @@ export default function RootLayout({
           <div className="relative min-h-screen flex flex-col">
             
             
-            <div className="sticky top-0 z-50">
+           
               <Header />
-            </div>
+           
             
             <main className="flex-1 z-10">
               {children}
