@@ -163,7 +163,8 @@ export default function Header() {
               </button>
               
               {servicesOpen && (
-                <div className="absolute top-full left-0 mt-2 w-96 p-3 rounded-xl bg-brand-dark/95 backdrop-blur-md border border-brand-gold/20 shadow-depth">
+                <div className="absolute top-full left-0 mt-2 w-96 p-3 rounded-xl bg-brand-dark/95 backdrop-blur-md border border-brand-gold/20 shadow-depth"
+                >
                   <div className="mb-2">
                     <h3 className="text-sm font-semibold text-brand-gold mb-1">Our Services</h3>
                     <p className="text-xs text-brand-foam/60">Complete marketing solutions for your business</p>

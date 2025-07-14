@@ -178,19 +178,22 @@ export const useMessageSender = ({
     // Validate the enhanced detection result
     if (!validateServiceDetection(enhancedServiceDetection)) {
       console.warn('Enhanced service detection failed, falling back to basic detection');
+      
       const basicDetection = detectServiceFromMessage(userMessage, detectedLang) as {
         service: string | null;
         confidence?: number;
         matchedTerms?: string[];
       };
       // Reassign enhancedServiceDetection as a typed object to avoid property errors
-      Object.assign(enhancedServiceDetection, {
+    let b=  Object.assign(enhancedServiceDetection, {
         service: basicDetection.service,
         confidence: basicDetection.confidence || 0.5,
         matchedTerms: basicDetection.matchedTerms || [],
         alternativeServices: [],
         detectionMethod: 'fallback_basic'
       });
+
+      console.log('assigned obj',b )
     }
     
     // Update detection history

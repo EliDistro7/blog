@@ -1,9 +1,40 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Star, Quote, ChevronLeft, ChevronRight, Globe, Users, Heart, Building } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function TestimonialCarousel() {
+  const {language} = useLanguage(); // it returns either "sw" for swahili or "en" for english;
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
+  const translations = {
+    en: {
+      sectionBadge: "Client Success Stories",
+      mainTitle: "What Our Clients Say",
+      subtitle: "Discover how we've transformed businesses across Tanzania with our digital solutions",
+      previous: "Previous",
+      next: "Next",
+      stats: {
+        websites: "Websites Delivered",
+        clients: "Happy Clients", 
+        projects: "Projects Completed",
+        experience: "Years Experience"
+      }
+    },
+    sw: {
+      sectionBadge: "Hadithi za Mafanikio ya Wateja",
+      mainTitle: "Wateja Wetu Wanasema Nini",
+      subtitle: "Gundua jinsi tulivyobadilisha biashara kote Tanzania kwa suluhisho zetu za kidijitali",
+      previous: "Iliyopita",
+      next: "Ifuatayo",
+      stats: {
+        websites: "Tovuti Zilizotolewa",
+        clients: "Wateja Wenye Furaha",
+        projects: "Miradi Iliyokamilika", 
+        experience: "Miaka ya Uzoefu"
+      }
+    }
+  };
 
   const testimonials = [
     { 
@@ -107,6 +138,8 @@ export default function TestimonialCarousel() {
     }
   }, [isAutoPlaying, nextSlide]);
 
+  const t = translations[language];
+
   return (
     <div className="relative w-full py-8 sm:py-16 bg-gradient-to-br from-brand-dark via-brand-deep to-brand-medium overflow-hidden">
       {/* Animated Background Elements */}
@@ -124,13 +157,21 @@ export default function TestimonialCarousel() {
         <div className="text-center mb-8 sm:mb-16 px-2">
           <div className="inline-flex items-center gap-2 bg-brand-accent/10 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 mb-4 sm:mb-6">
             <Star className="w-4 h-4 sm:w-5 sm:h-5 text-brand-gold animate-pulse" />
-            <span className="text-brand-gold font-medium text-sm sm:text-base">Client Success Stories</span>
+            <span className="text-brand-gold font-medium text-sm sm:text-base">{t.sectionBadge}</span>
           </div>
           <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 px-2">
-            What Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-coral">Clients Say</span>
+            {language === 'en' ? (
+              <>
+                What Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-coral">Clients Say</span>
+              </>
+            ) : (
+              <>
+                Wateja Wetu <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-coral">Wanasema Nini</span>
+              </>
+            )}
           </h2>
           <p className="text-lg sm:text-xl text-brand-light max-w-2xl mx-auto px-2">
-            Discover how we&apos;ve transformed businesses across Tanzania with our digital solutions
+            {t.subtitle}
           </p>
         </div>
 
@@ -187,7 +228,7 @@ export default function TestimonialCarousel() {
               <div className="lg:col-span-3 relative">
                 <Quote size={40} className="absolute -top-2 -left-2 sm:-top-4 sm:-left-4 text-brand-accent/20 sm:w-15 sm:h-15" />
                 <blockquote className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light text-white leading-relaxed pl-6 sm:pl-8 pr-2 sm:pr-4">
-                  &ldquo;{testimonials[activeIndex].quote.en}&rdquo;
+                  &ldquo;{testimonials[activeIndex].quote[language]}&rdquo;
                 </blockquote>
                 <div className="absolute bottom-0 right-0 w-12 sm:w-16 h-1 bg-gradient-to-r from-brand-accent to-brand-coral rounded-full"></div>
               </div>
@@ -203,7 +244,7 @@ export default function TestimonialCarousel() {
               className="group flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 text-white transition-all duration-300 border border-white/20 hover:border-brand-accent/50"
             >
               <ChevronLeft size={18} className="sm:w-5 sm:h-5 group-hover:-translate-x-1 transition-transform" />
-              <span className="hidden sm:inline text-sm sm:text-base">Previous</span>
+              <span className="hidden sm:inline text-sm sm:text-base">{t.previous}</span>
             </button>
 
             <div className="flex gap-2 sm:gap-3">
@@ -226,7 +267,7 @@ export default function TestimonialCarousel() {
               onMouseLeave={() => setIsAutoPlaying(true)}
               className="group flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 text-white transition-all duration-300 border border-white/20 hover:border-brand-accent/50"
             >
-              <span className="hidden sm:inline text-sm sm:text-base">Next</span>
+              <span className="hidden sm:inline text-sm sm:text-base">{t.next}</span>
               <ChevronRight size={18} className="sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
@@ -235,10 +276,10 @@ export default function TestimonialCarousel() {
         {/* Stats Section */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mt-12 sm:mt-16 px-2 sm:px-0">
           {[
-            { label: "Websites Delivered", value: "50+", icon: <Globe className="w-5 h-5 sm:w-6 sm:h-6" /> },
-            { label: "Happy Clients", value: "40+", icon: <Users className="w-5 h-5 sm:w-6 sm:h-6" /> },
-            { label: "Projects Completed", value: "60+", icon: <Building className="w-5 h-5 sm:w-6 sm:h-6" /> },
-            { label: "Years Experience", value: "5+", icon: <Star className="w-5 h-5 sm:w-6 sm:h-6" /> }
+            { label: t.stats.websites, value: "50+", icon: <Globe className="w-5 h-5 sm:w-6 sm:h-6" /> },
+            { label: t.stats.clients, value: "40+", icon: <Users className="w-5 h-5 sm:w-6 sm:h-6" /> },
+            { label: t.stats.projects, value: "60+", icon: <Building className="w-5 h-5 sm:w-6 sm:h-6" /> },
+            { label: t.stats.experience, value: "5+", icon: <Star className="w-5 h-5 sm:w-6 sm:h-6" /> }
           ].map((stat, index) => (
             <div key={index} className="text-center bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-4 sm:p-6 border border-white/10 hover:border-brand-accent/30 transition-all duration-300 group">
               <div className="text-brand-gold mb-2 flex justify-center group-hover:scale-110 transition-transform">

@@ -93,19 +93,19 @@ export default function RootLayout({
       
       <body className="bg-brand-foam text-brand-dark font-sans">
         <LanguageProvider>
-          <div className="relative min-h-screen flex flex-col">
+      
             
             
            
               <Header />
-           
+         
             
             <main className="flex-1 z-10">
               {children}
             </main>
             
             <Footer />
-          </div>
+        
           <SpeedInsights />
         </LanguageProvider>
       </body>

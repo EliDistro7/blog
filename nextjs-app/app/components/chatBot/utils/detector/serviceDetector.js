@@ -70,6 +70,7 @@ function enhancedKeywordMatching(message, language, serviceKeywords) {
   };
   
   // Get services for the specified language
+  console.log('service keywords', serviceKeywords)
   const languageKeywords = serviceKeywords[language] || serviceKeywords['en'] || {};
   
   Object.keys(languageKeywords).forEach(service => {
@@ -116,6 +117,9 @@ function enhancedKeywordMatching(message, language, serviceKeywords) {
       }
     });
   });
+
+  console.log('services scores', serviceScores);
+  console.log('matched items', matchedTerms);
   
   return formatMatchingResults(serviceScores, matchedTerms, 'keyword');
 }
@@ -271,6 +275,7 @@ function formatMatchingResults(serviceScores, matchedTerms, matchType) {
     .sort(([, a], [, b]) => b - a);
   
   const bestMatch = sortedServices[0];
+  console.log('best match', bestMatch)
   const alternatives = sortedServices.slice(1, 4);
   
   return {
