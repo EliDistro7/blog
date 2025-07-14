@@ -152,7 +152,7 @@ export default function TestimonialCarousel() {
       {/* Subtle Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
       
-      <div className="relative w-full px-2 sm:px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div className="relative w-full px-2 sm:px-2 md:px-2 lg:px-8 max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-8 sm:mb-16 px-2">
           <div className="inline-flex items-center gap-2 bg-brand-accent/10 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 mb-4 sm:mb-6">

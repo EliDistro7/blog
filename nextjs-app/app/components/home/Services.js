@@ -77,7 +77,7 @@ const ServicesShowcase = () => {
       },
       icon: DoorOpen,
       gradient: "from-indigo-500 via-purple-500 to-pink-500",
-      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
+      image: "/images/door.jpeg",
       features: [
         { en: "Personal Engagement", sw: "Ushirikiano wa Binafsi" },
         { en: "Local Targeting", sw: "Lengo la Mtandaoni" },
@@ -100,8 +100,8 @@ const ServicesShowcase = () => {
       },
       icon: Users,
       gradient: "from-pink-500 via-red-500 to-orange-500",
-      image: "https://images.unsplash.com/photo-1611926653458-09294b3142bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
-      features: [
+   image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
+       features: [
         { en: "Content Strategy", sw: "Mkakati wa Maudhui" },
         { en: "Community Building", sw: "Ujenzi wa Jumuiya" },
         { en: "Analytics & Insights", sw: "Uchanganuzi na Maarifa" }
