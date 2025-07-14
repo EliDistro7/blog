@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Phone } from 'lucide-react';
 
 import { useLanguage } from '@/context/LanguageContext';
-import DoorToDoorHero from '@/app/components/door/DoorToDoorHero';
-import DoorToDoorContent from '@/app/components/door/DoorToDoorContent';
+import DoorToDoorHero from './DoorToDoorHero';
+import DoorToDoorContent from './DoorToDoorContent';
 
 const DoorToDoorServices = () => {
   const { language } = useLanguage();
