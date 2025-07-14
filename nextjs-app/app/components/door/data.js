@@ -6,8 +6,9 @@ import {
   TrendingUp, 
   Clock, 
   CheckCircle, 
-  Star,
-  Phone,
+  Cookie,
+  Candy,
+  Gift,
   Mail,
   PenTool,
   BookOpen,
@@ -103,7 +104,7 @@ import {
     }
   ];
 
-  export const currentPartners = [
+export const currentPartners = [
   {
     company: "MAGNA",
     logo: Building,
@@ -196,27 +197,27 @@ import {
   {
     company: "SAADO FOODS",
     logo: Utensils,
-    industry: { en: "Food Processing", sw: "Usindikaji wa Chakula" },
+    industry: { en: "Confectionery & Food Products", sw: "Peremende na Bidhaa za Chakula" },
     products: [
       {
-        name: { en: "Cottage Cheese", sw: "Jibini la Cottage" },
-        icon: Milk,
-        description: { en: "Fresh cottage cheese products", sw: "Bidhaa za jibini la cottage mpya" }
+        name: { en: "Chocolate", sw: "Chokoleti" },
+        icon: Gift,
+        description: { en: "Premium chocolate products and confectionery", sw: "Bidhaa za chokoleti na peremende za hali ya juu" }
       },
       {
-        name: { en: "Top Grain", sw: "Nafaka Bora" },
+        name: { en: "Finger Chocolate", sw: "Chokoleti ya Kidole" },
+        icon: Candy,
+        description: { en: "Finger-shaped chocolate snacks", sw: "Vitafunio vya chokoleti vya umbo la kidole" }
+      },
+      {
+        name: { en: "Top Corn", sw: "Mahindi Bora" },
         icon: Wheat,
-        description: { en: "Premium grain products", sw: "Bidhaa za nafaka za hali ya juu" }
+        description: { en: "Premium corn-based snack products", sw: "Vitafunio vya mahindi vya hali ya juu" }
       },
       {
-        name: { en: "Pillow Fillers", sw: "Vijijazi vya Mto" },
-        icon: Package,
-        description: { en: "Comfortable pillow filling materials", sw: "Vifaa vya kujaza mto vya urahisi" }
-      },
-      {
-        name: { en: "Fibers", sw: "Nyuzi" },
-        icon: Layers,
-        description: { en: "Natural and synthetic fiber products", sw: "Bidhaa za nyuzi za asili na bandia" }
+        name: { en: "Biscuits", sw: "Biskuti" },
+        icon: Cookie,
+        description: { en: "Various types of biscuits and cookies", sw: "Aina mbalimbali za biskuti na mikate" }
       }
     ]
   }
@@ -241,41 +242,51 @@ import {
     }
   ];
 
-  export const pricingPlans = [
-    {
-      name: { en: "Starter", sw: "Mwanzo" },
-      price: "$299",
-      period: { en: "per campaign", sw: "kwa kampeni" },
-      features: [
-        { en: "Up to 100 doors", sw: "Hadi milango 100" },
-        { en: "Basic reporting", sw: "Ripoti ya msingi" },
-        { en: "Email support", sw: "Msaada wa barua pepe" },
-        { en: "2-day campaign", sw: "Kampeni ya siku 2" }
-      ]
-    },
-    {
-      name: { en: "Professional", sw: "Mtaalamu" },
-      price: "$799",
-      period: { en: "per campaign", sw: "kwa kampeni" },
-      popular: true,
-      features: [
-        { en: "Up to 500 doors", sw: "Hadi milango 500" },
-        { en: "Advanced analytics", sw: "Uchanganuzi wa kina" },
-        { en: "Phone & email support", sw: "Msaada wa simu na barua pepe" },
-        { en: "1-week campaign", sw: "Kampeni ya wiki 1" },
-        { en: "Lead qualification", sw: "Uhakiki wa viongozi" }
-      ]
-    },
-    {
-      name: { en: "Enterprise", sw: "Biashara" },
-      price: { en: "Custom", sw: "Maalum" },
-      period: { en: "pricing", sw: "bei" },
-      features: [
-        { en: "Unlimited doors", sw: "Milango isiyopungua" },
-        { en: "Custom reporting", sw: "Ripoti maalum" },
-        { en: "24/7 support", sw: "Msaada wa 24/7" },
-        { en: "Multi-week campaigns", sw: "Kampeni za wiki nyingi" },
-        { en: "Dedicated account manager", sw: "Meneja wa akaunti aliyejitolea" }
-      ]
-    }
-  ];
+ export const pricingPlans = [
+  {
+    name: { en: "Starter", sw: "Mwanzo" },
+    subtitle: { en: "Street Presence", sw: "Uongozi wa Mtaani" },
+    price: "TZS 300,000",
+    period: { en: "per Month", sw: "kwa Mwezi" },
+    target: { en: "Small businesses or startups testing physical outreach", sw: "Biashara ndogo au miradi mipya yanayojaribu kufikia wateja" },
+    features: [
+      { en: "1 sales rep assigned for 2 days per week (8 days/month)", sw: "Mwakilishi mmoja wa mauzo kwa siku 2 kwa wiki (siku 8/mwezi)" },
+      { en: "Coverage of selected districts or ward", sw: "Uongozi wa wilaya au kata zilizochaguliwa" },
+      { en: "Distribution of 100 branded flyers per week", sw: "Ugavi wa vipeperushi 100 vya biashara kwa wiki" },
+      { en: "Collection of potential clients per week (5-10 per month)", sw: "Ukusanyaji wa wateja watarajiwa kwa wiki (5-10 kwa mwezi)" },
+      { en: "Weekly status reports to track feedback", sw: "Ripoti za kila wiki za kufuatilia maoni" }
+    ]
+  },
+  {
+    name: { en: "Growth", sw: "Ukuaji" },
+    subtitle: { en: "Neighborhood Impact", sw: "Athari ya Mtaani" },
+    price: "TZS 600,000",
+    period: { en: "per Month", sw: "kwa Mwezi" },
+    popular: true,
+    target: { en: "Businesses ready to expand reach and generate leads", sw: "Biashara zilizo tayari kupanua uwazi na kupata viongozi" },
+    features: [
+      { en: "2 trained sales reps assigned for 3 days/week (12 visits/month)", sw: "Wawakilishi 2 wa mauzo waliofunzwa kwa siku 3/wiki (ziara 12/mwezi)" },
+      { en: "Coverage of up to 5-8 districts/wards", sw: "Uongozi wa hadi wilaya/kata 5-8" },
+      { en: "Distribution of 200 branded flyers per week", sw: "Ugavi wa vipeperushi 200 vya biashara kwa wiki" },
+      { en: "Branded uniforms for the reps (to enhance brand presence)", sw: "Sare za biashara kwa wawakilishi (kuboresha uongozi wa biashara)" },
+      { en: "Contact collection (100+ prospects monthly)", sw: "Ukusanyaji wa anwani (wapenzi 100+ kwa mwezi)" },
+      { en: "Weekly performance reports - leads summary", sw: "Ripoti za utendaji wa kila wiki - muhtasari wa viongozi" }
+    ]
+  },
+  {
+    name: { en: "Premium", sw: "Bora" },
+    subtitle: { en: "City Domination", sw: "Utawala wa Jiji" },
+    price: "TZS 900,000 - 1,200,000",
+    period: { en: "per Month", sw: "kwa Mwezi" },
+    target: { en: "Established businesses seeking city-wide scale and dominance", sw: "Biashara zilizoimarika zinazotafuta ukuu wa jiji lote" },
+    features: [
+      { en: "3-4 uniformed sales reps, active 5 days/week", sw: "Wawakilishi 3-4 wa mauzo wenye sare, wakiwa hai siku 5/wiki" },
+      { en: "Coverage of entire Dar es Salaam, roofing zones", sw: "Uongozi wa Dar es Salaam nzima, maeneo ya mapaa" },
+      { en: "Distribution of up to 1,000 flyers/posters/month", sw: "Ugavi wa hadi vipeperushi/mabango 1,000/mwezi" },
+      { en: "Product demonstrations (for applicable businesses)", sw: "Maonyesho ya bidhaa (kwa biashara zinazofaa)" },
+      { en: "Monthly lead generation targets (100+ qualified prospects)", sw: "Malengo ya kila mwezi ya kupata viongozi (wapenzi 100+ wanaofaa)" },
+      { en: "Bi-weekly strategy calls with dedicated WhatsApp check-ins", sw: "Simu za mkakati kila wiki mbili na mahakikisho ya WhatsApp" },
+      { en: "Monthly performance meeting & campaign optimization", sw: "Mkutano wa utendaji wa kila mwezi na kuboresha kampeni" }
+    ]
+  }
+];
