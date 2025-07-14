@@ -30,8 +30,18 @@ import {
   Heart
 } from 'lucide-react';
 
+import {
+  pricingPlans,
+  process,
+  faqs,
+  currentPartners,
+  services,
+  heroStats,
+} from '@/app/components/door/data';
+import { useLanguage } from '@/context/LanguageContext';
+
 const DoorToDoorServices = () => {
-  const [language, setLanguage] = useState('en');
+  const {language} = useLanguage();
   const [activeTab, setActiveTab] = useState('overview');
   const [expandedFaq, setExpandedFaq] = useState(null);
   const [scrollY, setScrollY] = useState(0);
@@ -47,201 +57,6 @@ const DoorToDoorServices = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const heroStats = [
-    {
-      number: "95%",
-      label: { en: "Success Rate", sw: "Kiwango cha Mafanikio" }
-    },
-    {
-      number: "10K+",
-      label: { en: "Doors Reached", sw: "Milango Yaliyofikiwa" }
-    },
-    {
-      number: "500+",
-      label: { en: "Happy Clients", sw: "Wateja Wenye Furaha" }
-    },
-    {
-      number: "24/7",
-      label: { en: "Support", sw: "Msaada" }
-    }
-  ];
-
-  const services = [
-    {
-      icon: Target,
-      title: { en: "Lead Generation", sw: "Uongozaji wa Viongozi" },
-      description: { en: "Identify and qualify potential customers through strategic door-to-door campaigns", sw: "Tambua na uhakiki wateja watarajiwa kupitia kampeni za mkakati wa mlango hadi mlango" }
-    },
-    {
-      icon: Users,
-      title: { en: "Brand Awareness", sw: "Ufahamu wa Brand" },
-      description: { en: "Increase brand visibility and recognition in your target neighborhoods", sw: "Ongeza miwani ya brand na utambuzi katika mitaa yako ya lengo" }
-    },
-    {
-      icon: BarChart3,
-      title: { en: "Market Research", sw: "Utafiti wa Soko" },
-      description: { en: "Gather valuable insights about customer preferences and market trends", sw: "Kusanya maarifa muhimu kuhusu mapendeleo ya wateja na mienendo ya soko" }
-    },
-    {
-      icon: TrendingUp,
-      title: { en: "Sales Conversion", sw: "Kubadilisha Mauzo" },
-      description: { en: "Convert prospects into customers through personalized interactions", sw: "Badilisha matarajio kuwa wateja kupitia mwingiliano wa kibinafsi" }
-    }
-  ];
-
-  const process = [
-    {
-      step: "01",
-      title: { en: "Strategy Planning", sw: "Upangaji wa Mkakati" },
-      description: { en: "We analyze your target market and develop a customized door-to-door strategy", sw: "Tunachanganua soko lako la lengo na kuendeleza mkakati wa kipekee wa mlango hadi mlango" }
-    },
-    {
-      step: "02",
-      title: { en: "Team Training", sw: "Mafunzo ya Timu" },
-      description: { en: "Our professional team is trained on your products and brand messaging", sw: "Timu yetu ya kitaalamu inafunzwa kuhusu bidhaa zako na ujumbe wa brand" }
-    },
-    {
-      step: "03",
-      title: { en: "Campaign Execution", sw: "Utekelezaji wa Kampeni" },
-      description: { en: "Systematic door-to-door visits with real-time tracking and reporting", sw: "Ziara za mfumo wa mlango hadi mlango na ufuatiliaji wa wakati halisi na uripoti" }
-    },
-    {
-      step: "04",
-      title: { en: "Results Analysis", sw: "Uchambuzi wa Matokeo" },
-      description: { en: "Detailed analytics and insights to optimize future campaigns", sw: "Uchanganuzi wa kina na maarifa ya kuboresha kampeni za baadaye" }
-    }
-  ];
-
-  const currentPartners = [
-    {
-      company: "TechnoLink Solutions",
-      logo: Building,
-      industry: { en: "Technology", sw: "Teknolojia" },
-      products: [
-        {
-          name: { en: "Smart Home Security Systems", sw: "Mifumo ya Usalama wa Nyumbani wa Akili" },
-          icon: ShieldIcon,
-          description: { en: "Advanced security solutions with 24/7 monitoring", sw: "Suluhisho za usalama za hali ya juu na ufuatiliaji wa 24/7" }
-        },
-        {
-          name: { en: "High-Speed Internet Packages", sw: "Vifurushi vya Mtandao wa Kasi ya Juu" },
-          icon: Wifi,
-          description: { en: "Fiber optic internet with unlimited data", sw: "Mtandao wa fiber optic na data isiyopungua" }
-        },
-        {
-          name: { en: "Smart Home Automation", sw: "Utawala wa Nyumbani wa Akili" },
-          icon: Home,
-          description: { en: "Voice-controlled home automation systems", sw: "Mifumo ya utawala wa nyumbani inayodhibitiwa na sauti" }
-        }
-      ]
-    },
-    {
-      company: "PowerGrid Energy",
-      logo: Zap,
-      industry: { en: "Energy", sw: "Nishati" },
-      products: [
-        {
-          name: { en: "Solar Panel Installation", sw: "Usakinishaji wa Paneli za Jua" },
-          icon: Zap,
-          description: { en: "Residential solar energy solutions with 25-year warranty", sw: "Suluhisho za nishati ya jua za makazi na dhamana ya miaka 25" }
-        },
-        {
-          name: { en: "Battery Storage Systems", sw: "Mifumo ya Kuhifadhi Betri" },
-          description: { en: "Home energy storage for backup power", sw: "Kuhifadhi nishati ya nyumbani kwa nguvu za hiari" }
-        }
-      ]
-    },
-    {
-      company: "HealthFirst Medical",
-      logo: Heart,
-      industry: { en: "Healthcare", sw: "Huduma za Afya" },
-      products: [
-        {
-          name: { en: "Health Insurance Plans", sw: "Mipango ya Bima ya Afya" },
-          icon: Heart,
-          description: { en: "Comprehensive health coverage for families", sw: "Bima kamilifu ya afya kwa familia" }
-        },
-        {
-          name: { en: "Wellness Programs", sw: "Programu za Ustawi" },
-          description: { en: "Preventive healthcare and wellness services", sw: "Huduma za kuzuia magonjwa na ustawi" }
-        }
-      ]
-    },
-    {
-      company: "MobileConnect Tanzania",
-      logo: Smartphone,
-      industry: { en: "Telecommunications", sw: "Mawasiliano" },
-      products: [
-        {
-          name: { en: "Mobile Phone Plans", sw: "Mipango ya Simu za Mkononi" },
-          icon: Smartphone,
-          description: { en: "Unlimited calling and data packages", sw: "Vifurushi vya kupiga simu na data visivyopungua" }
-        },
-        {
-          name: { en: "Smartphone Devices", sw: "Vifaa vya Simu za Akili" },
-          description: { en: "Latest smartphones with flexible payment options", sw: "Simu za akili za hivi karibuni na chaguo za malipo za kubadilika" }
-        }
-      ]
-    }
-  ];
-
-  const faqs = [
-    {
-      question: { en: "How do you target the right neighborhoods?", sw: "Unavipi mitaa sahihi ya lengo?" },
-      answer: { en: "We use demographic data, market research, and your customer profiles to identify high-potential areas for maximum campaign effectiveness.", sw: "Tunatumia data za kidemografia, utafiti wa soko, na maelezo ya wateja wako kutambua maeneo yenye uwezekano mkubwa kwa ufanisi mkubwa wa kampeni." }
-    },
-    {
-      question: { en: "What training do your representatives receive?", sw: "Wawakilishi wako wanapata mafunzo gani?" },
-      answer: { en: "Our team undergoes comprehensive training on your products, brand values, communication techniques, and professional door-to-door etiquette.", sw: "Timu yetu inapitia mafunzo ya kina kuhusu bidhaa zako, maadili ya brand, mbinu za mawasiliano, na adabu za kitaalamu za mlango hadi mlango." }
-    },
-    {
-      question: { en: "How do you measure campaign success?", sw: "Unawezaje kupima mafanikio ya kampeni?" },
-      answer: { en: "We track key metrics including doors visited, leads generated, conversion rates, and provide detailed analytics reports with actionable insights.", sw: "Tunafuata vipimo muhimu ikiwa ni pamoja na milango iliyotembelewa, viongozi waliozalishwa, viwango vya ubadilishaji, na kutoa ripoti za uchanganuzi wa kina na maarifa ya kutenda." }
-    },
-    {
-      question: { en: "What industries do you serve?", sw: "Unatumikia viwanda gani?" },
-      answer: { en: "We serve various industries including retail, healthcare, technology, real estate, financial services, and local businesses of all sizes.", sw: "Tunatumikia viwanda mbalimbali ikiwa ni pamoja na rejareja, huduma za afya, teknolojia, mali isiyohamishika, huduma za kifedha, na biashara za ndani za ukubwa wote." }
-    }
-  ];
-
-  const pricingPlans = [
-    {
-      name: { en: "Starter", sw: "Mwanzo" },
-      price: "$299",
-      period: { en: "per campaign", sw: "kwa kampeni" },
-      features: [
-        { en: "Up to 100 doors", sw: "Hadi milango 100" },
-        { en: "Basic reporting", sw: "Ripoti ya msingi" },
-        { en: "Email support", sw: "Msaada wa barua pepe" },
-        { en: "2-day campaign", sw: "Kampeni ya siku 2" }
-      ]
-    },
-    {
-      name: { en: "Professional", sw: "Mtaalamu" },
-      price: "$799",
-      period: { en: "per campaign", sw: "kwa kampeni" },
-      popular: true,
-      features: [
-        { en: "Up to 500 doors", sw: "Hadi milango 500" },
-        { en: "Advanced analytics", sw: "Uchanganuzi wa kina" },
-        { en: "Phone & email support", sw: "Msaada wa simu na barua pepe" },
-        { en: "1-week campaign", sw: "Kampeni ya wiki 1" },
-        { en: "Lead qualification", sw: "Uhakiki wa viongozi" }
-      ]
-    },
-    {
-      name: { en: "Enterprise", sw: "Biashara" },
-      price: { en: "Custom", sw: "Maalum" },
-      period: { en: "pricing", sw: "bei" },
-      features: [
-        { en: "Unlimited doors", sw: "Milango isiyopungua" },
-        { en: "Custom reporting", sw: "Ripoti maalum" },
-        { en: "24/7 support", sw: "Msaada wa 24/7" },
-        { en: "Multi-week campaigns", sw: "Kampeni za wiki nyingi" },
-        { en: "Dedicated account manager", sw: "Meneja wa akaunti aliyejitolea" }
-      ]
-    }
-  ];
 
   const getLocalizedText = (textObj) => {
     if (!textObj) return '';
@@ -250,15 +65,8 @@ const DoorToDoorServices = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-900">
-      {/* Language Toggle */}
-      <div className="fixed top-4 right-4 z-50">
-        <button
-          onClick={() => setLanguage(language === 'en' ? 'sw' : 'en')}
-          className="px-4 py-2 bg-brand-gold/20 backdrop-blur-md rounded-lg border border-brand-gold/40 text-brand-goldLight hover:bg-brand-gold/30 transition-all shadow-gold"
-        >
-          {language === 'en' ? 'Kiswahili' : 'English'}
-        </button>
-      </div>
+    
+      
 
       {/* Hero Section */}
       <div className="relative overflow-hidden">
