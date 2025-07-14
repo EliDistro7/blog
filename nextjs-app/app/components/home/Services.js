@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DoorOpen, Smartphone, Globe, Users, ChevronRight, ExternalLink } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import Link from 'next/link';
 
 
 
@@ -351,18 +352,20 @@ const ServicesShowcase = () => {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <button
+                <Link
+                href={`/services/${currentService.id}`}
                   className={`flex-1 px-6 py-3 bg-gradient-to-r ${currentService.gradient} text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all flex items-center justify-center gap-3 transform hover:scale-105 hover:-translate-y-1`}
                 >
                   {language === 'en' ? 'Get Started' : 'Anza Sasa'}
                   <ExternalLink className="w-5 h-5" />
-                </button>
+                </Link>
                 
-                <button
+                <Link
+                href={`/services/${currentService.id}`}
                   className="flex-1 px-6 py-3 bg-white/10 backdrop-blur-md text-white font-bold rounded-xl hover:bg-white/20 transition-all border border-white/20 shadow-lg transform hover:scale-105 hover:-translate-y-1"
                 >
                   {language === 'en' ? 'Learn More' : 'Jifunze Zaidi'}
-                </button>
+                </Link>
               </div>
             </div>
           </div>

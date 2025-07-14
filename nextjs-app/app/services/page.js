@@ -1,34 +1,8 @@
-"use client";
-
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, Users, Globe, Share2, FileText, Package, Palette, ArrowRight, Star, Check } from 'lucide-react';
 
 const ServicesPage = () => {
   const [expandedService, setExpandedService] = useState(null);
-
-  const getServiceIconBg = (color) => {
-    const backgrounds = {
-      'brand-accent': 'bg-gradient-to-r from-indigo-500 to-indigo-600',
-      'brand-teal': 'bg-gradient-to-r from-teal-500 to-teal-600',
-      'brand-coral': 'bg-gradient-to-r from-orange-500 to-orange-600',
-      'brand-gold': 'bg-gradient-to-r from-yellow-500 to-yellow-600',
-      'brand-blue': 'bg-gradient-to-r from-blue-500 to-blue-600',
-      'brand-deep': 'bg-gradient-to-r from-slate-700 to-slate-800'
-    };
-    return backgrounds[color] || 'bg-gradient-to-r from-gray-500 to-gray-600';
-  };
-
-  const getServiceButtonBg = (color) => {
-    const backgrounds = {
-      'brand-accent': 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white',
-      'brand-teal': 'bg-gradient-to-r from-teal-500 to-teal-600 text-white',
-      'brand-coral': 'bg-gradient-to-r from-orange-500 to-orange-600 text-white',
-      'brand-gold': 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-white',
-      'brand-blue': 'bg-gradient-to-r from-blue-500 to-blue-600 text-white',
-      'brand-deep': 'bg-gradient-to-r from-slate-700 to-slate-800 text-white'
-    };
-    return backgrounds[color] || 'bg-gradient-to-r from-gray-500 to-gray-600 text-white';
-  };
 
   const services = [
     {
@@ -49,7 +23,7 @@ const ServicesPage = () => {
         "Immediate feedback collection",
         "Brand awareness expansion"
       ],
-      gradient: "from-indigo-100 to-orange-100"
+      gradient: "from-brand-accent/20 to-brand-coral/20"
     },
     {
       id: 2,
@@ -69,7 +43,7 @@ const ServicesPage = () => {
         "Scalable solutions",
         "Modern user experience"
       ],
-      gradient: "from-teal-100 to-blue-100"
+      gradient: "from-brand-teal/20 to-brand-blue/20"
     },
     {
       id: 3,
@@ -89,7 +63,7 @@ const ServicesPage = () => {
         "Lead generation",
         "Brand reputation management"
       ],
-      gradient: "from-orange-100 to-yellow-100"
+      gradient: "from-brand-coral/20 to-brand-gold/20"
     },
     {
       id: 4,
@@ -109,7 +83,7 @@ const ServicesPage = () => {
         "Increased success rates",
         "Time-saving solutions"
       ],
-      gradient: "from-yellow-100 to-indigo-100"
+      gradient: "from-brand-gold/20 to-brand-accent/20"
     },
     {
       id: 5,
@@ -129,7 +103,7 @@ const ServicesPage = () => {
         "Technical expertise",
         "Ongoing support"
       ],
-      gradient: "from-blue-100 to-teal-100"
+      gradient: "from-brand-blue/20 to-brand-teal/20"
     },
     {
       id: 6,
@@ -149,7 +123,7 @@ const ServicesPage = () => {
         "Customer recognition",
         "Brand value enhancement"
       ],
-      gradient: "from-slate-100 to-gray-100"
+      gradient: "from-brand-deep/20 to-brand-medium/20"
     }
   ];
 
@@ -196,7 +170,7 @@ const ServicesPage = () => {
                 <div className="relative p-8">
                   <div className="flex items-start justify-between mb-6">
                     <div className="flex items-center space-x-4">
-                      <div className={`p-4 rounded-xl shadow-icon ${getServiceIconBg(service.color)}`}>
+                      <div className={`p-4 rounded-xl bg-gradient-to-r from-${service.color} to-${service.color}/80 shadow-icon`}>
                         <IconComponent className="w-8 h-8 text-white" />
                       </div>
                       <div>
@@ -259,7 +233,7 @@ const ServicesPage = () => {
 
                   {/* Action Button */}
                   <div className="mt-6 pt-6 border-t border-brand-foam">
-                    <button className={`w-full font-semibold py-3 px-6 rounded-xl hover:shadow-glow transition-all duration-300 flex items-center justify-center group ${getServiceButtonBg(service.color)}`}>
+                    <button className={`w-full bg-gradient-to-r from-${service.color} to-${service.color}/80 text-white font-semibold py-3 px-6 rounded-xl hover:shadow-glow transition-all duration-300 flex items-center justify-center group`}>
                       Learn More
                       <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
                     </button>
@@ -281,10 +255,10 @@ const ServicesPage = () => {
             Let's discuss how our comprehensive services can help you achieve your business goals and drive sustainable growth.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-yellow-500 hover:bg-yellow-600 text-slate-800 font-semibold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
+            <button className="bg-brand-gold hover:bg-brand-goldDark text-brand-dark font-semibold py-4 px-8 rounded-xl transition-all duration-300 shadow-gold hover:shadow-glow">
               Get Started Today
             </button>
-            <button className="border-2 border-slate-200 text-slate-200 hover:bg-slate-200 hover:text-slate-800 font-semibold py-4 px-8 rounded-xl transition-all duration-300">
+            <button className="border-2 border-brand-foam text-brand-foam hover:bg-brand-foam hover:text-brand-dark font-semibold py-4 px-8 rounded-xl transition-all duration-300">
               Schedule Consultation
             </button>
           </div>
