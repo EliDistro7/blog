@@ -175,18 +175,7 @@ const ServicesShowcase = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Language Toggle for Demo */}
-      <div className="absolute top-4 right-4 z-30">
-        <button
-          onClick={() => {
-            const { setLanguage } = useLanguage();
-            setLanguage(language === 'en' ? 'sw' : 'en');
-          }}
-          className="bg-white/20 backdrop-blur-md text-white px-4 py-2 rounded-lg border border-white/30 hover:bg-white/30 transition-all"
-        >
-          {language === 'en' ? 'SW' : 'EN'}
-        </button>
-      </div>
+   
 
       {/* Dynamic Background Image */}
       <div className="absolute inset-0">
