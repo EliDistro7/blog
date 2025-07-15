@@ -10,7 +10,12 @@ import {content, departmentHeads} from '@/app/components/team/data';
 export default function TeamPage() {
   const { language } = useLanguage();
 
- 
+  const handlePlanClick = () => {
+    const message = language === 'en'? `Hi! I'm interested in your services. Can you provide more details?` : `Hujambo! Ninapendezwa na huduma zenu za masoko. Je, unaweza kutoa maelezo zaidi`;
+    
+      const whatsappUrl = `https://wa.me/255745787370?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
   
 
   return (
@@ -129,13 +134,13 @@ export default function TeamPage() {
           <p className="text-xl text-brand-gold mb-8 max-w-2xl mx-auto">
             {content[language].cta.subtitle}
           </p>
-          <Link
-            href="/contact" 
+          <button
+            onClick={handlePlanClick}
             className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-brand-gold to-brand-goldLight text-gray-900 font-bold px-8 py-4 rounded-xl shadow-gold hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
           >
             <Mail className="w-5 h-5" />
             {content[language].cta.button}
-          </Link>
+          </button>
         </div>
       </section>
     </div>
