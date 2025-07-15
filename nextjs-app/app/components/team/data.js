@@ -231,7 +231,7 @@
         en: "Full stack developer with expertise in modern web technologies. Architect of our digital platforms and technical vision.",
         sw: "Mtaalamu wa maendeleo ya teknolojia za wavuti za kisasa. Mbunifu wa majukwaa yetu ya kidijitali na maono ya kiteknolojia."
       },
-      image: '/team/bari4.png',
+      image: '/team/bari4.jpeg',
       tzExperience: {
         en: "Building Tanzania's digital future",
         sw: "Anaweka msingi wa mustakabali wa kidijitali wa Tanzania"
