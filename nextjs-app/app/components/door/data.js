@@ -16,7 +16,7 @@ import {
   Utensils,
   Wheat,
   Leaf,
-  Seed,
+ 
   Truck,
   Sparkles,
   Milk,
