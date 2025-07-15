@@ -73,22 +73,39 @@ const ServicesAndProcess = () => {
             </p>
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            {process.map((step, index) => (
-              <div key={index} className="flex items-start mb-12 last:mb-0">
-                <div className="flex-shrink-0 w-20 h-20 bg-gradient-to-r from-brand-gold to-brand-goldLight rounded-full flex items-center justify-center text-gray-900 font-bold text-2xl shadow-gold">
-                  {step.step}
-                </div>
-                <div className="ml-8 flex-1">
-                  <h3 className="text-2xl font-bold text-brand-goldLight mb-4">
-                    {getLocalizedText(step.title)}
-                  </h3>
-                  <p className="text-brand-gold/80 leading-relaxed">
-                    {getLocalizedText(step.description)}
-                  </p>
+          <div className="max-w-7xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              {/* Process Steps */}
+              <div className="space-y-8">
+                {process.map((step, index) => (
+                  <div key={index} className="flex items-start">
+                    <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-r from-brand-gold to-brand-goldLight rounded-full flex items-center justify-center text-gray-900 font-bold text-xl shadow-gold">
+                      {step.step}
+                    </div>
+                    <div className="ml-6 flex-1">
+                      <h3 className="text-xl font-bold text-brand-goldLight mb-3">
+                        {getLocalizedText(step.title)}
+                      </h3>
+                      <p className="text-brand-gold/80 leading-relaxed">
+                        {getLocalizedText(step.description)}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Image */}
+              <div className="lg:order-last">
+                <div className="relative">
+                  <img 
+                    src="/images/door.jpeg" 
+                    alt="Door-to-door marketing process"
+                    className="w-full h-auto rounded-2xl shadow-2xl border border-brand-gold/30"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/30 to-transparent rounded-2xl"></div>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </div>

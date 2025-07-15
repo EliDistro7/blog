@@ -26,6 +26,7 @@ import {
   Quote,
   BarChart3,
   Shield,
+  Seed,
   Award,
   ChevronDown,
   ChevronUp,

@@ -13,6 +13,16 @@ const PartnersAndPricing = () => {
     return textObj[language] || textObj.en;
   };
 
+  const handlePlanClick = (planName) => {
+    const message = getLocalizedText({
+      en: `Hi! I'm interested in the ${getLocalizedText(planName)} plan for door-to-door marketing services. Can you provide more details?`,
+      sw: `Hujambo! Ninapendezwa na mpango wa ${getLocalizedText(planName)} kwa huduma za uuzaji wa mlango hadi mlango. Je, unaweza kutoa maelezo zaidi?`
+    });
+    
+    const whatsappUrl = `https://wa.me/255745787370?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   return (
     <>
       {/* Current Partners Section */}
@@ -128,11 +138,14 @@ const PartnersAndPricing = () => {
                   ))}
                 </ul>
 
-                <button className={`w-full py-3 rounded-xl font-bold transition-all shadow-gold ${
-                  plan.popular 
-                    ? 'bg-gradient-to-r from-brand-gold to-brand-goldLight text-gray-900 hover:shadow-2xl' 
-                    : 'bg-brand-gold/10 text-brand-goldLight border border-brand-gold/40 hover:bg-brand-gold/20'
-                }`}>
+                <button 
+                  onClick={() => handlePlanClick(plan.name)}
+                  className={`w-full py-3 rounded-xl font-bold transition-all shadow-gold hover:scale-[1.02] ${
+                    plan.popular 
+                      ? 'bg-gradient-to-r from-brand-gold to-brand-goldLight text-gray-900 hover:shadow-2xl' 
+                      : 'bg-brand-gold/10 text-brand-goldLight border border-brand-gold/40 hover:bg-brand-gold/20'
+                  }`}
+                >
                   {getLocalizedText({
                     en: "Choose Plan",
                     sw: "Chagua Mpango"
