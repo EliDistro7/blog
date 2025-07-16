@@ -19,7 +19,7 @@ const HeroSection = ({ language, heroStats }) => {
           {language === 'en' ? 'Social Presence' : 'Uongozi Wako wa Kijamii'}
         </h1>
         
-        <p className="text-xl md:text-2xl text-brand-light mb-8 max-w-3xl mx-auto">
+        <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
           {language === 'en' 
             ? 'Elevate your brand with professional social media management, stunning content creation, and data-driven strategies that deliver results.'
             : 'Inua brand yako na uongozi wa kitaalamu wa mitandao ya kijamii, uundaji wa maudhui ya kupendeza, na mikakati ya data inayotoa matokeo.'
@@ -39,7 +39,7 @@ const HeroSection = ({ language, heroStats }) => {
           {heroStats.map((stat, index) => (
             <div key={index} className="text-center">
               <div className="text-3xl md:text-4xl font-bold text-brand-gold mb-2">{stat.number}</div>
-              <div className="text-brand-light text-sm">{stat.label[language]}</div>
+              <div className="text-gray-300 text-sm">{stat.label[language]}</div>
             </div>
           ))}
         </div>

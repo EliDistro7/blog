@@ -10,7 +10,7 @@ const FAQSection = ({ language, faqs, expandedFaq, toggleFaq }) => {
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
             {language === 'en' ? 'Frequently Asked Questions' : 'Maswali Yanayoulizwa Mara kwa Mara'}
           </h2>
-          <p className="text-brand-light text-lg max-w-2xl mx-auto">
+          <p className="text-gray-300 text-lg max-w-2xl mx-auto">
             {language === 'en' 
               ? 'Get answers to common questions about our services'
               : 'Pata majibu ya maswali ya kawaida kuhusu huduma zetu'
@@ -34,7 +34,7 @@ const FAQSection = ({ language, faqs, expandedFaq, toggleFaq }) => {
               </button>
               {expandedFaq === index && (
                 <div className="px-8 pb-6">
-                  <p className="text-brand-light leading-relaxed">{faq.answer[language]}</p>
+                  <p className="text-gray-300 leading-relaxed">{faq.answer[language]}</p>
                 </div>
               )}
             </div>

@@ -9,7 +9,7 @@ const ProcessSection = ({ language, process }) => {
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
             {language === 'en' ? 'Our Process' : 'Mchakato Wetu'}
           </h2>
-          <p className="text-brand-light text-lg max-w-2xl mx-auto">
+          <p className="text-gray-300 text-lg max-w-2xl mx-auto">
             {language === 'en' 
               ? 'A proven 5-step approach to social media success'
               : 'Njia iliyothibitishwa ya hatua 5 za mafanikio ya mitandao ya kijamii'
@@ -25,7 +25,7 @@ const ProcessSection = ({ language, process }) => {
               </div>
               <div className="flex-1">
                 <h3 className="text-2xl font-semibold mb-4 text-white">{step.title[language]}</h3>
-                <p className="text-brand-light leading-relaxed">{step.description[language]}</p>
+                <p className="text-gray-300 leading-relaxed">{step.description[language]}</p>
               </div>
             </div>
           ))}
