@@ -4,7 +4,7 @@ import { CheckCircle } from 'lucide-react';
 
 const PricingSection = ({ language, pricingPlans }) => {
   return (
-    <section className="py-20 px-4 bg-brand-deep">
+    <section className="py-20 px-0 bg-brand-deep">
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
@@ -18,7 +18,7 @@ const PricingSection = ({ language, pricingPlans }) => {
           </p>
         </div>
         
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl ">
           {pricingPlans.map((plan, index) => (
             <div key={index} className={`bg-brand-medium p-8 rounded-xl border-2 transition-all duration-300 hover:transform hover:scale-105 ${
               plan.popular 

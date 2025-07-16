@@ -3,7 +3,7 @@ import React from 'react';
 
 const ProcessSection = ({ language, process }) => {
   return (
-    <section className="py-20 px-4 bg-brand-dark">
+    <section className="py-20 px-0 bg-brand-dark">
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">

@@ -250,7 +250,7 @@ const ServicesSection = ({ language, services }) => {
   };
 
   return (
-    <section className="py-20 px-4 bg-brand-deep relative overflow-hidden">
+    <section className="py-20 px-0 bg-brand-deep relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-10 left-10 w-20 h-20 rounded-full bg-brand-gold"></div>

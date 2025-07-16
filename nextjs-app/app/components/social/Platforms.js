@@ -4,8 +4,8 @@ import { CheckCircle } from 'lucide-react';
 
 const PlatformsSection = ({ language, platforms }) => {
   return (
-    <section className="py-20 px-4 bg-brand-deep">
-      <div className="container mx-auto">
+    <section className="py-20 px-0 bg-brand-deep">
+      <div className="container">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
             {language === 'en' ? 'Platforms We Master' : 'Mitandao Tunayoshinda'}
