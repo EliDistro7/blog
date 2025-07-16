@@ -205,16 +205,16 @@ export const currentClients = [
   {
     company: "AMKA KIJANA",
     logo: Monitor,
-    image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop",
+    image: "/images/kijana.webp",
     industry: { en: "Reproductive Health Education", sw: "Elimu ya Afya ya Uzazi" },
-    platforms: ["Instagram", "LinkedIn", "Twitter"],
+    platforms: ["Instagram"],
     socialLinks: {
-      instagram: "https://instagram.com/amkakijana",
-      linkedin: "https://linkedin.com/company/amka-kijana",
-      twitter: "https://twitter.com/amkakijana"
+      instagram: "https://www.instagram.com/amka.kijana/",
+//linkedin: "https://linkedin.com/company/amka-kijana",
+    //  youtube: "https://twitter.com/amkakijana"
     },
     results: {
-      followers: "+15K",
+      followers: "+1K",
       engagement: "+250%",
       leads: "+180%"
     },
@@ -232,107 +232,103 @@ export const currentClients = [
     ]
   },
   {
-    company: "SAFARI ADVENTURES TZ",
+    company: "FH AGRO",
     logo: Camera,
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=400&h=300&fit=crop",
-    industry: { en: "Tourism & Travel", sw: "Utalii na Usafiri" },
-    platforms: ["Instagram", "Facebook", "TikTok"],
+    image: "/images/fh.webp",
+    industry: { en: "Agro-Business", sw: "Kilimo Biashara" },
+    platforms: ["Instagram"],
     socialLinks: {
-      instagram: "https://instagram.com/safariadventures_tz",
-      facebook: "https://facebook.com/safariadventures.tz",
-      tiktok: "https://tiktok.com/@safariadventures_tz"
+      instagram: "https://www.instagram.com/fhagro_tz/",
     },
     results: {
-      followers: "+25K",
+      followers: "+25",
       engagement: "+320%",
       bookings: "+150%"
     },
     services: [
       {
-        name: { en: "Visual Storytelling", sw: "Uhadithia wa Kuona" },
+        name: { en: "Visual Storytelling", sw: "Content za story kwa njia ya video" },
         icon: Video,
-        description: { en: "Stunning travel photography and destination videos", sw: "Upigaji picha wa kusafiri na video za makazi zenye kuvutia" }
+        description: { en: "Stunning story telling videos", sw: "Video za kuvutia kuhusu ubora wa vifaa vya FH Agro" }
       },
       {
         name: { en: "Influencer Partnerships", sw: "Ushirikiano wa Washawishi" },
         icon: Users,
-        description: { en: "Collaborations with travel influencers and content creators", sw: "Ushirikiano na washawishi wa kusafiri na waundaji wa maudhui" }
+        description: { en: "Collaborations with public influencers and content creators", sw: "Ushirikiano na watu wenye washawishi na waundaji wa maudhui" }
       }
     ]
   },
   {
-    company: "MAMA LUCY'S KITCHEN",
+    company: "A&F Advisory LTD",
     logo: Utensils,
-    image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop",
+    image: "/images/af.webp",
     industry: { en: "Food & Restaurant", sw: "Chakula na Mgahawa" },
-    platforms: ["Instagram", "Facebook", "TikTok"],
+    platforms: ["Instagram"],
     socialLinks: {
-      instagram: "https://instagram.com/mamalucyskitchen",
-      facebook: "https://facebook.com/mamalucyskitchen",
-      tiktok: "https://tiktok.com/@mamalucyskitchen"
+      instagram: "https://www.instagram.com/af_advisory_ltd/",
+   
+    
     },
     results: {
-      followers: "+12K",
-      engagement: "+280%",
-      orders: "+200%"
+      followers: "+20",
+      engagement: "+80%",
+      orders: "+20%"
     },
     services: [
       {
-        name: { en: "Food Photography", sw: "Upigaji Picha wa Chakula" },
+        name: { en: "Accounting & Legal services", sw: "Uhasibu na Huduma za kisheria" },
         icon: Camera,
-        description: { en: "Professional food styling and photography", sw: "Upigaji picha wa chakula wa kitaalamu na urembo" }
+        description: { en: "Professional accounting and Legal services education directing them to use A&F Advisory LTD guidelines", sw: "Huduma zenye weledi za kihasibu na kisheria" }
       },
       {
-        name: { en: "Recipe Content", sw: "Maudhui ya Mapishi" },
+        name: { en: "Educational content about compliance", sw: "Maudhui ya kuelimisha kuhusu wafanya biashara wanavyoweza kufuata sheria huku kwa kuwatumia A & F LTD" },
         icon: FileText,
-        description: { en: "Engaging recipe videos and cooking tutorials", sw: "Video za mapishi zinazovutia na mafunzo ya upishi" }
+        description: { en: "Engaging advisory videos ", sw: "Video za kuelimisha na kushauri zinazovutia" }
       }
     ]
   },
   {
-    company: "FIT LIFE GYM",
+    company: "BabyStuff_TZ",
     logo: Dumbbell,
-    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop",
-    industry: { en: "Health & Fitness", sw: "Afya na Mazoezi" },
+    image: "/images/kids.webp",
+    industry: { en: "Kid's clothes", sw: "Nguo za Watoto" },
     platforms: ["Instagram", "YouTube", "TikTok"],
     socialLinks: {
-      instagram: "https://instagram.com/fitlifegym_tz",
-      youtube: "https://youtube.com/c/fitlifegym",
-      tiktok: "https://tiktok.com/@fitlifegym_tz"
+      instagram: "https://www.instagram.com/babystuff_tz",
+    
     },
     results: {
-      followers: "+18K",
+      followers: "+2K",
       engagement: "+300%",
       memberships: "+120%"
     },
     services: [
       {
-        name: { en: "Workout Content", sw: "Maudhui ya Mazoezi" },
+        name: { en: "Sales offer Content", sw: "Maudhui ya ofa za mauzo" },
         icon: PlayCircle,
-        description: { en: "Exercise videos and fitness tips", sw: "Video za mazoezi na vidokezo vya afya" }
+        description: { en: "Sales videos and offer tips", sw: "Video za mauzo na vidokezo vya bidhaa mpya" }
       },
       {
-        name: { en: "Transformation Stories", sw: "Hadithi za Mabadiliko" },
+        name: { en: "Transformation Stories", sw: "Stori za Mabadiliko " },
         icon: TrendingUp,
-        description: { en: "Client success stories and testimonials", sw: "Hadithi za mafanikio ya wateja na ushahidi" }
+        description: { en: "Client success stories and testimonials", sw: "Stori za mafanikio kutoka kwa wateja na ushahidi" }
       }
     ]
   },
   {
-    company: "ELEGANCE FASHION",
+    company: "PICHAZANGU STORE",
     logo: Shirt,
-    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop",
-    industry: { en: "Fashion & Retail", sw: "Mitindo na Uuzaji" },
-    platforms: ["Instagram", "Facebook", "TikTok"],
+    image: "/images/pichazangu.jpg",
+    industry: { en: "Media & Storage", sw: "Media na Storage" },
+    platforms: ["Instagram"],
     socialLinks: {
-      instagram: "https://instagram.com/elegancefashion_tz",
-      facebook: "https://facebook.com/elegancefashion.tz",
-      tiktok: "https://tiktok.com/@elegancefashion_tz"
+      instagram: "https://www.instagram.com/pichazangu.store/",
+    
     },
     results: {
-      followers: "+22K",
+      followers: "+1K",
       engagement: "+350%",
-      sales: "+180%"
+      sales: "+130%"
     },
     services: [
       {

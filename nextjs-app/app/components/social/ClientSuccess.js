@@ -50,13 +50,13 @@ const ClientSuccessSection = ({ language, currentClients }) => {
             return (
               <div key={index} className="bg-brand-medium rounded-xl border border-brand-gold/10 hover:border-brand-gold/30 transition-all duration-300 overflow-hidden">
                 {/* Client Image */}
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-96 overflow-hidden">
                   <img 
                     src={client.image} 
                     alt={client.company}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/60 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/20 to-transparent" />
                 </div>
                 
                 <div className="p-8">
@@ -115,13 +115,7 @@ const ClientSuccessSection = ({ language, currentClients }) => {
                       );
                     })}
                   </div>
-                  
-                  {/* View Profile Button */}
-                  <div className="mt-4">
-                    <button className="w-full bg-brand-gold/10 text-brand-gold border border-brand-gold/30 px-4 py-2 rounded-lg hover:bg-brand-gold hover:text-brand-dark transition-all duration-300">
-                      {language === 'en' ? 'View Success Story' : 'Ona Hadithi ya Mafanikio'}
-                    </button>
-                  </div>
+                 
                 </div>
               </div>
             );
