@@ -11,7 +11,7 @@ const PortfolioSection = ({ portfolioProjects }) => {
               Our Portfolio
             </h2>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Discover the websites and applications we've built for our clients
+              Discover the websites and applications we built for our clients
             </p>
           </div>
 
