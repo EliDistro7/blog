@@ -101,21 +101,13 @@ export default function Header() {
   ]
 
   const navItems = [
+    
     {
-      name: "Portfolio",
-      path: "/portfolio",
-      icon: <Share2 className="w-5 h-5" />
-    },
-    {
-      name: "Our Team",
+      name: "About Us",
       path: "/team",
       icon: <Users className="w-5 h-5" />
     },
-    {
-      name: "About Us",
-      path: "/about",
-      icon: <MessageCircle className="w-5 h-5" />
-    }
+  
   ]
 
   return (

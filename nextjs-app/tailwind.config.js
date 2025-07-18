@@ -4,7 +4,7 @@ import plugin from 'tailwindcss/plugin';
 
 export default {
   content: ["./app/**/*.{js, jsx,ts,tsx}", , "./sanity/**/*.{ts,tsx}"],
-  theme: {
+ theme: {
     container: {
       center: true,
       padding: "2rem",
@@ -102,7 +102,7 @@ brand: {
 
      
     },
-  },
+  }, 
   plugins: [
     typography,
     require('tailwind-clip-path'),
