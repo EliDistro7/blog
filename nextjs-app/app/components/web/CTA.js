@@ -11,7 +11,7 @@ const CTASection = () => {
             Ready to Start Your Project?
           </h2>
           <p className="text-xl text-gray-300 mb-8">
-            Let's discuss your vision and create something amazing together
+            Lets discuss your vision and create something amazing together
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
