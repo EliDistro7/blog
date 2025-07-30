@@ -26,7 +26,7 @@ import {
   Quote,
   BarChart3,
   Shield,
-  Seed,
+
   Award,
   ChevronDown,
   ChevronUp,
@@ -156,7 +156,7 @@ export const currentPartners = [
       },
       {
         name: { en: "Beans (Various)", sw: "Maharage (Aina Mbalimbali)" },
-        icon: Seed,
+        icon: Wheat,
         description: { en: "Different varieties of beans including Rosecoco", sw: "Aina mbalimbali za maharage ikiwa ni pamoja na Rosecoco" }
       }
     ]
