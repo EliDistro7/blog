@@ -395,7 +395,7 @@ const TestimonialsSection = ({ language, testimonials }) => (
                 <Star key={i} className="w-5 h-5 text-brand-gold fill-current" />
               ))}
             </div>
-            <p className="text-brand-foam mb-6 italic">"{testimonial.comment[language]}"</p>
+            <p className="text-brand-foam mb-6 italic">{testimonial.comment[language]}</p>
             <div>
               <div className="font-bold text-brand-goldLight">{testimonial.name}</div>
               <div className="text-brand-light text-sm">{testimonial.company}</div>
