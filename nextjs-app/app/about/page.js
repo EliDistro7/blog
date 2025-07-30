@@ -2,8 +2,10 @@
 
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, Users, Globe, Share2, FileText, Package, Palette, ArrowRight, Star, Check } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
-const ServicesPage = () => {
+
+const AboutPage = () => {
   const [expandedService, setExpandedService] = useState(null);
 
   const getServiceIconBg = (color) => {
@@ -303,4 +305,4 @@ const ServicesPage = () => {
   );
 };
 
-export default ServicesPage;
+export default AboutPage;
