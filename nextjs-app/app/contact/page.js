@@ -39,10 +39,9 @@ export default function ContactPage() {
         services: [
           { value: "", label: "Select a service" },
           { value: "web", label: "Web Design" },
-          { value: "catering", label: "Catering Services" },
+     
           { value: "social", label: "Social Media" },
-          { value: "mc", label: "MC Services" },
-          { value: "portfolio", label: "Portfolio Showcase" },
+         
           { value: "team", label: "Team Services" }
         ],
         submit: "Send Inquiry"
@@ -56,24 +55,14 @@ export default function ContactPage() {
             email: "web@futureholders.co.tz",
             phone: "+255 789 111 111"
           },
-          {
-            title: "Catering Services",
-            details: "For event catering and culinary inquiries",
-            email: "catering@futureholders.co.tz",
-            phone: "+255 789 222 222"
-          },
+      
           {
             title: "Social Media",
             details: "For digital marketing and brand growth",
             email: "social@futureholders.co.tz",
             phone: "+255 789 333 333"
           },
-          {
-            title: "MC Services",
-            details: "For event hosting and entertainment bookings",
-            email: "events@futureholders.co.tz",
-            phone: "+255 789 444 444"
-          }
+       
         ]
       },
       companyContacts: {
@@ -81,19 +70,11 @@ export default function ContactPage() {
         items: [
           {
             title: "General Inquiries",
-            email: "info@futureholders.co.tz",
-            phone: "+255 789 000 000"
+            email: "info@futureholders.com",
+            phone: "+255 745 787 370"
           },
-          {
-            title: "Careers",
-            email: "careers@futureholders.co.tz",
-            phone: "+255 789 555 555"
-          },
-          {
-            title: "Portfolio Showcase",
-            email: "portfolio@futureholders.co.tz",
-            phone: "+255 789 666 666"
-          }
+      
+        
         ]
       },
       cta: {
@@ -139,24 +120,14 @@ export default function ContactPage() {
             email: "web@futureholders.co.tz",
             phone: "+255 789 111 111"
           },
-          {
-            title: "Huduma za Upishi",
-            details: "Kwa upishi wa hafla na maswali ya upishi",
-            email: "catering@futureholders.co.tz",
-            phone: "+255 789 222 222"
-          },
+         
           {
             title: "Mitandao ya Kijamii",
             details: "Kwa uuzaji wa kidijitali na ukuaji wa chapa",
             email: "social@futureholders.co.tz",
             phone: "+255 789 333 333"
           },
-          {
-            title: "Huduma za MC",
-            details: "Kwa uandaa wa matukio na uhifadhi wa burudani",
-            email: "events@futureholders.co.tz",
-            phone: "+255 789 444 444"
-          }
+     
         ]
       },
       companyContacts: {
@@ -164,7 +135,7 @@ export default function ContactPage() {
         items: [
           {
             title: "Maswali ya Jumla",
-            email: "info@futureholders.co.tz",
+            email: "info@futureholders.com",
             phone: "+255 789 000 000"
           },
           {
@@ -190,100 +161,102 @@ export default function ContactPage() {
     }
   };
 
-  // Service contacts with icons and colors
+  // Service contacts with icons and colors (updated for dark/gold theme)
   const serviceContacts = content[language].serviceContacts.items.map((item, index) => {
     const icons = [
-      <Camera key='camera-icon' className="w-5 h-5 text-brand-accent" />,
-      <Utensils key='utensils-icon' className="w-5 h-5 text-brand-coral" />,
-      <Share2 key='shaare-2' className="w-5 h-5 text-brand-teal" />,
-      <Mic2 key='mic2' className="w-5 h-5 text-brand-foam" />
+      <Camera key='camera-icon' className="w-5 h-5 text-brand-gold" />,
+      <Utensils key='utensils-icon' className="w-5 h-5 text-brand-goldLight" />,
+      <Share2 key='share-2' className="w-5 h-5 text-brand-gold" />,
+      <Mic2 key='mic2' className="w-5 h-5 text-brand-goldLight" />
     ];
     const colors = [
-      { bg: "bg-brand-accent/10", border: "border-brand-accent/30" },
-      { bg: "bg-brand-coral/10", border: "border-brand-coral/30" },
-      { bg: "bg-brand-teal/10", border: "border-brand-teal/30" },
-      { bg: "bg-brand-foam/10", border: "border-brand-foam/30" }
+      { bg: "bg-brand-gold/10", border: "border-brand-gold/30" },
+      { bg: "bg-brand-goldLight/10", border: "border-brand-goldLight/30" },
+      { bg: "bg-brand-gold/10", border: "border-brand-gold/30" },
+      { bg: "bg-brand-goldLight/10", border: "border-brand-goldLight/30" }
     ];
     return { ...item, icon: icons[index], ...colors[index] };
   });
 
   return (
-    <div className={`min-h-screen ${sourceSans.variable} font-sans bg-brand-foam text-brand-dark`}>
+    <div className={`min-h-screen ${sourceSans.variable} font-sans bg-brand-dark text-white`}>
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-brand-dark to-brand-blue py-32 text-center">
+      <div className="relative bg-gradient-to-br from-brand-dark via-brand-deep to-brand-medium py-32 text-center">
         <div className="absolute inset-0 opacity-10 bg-[url('/images/circuit-pattern.svg')] bg-[size:1200px]"></div>
         <div className="container relative z-10 px-4">
-          <h1 className={`text-4xl md:text-6xl font-bold ${baskerville.variable} font-serif text-white mb-6`}>
+          <h1 className={`text-4xl md:text-6xl font-bold ${baskerville.variable} font-serif text-brand-gold mb-6`}>
             {content[language].hero.title}
           </h1>
-          <p className="text-xl text-brand-foam/90 max-w-3xl mx-auto">
+          <p className="text-xl text-brand-goldLight/90 max-w-3xl mx-auto">
             {content[language].hero.subtitle}
           </p>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-brand-foam clip-path-wave"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-brand-dark clip-path-wave"></div>
       </div>
 
       {/* Contact Content */}
       <div className="container py-20 px-4">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
           {/* Contact Form */}
-          <div className="bg-white rounded-xl shadow-depth p-8 border border-brand-foam/20">
-            <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-brand-dark mb-6`}>
+          <div className="bg-brand-deep rounded-xl shadow-gold border border-brand-gold/20 p-8">
+            <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-brand-gold mb-6`}>
               {content[language].form.title}
             </h2>
             <form className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-brand-dark font-medium mb-2">
+                  <label htmlFor="name" className="block text-brand-goldLight font-medium mb-2">
                     {content[language].form.labels.name}
                   </label>
                   <input 
                     type="text" 
                     id="name" 
-                    className="w-full px-4 py-3 rounded-lg border border-brand-foam/30 focus:ring-2 focus:ring-brand-blue focus:border-transparent"
+                    className="w-full px-4 py-3 rounded-lg bg-brand-medium border border-brand-gold/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-brand-gold focus:border-transparent"
                     required
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-brand-dark font-medium mb-2">
+                  <label htmlFor="email" className="block text-brand-goldLight font-medium mb-2">
                     {content[language].form.labels.email}
                   </label>
                   <input 
                     type="email" 
                     id="email" 
-                    className="w-full px-4 py-3 rounded-lg border border-brand-foam/30 focus:ring-2 focus:ring-brand-blue focus:border-transparent"
+                    className="w-full px-4 py-3 rounded-lg bg-brand-medium border border-brand-gold/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-brand-gold focus:border-transparent"
                     required
                   />
                 </div>
               </div>
               <div>
-                <label htmlFor="service" className="block text-brand-dark font-medium mb-2">
+                <label htmlFor="service" className="block text-brand-goldLight font-medium mb-2">
                   {content[language].form.labels.service}
                 </label>
                 <select 
                   id="service" 
-                  className="w-full px-4 py-3 rounded-lg border border-brand-foam/30 focus:ring-2 focus:ring-brand-blue focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-lg bg-brand-medium border border-brand-gold/30 text-white focus:ring-2 focus:ring-brand-gold focus:border-transparent"
                 >
                   {content[language].form.services.map((service, index) => (
-                    <option key={`${index}-option`} value={service.value}>{service.label}</option>
+                    <option key={`${index}-option`} value={service.value} className="bg-brand-medium text-white">
+                      {service.label}
+                    </option>
                   ))}
                 </select>
               </div>
               <div>
-                <label htmlFor="message" className="block text-brand-dark font-medium mb-2">
+                <label htmlFor="message" className="block text-brand-goldLight font-medium mb-2">
                   {content[language].form.labels.message}
                 </label>
                 <textarea 
                   id="message" 
                   rows={5} 
-                  className="w-full px-4 py-3 rounded-lg border border-brand-foam/30 focus:ring-2 focus:ring-brand-blue focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-lg bg-brand-medium border border-brand-gold/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-brand-gold focus:border-transparent"
                   placeholder={content[language].form.labels.placeholder}
                   required
                 ></textarea>
               </div>
               <button 
                 type="submit" 
-                className="flex items-center justify-center gap-2 px-8 py-4 bg-brand-blue hover:bg-brand-accent text-white font-bold rounded-lg transition-all duration-300 shadow-depth hover:shadow-glow"
+                className="flex items-center justify-center gap-2 px-8 py-4 bg-brand-gold hover:bg-brand-goldLight text-brand-dark font-bold rounded-lg transition-all duration-300 shadow-gold hover:shadow-glow"
               >
                 <Send className="w-5 h-5" />
                 {content[language].form.submit}
@@ -293,34 +266,34 @@ export default function ContactPage() {
 
           {/* Service Contacts */}
           <div className="space-y-6">
-            <div className="bg-white rounded-xl shadow-depth p-6 border border-brand-foam/20">
-              <h2 className={`text-2xl font-bold ${baskerville.variable} font-serif text-brand-dark mb-6`}>
+            <div className="bg-brand-deep rounded-xl shadow-gold border border-brand-gold/20 p-6">
+              <h2 className={`text-2xl font-bold ${baskerville.variable} font-serif text-brand-gold mb-6`}>
                 {content[language].serviceContacts.title}
               </h2>
               <div className="space-y-4">
                 {serviceContacts.map((service, index) => (
                   <div 
                     key={`${index}-service-contacts`} 
-                    className={`p-4 rounded-lg ${service.bg} border ${service.border}`}
+                    className={`p-4 rounded-lg ${service.bg} border ${service.border} bg-brand-medium/50`}
                   >
                     <div className="flex items-center gap-3 mb-2">
-                      <div className={`p-2 rounded-md ${service.bg.replace('10', '20')}`}>
+                      <div className={`p-2 rounded-md bg-brand-gold/20`}>
                         {service.icon}
                       </div>
-                      <h3 className="font-bold text-brand-dark">{service.title}</h3>
+                      <h3 className="font-bold text-brand-goldLight">{service.title}</h3>
                     </div>
-                    <p className="text-brand-dark/80 mb-3 text-sm">{service.details}</p>
+                    <p className="text-gray-300 mb-3 text-sm">{service.details}</p>
                     <div className="space-y-2">
                       <Link 
                         href={`mailto:${service.email}`} 
-                        className="flex items-center gap-2 text-brand-dark hover:text-brand-accent text-sm"
+                        className="flex items-center gap-2 text-brand-goldLight hover:text-brand-gold text-sm transition-colors"
                       >
                         <Mail className="w-4 h-4" />
                         {service.email}
                       </Link>
                       <Link 
                         href={`tel:${service.phone.replace(/\D/g, '')}`} 
-                        className="flex items-center gap-2 text-brand-dark hover:text-brand-accent text-sm"
+                        className="flex items-center gap-2 text-brand-goldLight hover:text-brand-gold text-sm transition-colors"
                       >
                         <Phone className="w-4 h-4" />
                         {service.phone}
@@ -332,25 +305,25 @@ export default function ContactPage() {
             </div>
 
             {/* General Contacts */}
-            <div className="bg-white rounded-xl shadow-depth p-6 border border-brand-foam/20">
-              <h2 className={`text-2xl font-bold ${baskerville.variable} font-serif text-brand-dark mb-6`}>
+            <div className="bg-brand-deep rounded-xl shadow-gold border border-brand-gold/20 p-6">
+              <h2 className={`text-2xl font-bold ${baskerville.variable} font-serif text-brand-gold mb-6`}>
                 {content[language].companyContacts.title}
               </h2>
               <div className="space-y-4">
                 {content[language].companyContacts.items.map((info, index) => (
-                  <div key={`${index}-company-contacts`} className="p-4 rounded-lg bg-brand-foam/10 border border-brand-foam/30">
-                    <h3 className="font-bold text-brand-dark mb-2">{info.title}</h3>
+                  <div key={`${index}-company-contacts`} className="p-4 rounded-lg bg-brand-medium/50 border border-brand-gold/20">
+                    <h3 className="font-bold text-brand-goldLight mb-2">{info.title}</h3>
                     <div className="space-y-2">
                       <a 
                         href={`mailto:${info.email}`} 
-                        className="flex items-center gap-2 text-brand-dark hover:text-brand-accent text-sm"
+                        className="flex items-center gap-2 text-brand-goldLight hover:text-brand-gold text-sm transition-colors"
                       >
                         <Mail className="w-4 h-4" />
                         {info.email}
                       </a>
                       <a 
                         href={`tel:${info.phone.replace(/\D/g, '')}`} 
-                        className="flex items-center gap-2 text-brand-dark hover:text-brand-accent text-sm"
+                        className="flex items-center gap-2 text-brand-goldLight hover:text-brand-gold text-sm transition-colors"
                       >
                         <Phone className="w-4 h-4" />
                         {info.phone}
@@ -365,12 +338,12 @@ export default function ContactPage() {
       </div>
 
       {/* Team CTA */}
-      <div className="bg-gradient-to-r from-brand-blue to-brand-accent py-16 px-4">
+      <div className="bg-gradient-to-r from-brand-gold to-brand-goldLight py-16 px-4">
         <div className="container max-w-4xl mx-auto text-center">
-          <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-white mb-6`}>
+          <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-brand-dark mb-6`}>
             {content[language].cta.title}
           </h2>
-          <p className="text-brand-foam/90 mb-8 text-lg max-w-2xl mx-auto">
+          <p className="text-brand-goldDark mb-8 text-lg max-w-2xl mx-auto">
             {content[language].cta.subtitle}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
@@ -380,8 +353,8 @@ export default function ContactPage() {
                 href={button.href}
                 className={`inline-flex items-center justify-center gap-2 font-bold px-8 py-4 rounded-lg transition-all duration-300 shadow-depth hover:shadow-glow ${
                   index === 0 
-                    ? 'bg-white text-brand-dark hover:bg-brand-foam' 
-                    : 'bg-brand-dark text-white hover:bg-brand-deep'
+                    ? 'bg-brand-dark text-brand-gold hover:bg-brand-deep border-2 border-brand-dark' 
+                    : 'bg-white text-brand-goldDark hover:bg-gray-100 border-2 border-white'
                 }`}
               >
                 {index === 0 ? <Users className="w-5 h-5" /> : <Camera className="w-5 h-5" />}
