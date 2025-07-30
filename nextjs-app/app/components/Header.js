@@ -58,14 +58,7 @@ export default function Header() {
       description: "Complete digital presence management",
       gradient: "from-brand-coral to-brand-gold"
     },
-    { 
-      name: "App Development", 
-      shortName: "App Building",
-      icon: <Smartphone className="w-5 h-5" />,
-      path: "/services/app-development",
-      description: "Custom mobile applications",
-      gradient: "from-brand-teal to-brand-accent"
-    },
+   
     { 
       name: "Web Development", 
       shortName: "Web Building",
