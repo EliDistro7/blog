@@ -24,7 +24,7 @@ import { StoriesSection } from "./components/home/StoriesSection";
 
 
   return (
-    <div>
+    <div className="mt-16 flex flex-col gap-20">
       <ServicesVisualization />
       <TestimonialSection />
       <CTASection />
