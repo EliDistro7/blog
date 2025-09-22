@@ -340,7 +340,7 @@ const ServicesShowcase = () => {
                           onClick={() => navigateToService(service.id)}
                           className={`w-full px-6 py-4 bg-gradient-to-r ${service.gradient} text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-3`}
                         >
-                          {language === 'en' ? 'Explore Service' : 'Chunguza Huduma'}
+                          {language === 'en' ? 'Explore Service' : 'Tazama zaidi Huduma'}
                           <ExternalLink className="w-4 h-4" />
                         </button>
                         
