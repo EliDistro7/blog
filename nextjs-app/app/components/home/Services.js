@@ -31,8 +31,8 @@ const ServicesShowcase = () => {
       },
       icon: DoorOpen,
       gradient: "from-indigo-500 via-purple-500 to-pink-500",
-      image: "https://images.unsplash.com/photo-1626785774625-0b1c2c4eab67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      features: [
+      image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+   features: [
         { en: "Logo Design", sw: "Muundo wa Logo" },
         { en: "Brand Guidelines", sw: "Miongozo ya Brand" },
         { en: "Visual Identity", sw: "Utambulisho wa Kuona" }
