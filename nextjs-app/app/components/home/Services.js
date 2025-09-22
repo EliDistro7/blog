@@ -9,6 +9,13 @@ const ServicesShowcase = () => {
   const [activeService, setActiveService] = useState(null);
   const [isClient, setIsClient] = useState(false);
 
+   const handlePlanClick = () => {
+    const message = language === 'en'? `Hi! I'm interested in your services. Can you provide more details?` : `Hujambo! Ninapendezwa na huduma zenu za masoko. Je, unaweza kutoa maelezo zaidi`;
+    
+      const whatsappUrl = `https://wa.me/255745787370?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   // Fix hydration
   useEffect(() => {
     setIsClient(true);
@@ -344,9 +351,7 @@ const ServicesShowcase = () => {
                           <ExternalLink className="w-4 h-4" />
                         </button>
                         
-                        <button className="w-full px-6 py-3 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-bold rounded-xl transition-all duration-300 border-2 border-white/20 hover:border-white/40">
-                          {language === 'en' ? 'Learn More' : 'Jifunze Zaidi'}
-                        </button>
+                      
                       </div>
                     </div>
                   </div>
@@ -367,7 +372,7 @@ const ServicesShowcase = () => {
               }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-              <button className="px-8 py-4 bg-white text-purple-600 font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex-1 hover:scale-105">
+              <button  onClick={handlePlanClick} className="px-8 py-4 bg-white text-purple-600 font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex-1 hover:scale-105">
                 {language === 'en' ? 'Get Free Consultation' : 'Pata Ushauri Bure'}
               </button>
               <button className="px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-bold rounded-xl hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 flex-1">
