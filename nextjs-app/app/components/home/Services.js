@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { DoorOpen, Smartphone, Globe, Users, ChevronRight, ExternalLink, ArrowRight, Play } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { useRouter } from 'next/navigation';
+
 const ServicesShowcase = () => {
-  const Router = useRouter();
-  const {language} = useLanguage(); // Mock language context
+  const router = useRouter();
+  const {language} = useLanguage(); 
   const [activeService, setActiveService] = useState(null);
   const [isClient, setIsClient] = useState(false);
 
@@ -14,6 +15,30 @@ const ServicesShowcase = () => {
   }, []);
 
   const services = [
+    {
+      id: 'branding',
+      title: {
+        en: "Branding & Identity",
+        sw: "Utambulisho wa Brand"
+      },
+      subtitle: {
+        en: "Build Your Unique Brand Identity",
+        sw: "Jenga Utambulisho Wako wa Kipekee"
+      },
+      description: {
+        en: "Complete brand identity development including logo design, brand guidelines, visual identity systems, and brand positioning strategies that make your business memorable.",
+        sw: "Uundaji kamili wa utambulisho wa brand ikiwa ni pamoja na muundo wa logo, miongozo ya brand, mifumo ya utambulisho wa kuona, na mikakati ya kuweka brand ambayo inafanya biashara yako ikumbukwe."
+      },
+      icon: DoorOpen,
+      gradient: "from-indigo-500 via-purple-500 to-pink-500",
+      image: "https://images.unsplash.com/photo-1626785774625-0b1c2c4eab67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      features: [
+        { en: "Logo Design", sw: "Muundo wa Logo" },
+        { en: "Brand Guidelines", sw: "Miongozo ya Brand" },
+        { en: "Visual Identity", sw: "Utambulisho wa Kuona" }
+      ]
+    },
+
     {
       id: 'door-to-door',
       title: {
@@ -25,16 +50,39 @@ const ServicesShowcase = () => {
         sw: "Miunganiko ya Binafsi, Matokeo ya Kweli"
       },
       description: {
-        en: "Direct engagement with your target audience through personalized face-to-face interactions that build trust and drive conversions.",
-        sw: "Ushirikiano wa moja kwa moja na walengwa wako kupitia mazungumzo ya ana kwa ana yanayojenga imani na kusonga mbele biashara."
+        en: "Direct engagement with your target audience through personalized face-to-face interactions that build trust, create lasting relationships, and drive immediate conversions.",
+        sw: "Ushirikiano wa moja kwa moja na walengwa wako kupitia mazungumzo ya ana kwa ana yanayojenga imani, kuunda mahusiano ya kudumu, na kusonga mbele mabadiliko ya haraka."
       },
-      icon: DoorOpen,
-      gradient: "from-indigo-500 via-purple-500 to-pink-500",
+      icon: Users,
+      gradient: "from-teal-500 via-green-500 to-blue-500",
       image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
       features: [
         { en: "Personal Engagement", sw: "Ushirikiano wa Binafsi" },
         { en: "Local Targeting", sw: "Lengo la Mtandaoni" },
         { en: "Direct Feedback", sw: "Maoni ya Moja kwa Moja" }
+      ]
+    },
+    {
+      id: 'equipment-sales',
+      title: {
+        en: "Equipment Sales",
+        sw: "Mauzo ya Vifaa"
+      },
+      subtitle: {
+        en: "Quality Equipment Solutions",
+        sw: "Suluhisho za Vifaa vya Ubora"
+      },
+      description: {
+        en: "Premium equipment sales and consultation services, providing businesses with the right tools and technology solutions to enhance productivity and operational efficiency.",
+        sw: "Mauzo ya vifaa vya hali ya juu na huduma za ushauri, kutoa biashara zifaa sahihi na suluhisho za teknolojia kuimarisha uzalishaji na ufanisi wa uendeshaji."
+      },
+      icon: Smartphone,
+      gradient: "from-orange-500 via-yellow-500 to-green-500",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      features: [
+        { en: "Equipment Consultation", sw: "Ushauri wa Vifaa" },
+        { en: "Quality Products", sw: "Bidhaa za Ubora" },
+        { en: "Technical Support", sw: "Msaada wa Kiufundi" }
       ]
     },
     {
@@ -48,11 +96,11 @@ const ServicesShowcase = () => {
         sw: "Kuongeza Uwepo Wako wa Kidijitali"
       },
       description: {
-        en: "Strategic content creation and community management across all major platforms to grow your brand's online influence.",
-        sw: "Uundaji wa maudhui ya kimkakati na usimamizi wa jumuiya katika majukwaa yote makuu ya kuongeza ushawishi wa brand yako mtandaoni."
+        en: "Strategic social media management across all platforms including content creation, community building, analytics, and targeted advertising to grow your online influence.",
+        sw: "Usimamizi wa kimkakati wa mitandao ya kijamii katika majukwaa yote ikiwa ni pamoja na uundaji wa maudhui, ujenzi wa jumuiya, uchanganuzi, na utangazaji wa lengo kuongeza ushawishi wako mtandaoni."
       },
       icon: Users,
-      gradient: "from-pink-500 via-red-500 to-orange-500",
+      gradient: "from-violet-500 via-purple-500 to-indigo-500",
       image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
       features: [
         { en: "Content Strategy", sw: "Mkakati wa Maudhui" },
@@ -61,51 +109,29 @@ const ServicesShowcase = () => {
       ]
     },
     {
-      id: 'app-development',
+      id: 'tender-applications',
       title: {
-        en: "App Development",
-        sw: "Uundaji wa Programu"
+        en: "Tender Applications",
+        sw: "Maombi ya Zabuni"
       },
       subtitle: {
-        en: "Mobile Solutions That Work",
-        sw: "Suluhisho za Rununu Zinazofanya Kazi"
+        en: "Win More Contracts",
+        sw: "Shinda Mikataba Zaidi"
       },
       description: {
-        en: "Custom mobile applications designed to enhance customer experience and streamline your business operations.",
-        sw: "Programu za rununu za kipekee zilizoundwa kuimarisha uzoefu wa mteja na kurahisisha shughuli za biashara yako."
+        en: "Professional tender application services including documentation preparation, compliance checking, proposal writing, and submission management to maximize your success rate.",
+        sw: "Huduma za kitaalamu za maombi ya zabuni ikiwa ni pamoja na utayarishaji wa nyaraka, ukaguzi wa kufuata taratibu, uandishi wa mapendekezo, na usimamizi wa kuwasilisha kuongeza kiwango chako cha mafanikio."
       },
-      icon: Smartphone,
-      gradient: "from-teal-500 via-green-500 to-blue-500",
-      image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      icon: ChevronRight,
+      gradient: "from-emerald-500 via-teal-500 to-cyan-500",
+      image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
       features: [
-        { en: "Custom Development", sw: "Uundaji wa Kipekee" },
-        { en: "User Experience", sw: "Uzoefu wa Mtumiaji" },
-        { en: "Performance Optimization", sw: "Uboreshaji wa Utendaji" }
+        { en: "Document Preparation", sw: "Utayarishaji wa Nyaraka" },
+        { en: "Compliance Check", sw: "Ukaguzi wa Kufuata" },
+        { en: "Proposal Writing", sw: "Uandishi wa Mapendekezo" }
       ]
     },
-    {
-      id: 'web-development',
-      title: {
-        en: "Web Development",
-        sw: "Uundaji wa Tovuti"
-      },
-      subtitle: {
-        en: "Digital Excellence Delivered",
-        sw: "Ubora wa Kidijitali Unaotolewa"
-      },
-      description: {
-        en: "Responsive, fast-loading websites that convert visitors into customers and establish your professional online presence.",
-        sw: "Tovuti zinazoweza kujibu, za kasi za kupakia ambazo zinabadilisha wageni kuwa wateja na kuanzisha uwepo wako wa kitaalamu mtandaoni."
-      },
-      icon: Globe,
-      gradient: "from-orange-500 via-yellow-500 to-green-500",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      features: [
-        { en: "Responsive Design", sw: "Muundo wa Mwitikio" },
-        { en: "SEO Optimized", sw: "Imeboreshwa kwa SEO" },
-        { en: "E-commerce Ready", sw: "Tayari kwa Biashara" }
-      ]
-    }
+
   ];
 
   // Helper function to get localized text
@@ -116,8 +142,7 @@ const ServicesShowcase = () => {
   // Mock navigation function
   const navigateToService = (serviceId) => {
     console.log(`Navigating to /services/${serviceId}`);
-    Router.push(`/services/${serviceId}`);
-    // In real implementation: router.push(`/services/${serviceId}`)
+   router.push(`/services/${serviceId}`)
   };
 
   return (
