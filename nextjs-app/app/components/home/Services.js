@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { DoorOpen, Smartphone, Globe, Users, ChevronRight, ExternalLink, ArrowRight, Play } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useRouter } from 'next/navigation';
 const ServicesShowcase = () => {
+  const Router = useRouter();
   const {language} = useLanguage(); // Mock language context
   const [activeService, setActiveService] = useState(null);
   const [isClient, setIsClient] = useState(false);
