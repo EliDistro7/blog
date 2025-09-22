@@ -114,6 +114,7 @@ const ServicesShowcase = () => {
   // Mock navigation function
   const navigateToService = (serviceId) => {
     console.log(`Navigating to /services/${serviceId}`);
+    Router.push(`/services/${serviceId}`);
     // In real implementation: router.push(`/services/${serviceId}`)
   };
 
