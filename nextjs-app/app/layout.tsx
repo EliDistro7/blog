@@ -1,6 +1,7 @@
 // app/layout.tsx
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import Script from "next/script";
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { Toaster } from "sonner";
@@ -8,13 +9,11 @@ import Footer from "@/app/components/Footer";
 import Header from "@/app/components/Header";
 import { LanguageProvider } from '@/context/LanguageContext'
 
-// Fonts
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
 });
-
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
@@ -22,7 +21,6 @@ const playfair = Playfair_Display({
   weight: ["400", "700", "900"],
 });
 
-// Viewport configuration
 export const viewport: Viewport = {
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#E0F2FE' },
@@ -31,11 +29,9 @@ export const viewport: Viewport = {
   colorScheme: 'light',
 }
 
-// Metadata
 export async function generateMetadata(): Promise<Metadata> {
   const title = "Future Holders | Digital Innovation Studio";
   const description = "We build digital experiences that shape the future. Web design, development, and digital strategy services.";
-
   const metadataBase = new URL("https://www.futureholders.pro");
   
   return {
@@ -44,7 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${title}`,
       default: title,
     },
-    description: description,
+    description,
     openGraph: {
       title: "Future Holders",
       description: "Digital innovation studio creating future-ready experiences",
@@ -85,27 +81,31 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <head>
-        {/* Windows-specific tile color */}
         <meta name="msapplication-TileColor" content="#E0F2FE" />
-        {/* Apple touch icon */}
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
       </head>
-      
+
       <body className="bg-brand-foam text-brand-dark font-sans">
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-DXJZR4NRK1"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-DXJZR4NRK1');
+          `}
+        </Script>
+
         <LanguageProvider>
-      
-            
-            
-           
-              <Header />
-         
-            
-            <main className="flex-1 z-10">
-              {children}
-            </main>
-            
-            <Footer />
-        
+          <Header />
+          <main className="flex-1 z-10">
+            {children}
+          </main>
+          <Footer />
           <SpeedInsights />
         </LanguageProvider>
       </body>
