@@ -5,373 +5,398 @@ import { useLanguage } from '@/context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
-import { ChevronLeft, ChevronRight, Users, Smartphone, Globe, DoorOpen, Play, Pause } from 'lucide-react';
+import {
+  ChevronLeft, ChevronRight,
+  Globe, DoorOpen, Play, Pause,
+  Smartphone, ArrowRight,
+} from 'lucide-react';
 
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/effect-fade';
 
+// ── Inline African geometric SVG pattern ────────────────────────────────────
+const AfricanPattern = () => (
+  <svg
+    width="100%" height="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    className="absolute inset-0 pointer-events-none"
+    style={{ opacity: 0.055 }}
+  >
+    <defs>
+      <pattern id="heroPattern" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+        <polygon points="30,4 56,30 30,56 4,30" fill="none" stroke="#F59E0B" strokeWidth="1.5" />
+        <polygon points="30,16 44,30 30,44 16,30" fill="none" stroke="#D4AF37" strokeWidth="1" />
+        <line x1="30" y1="0" x2="30" y2="60" stroke="#F59E0B" strokeWidth="0.5" />
+        <line x1="0" y1="30" x2="60" y2="30" stroke="#F59E0B" strokeWidth="0.5" />
+        <circle cx="30" cy="30" r="2.5" fill="#F59E0B" />
+        <circle cx="0"  cy="0"  r="1.5" fill="#D4AF37" />
+        <circle cx="60" cy="0"  r="1.5" fill="#D4AF37" />
+        <circle cx="0"  cy="60" r="1.5" fill="#D4AF37" />
+        <circle cx="60" cy="60" r="1.5" fill="#D4AF37" />
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#heroPattern)" />
+  </svg>
+)
+
+// ── Content ──────────────────────────────────────────────────────────────────
 const heroContent = {
   en: {
     companyName: "Future Holders",
-    tagline: "Your Complete Marketing Solution",
+    tagline: "Tanzania's #1 Marketing Agency",
     slides: [
       {
-        title: "Door-to-Door Marketing",
+        title: "Door-to-Door\nMarketing",
         subtitle: "Personal Connection, Real Results",
-        description: "Direct engagement with your target audience through personalized face-to-face interactions that build trust and drive conversions",
+        description:
+          "Direct engagement with your target audience through personalized face-to-face interactions that build trust and drive conversions.",
         icon: DoorOpen,
-        gradient: "from-brand-accent via-brand-coral to-brand-teal",
-        bgColor: "bg-gradient-to-br from-brand-accent/20 to-brand-teal/10",
-        features: ["Personal Engagement", "Local Targeting", "Direct Feedback"]
+        features: ["Personal Engagement", "Local Targeting", "Direct Feedback"],
+        accentColor: "#F59E0B", // warning
       },
       {
-        title: "Social Media Management",
+        title: "Social Media\nManagement",
         subtitle: "Amplify Your Digital Presence",
-        description: "Strategic content creation and community management across all major platforms to grow your brand's online influence",
+        description:
+          "Strategic content creation and community management across all major platforms to grow your brand's online influence.",
         icon: Smartphone,
-        gradient: "from-brand-coral via-brand-gold to-brand-accent",
-        bgColor: "bg-gradient-to-br from-brand-coral/20 to-brand-gold/10",
-        features: ["Content Strategy", "Community Building", "Analytics & Insights"]
+        features: ["Content Strategy", "Community Building", "Analytics & Insights"],
+        accentColor: "#D4AF37", // brand.gold
       },
       {
-        title: "App Development",
+        title: "App\nDevelopment",
         subtitle: "Mobile Solutions That Work",
-        description: "Custom mobile applications designed to enhance customer experience and streamline your business operations",
+        description:
+          "Custom mobile applications designed to enhance customer experience and streamline your business operations.",
         icon: Smartphone,
-        gradient: "from-brand-teal via-brand-accent to-brand-coral",
-        bgColor: "bg-gradient-to-br from-brand-teal/20 to-brand-accent/10",
-        features: ["Custom Development", "User Experience", "Performance Optimization"]
+        features: ["Custom Development", "User Experience", "Performance Optimization"],
+        accentColor: "#F59E0B",
       },
       {
-        title: "Web Development",
+        title: "Web\nDevelopment",
         subtitle: "Digital Excellence Delivered",
-        description: "Responsive, fast-loading websites that convert visitors into customers and establish your professional online presence",
+        description:
+          "Responsive, fast-loading websites that convert visitors into customers and establish your professional online presence.",
         icon: Globe,
-        gradient: "from-brand-gold via-brand-coral to-brand-teal",
-        bgColor: "bg-gradient-to-br from-brand-gold/20 to-brand-coral/10",
-        features: ["Responsive Design", "SEO Optimized", "E-commerce Ready"]
-      }
+        features: ["Responsive Design", "SEO Optimized", "E-commerce Ready"],
+        accentColor: "#D4AF37",
+      },
     ],
-    cta: "Get Started Today"
+    cta: "Start Growing",
   },
   sw: {
     companyName: "Future Holders",
-    tagline: "Suluhisho Lako Kamili la Uuzaji",
+    tagline: "Wakala Nambari 1 wa Uuzaji Tanzania",
     slides: [
       {
-        title: "Uuzaji Mlango kwa Mlango",
+        title: "Uuzaji\nMlango kwa Mlango",
         subtitle: "Miunganiko ya Binafsi, Matokeo ya Kweli",
-        description: "Ushirikiano wa moja kwa moja na walengwa wako kupitia mazungumzo ya ana kwa ana yanayojenga imani",
+        description:
+          "Ushirikiano wa moja kwa moja na walengwa wako kupitia mazungumzo ya ana kwa ana yanayojenga imani.",
         icon: DoorOpen,
-        gradient: "from-brand-accent via-brand-coral to-brand-teal",
-        bgColor: "bg-gradient-to-br from-brand-accent/20 to-brand-teal/10",
-        features: ["Ushirikiano wa Binafsi", "Lengo la Mtandaoni", "Maoni ya Moja kwa Moja"]
+        features: ["Ushirikiano wa Binafsi", "Lengo la Mtandaoni", "Maoni ya Moja kwa Moja"],
+        accentColor: "#F59E0B",
       },
       {
-        title: "Usimamizi wa Mitandao ya Kijamii",
+        title: "Usimamizi wa\nMitandao ya Kijamii",
         subtitle: "Kuongeza Uwepo Wako wa Kidijitali",
-        description: "Uundaji wa maudhui ya kimkakati na usimamizi wa jumuiya katika majukwaa yote makuu",
+        description:
+          "Uundaji wa maudhui ya kimkakati na usimamizi wa jumuiya katika majukwaa yote makuu.",
         icon: Smartphone,
-        gradient: "from-brand-coral via-brand-gold to-brand-accent",
-        bgColor: "bg-gradient-to-br from-brand-coral/20 to-brand-gold/10",
-        features: ["Mkakati wa Maudhui", "Ujenzi wa Jumuiya", "Uchanganuzi na Maarifa"]
+        features: ["Mkakati wa Maudhui", "Ujenzi wa Jumuiya", "Uchanganuzi na Maarifa"],
+        accentColor: "#D4AF37",
       },
       {
-        title: "Uundaji wa Programu",
+        title: "Uundaji wa\nProgramu",
         subtitle: "Suluhisho za Rununu Zinazofanya Kazi",
-        description: "Programu za rununu za kipekee zilizoundwa kuimarisha uzoefu wa mteja na kurahisisha shughuli za biashara",
+        description:
+          "Programu za rununu za kipekee zilizoundwa kuimarisha uzoefu wa mteja.",
         icon: Smartphone,
-        gradient: "from-brand-teal via-brand-accent to-brand-coral",
-        bgColor: "bg-gradient-to-br from-brand-teal/20 to-brand-accent/10",
-        features: ["Uundaji wa Kipekee", "Uzoefu wa Mtumiaji", "Uboreshaji wa Utendaji"]
+        features: ["Uundaji wa Kipekee", "Uzoefu wa Mtumiaji", "Uboreshaji wa Utendaji"],
+        accentColor: "#F59E0B",
       },
       {
-        title: "Uundaji wa Tovuti",
+        title: "Uundaji wa\nTovuti",
         subtitle: "Ubora wa Kidijitali Unaotolewa",
-        description: "Tovuti zinazoweza kujibu, za kasi za kupakia ambazo zinabadilisha wageni kuwa wateja",
+        description:
+          "Tovuti zinazoweza kujibu, za kasi za kupakia ambazo zinabadilisha wageni kuwa wateja.",
         icon: Globe,
-        gradient: "from-brand-gold via-brand-coral to-brand-teal",
-        bgColor: "bg-gradient-to-br from-brand-gold/20 to-brand-coral/10",
-        features: ["Muundo wa Mwitikio", "Imeboreshwa kwa SEO", "Tayari kwa Biashara"]
-      }
+        features: ["Muundo wa Mwitikio", "Imeboreshwa kwa SEO", "Tayari kwa Biashara"],
+        accentColor: "#D4AF37",
+      },
     ],
-    cta: "Anza Leo"
-  }
-};
+    cta: "Anza Leo",
+  },
+}
 
-// Floating particle component
-const Particle = ({ index }) => {
-  const size = Math.random() * 3 + 1;
-  
-  return (
-    <div 
-      className="absolute rounded-full pointer-events-none"
-      style={{
-        width: `${size}px`,
-        height: `${size}px`,
-        background: index % 5 === 0 ? '#6366F1' : 
-                   index % 4 === 0 ? '#F97316' : 
-                   index % 3 === 0 ? '#0D9488' : 
-                   index % 2 === 0 ? '#E2E8F0' : '#D4AF37',
-        left: `${Math.random() * 100}%`,
-        top: `${Math.random() * 100}%`,
-        opacity: Math.random() * 0.3 + 0.1,
-        filter: 'blur(1px)',
-        animation: `float ${Math.random() * 10 + 15}s ease-in-out infinite`,
-        animationDelay: `${Math.random() * 5}s`
-      }}
-    />
-  );
-};
-
+// ── Component ─────────────────────────────────────────────────────────────────
 export default function Hero() {
-  const { language } = useLanguage();
-  const [isMounted, setIsMounted] = useState(false);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const swiperRef = useRef(null);
-  
-  const content = heroContent[language];
+  const { language }        = useLanguage()
+  const [isMounted, setIsMounted]       = useState(false)
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [isPlaying, setIsPlaying]       = useState(true)
+  const swiperRef = useRef<any>(null)
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const content = heroContent['en' | 'sw']
+
+  useEffect(() => { setIsMounted(true) }, [])
 
   const toggleAutoplay = () => {
-    if (swiperRef.current) {
-      if (isPlaying) {
-        swiperRef.current.autoplay.stop();
-      } else {
-        swiperRef.current.autoplay.start();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
+    if (!swiperRef.current) return
+    isPlaying
+      ? swiperRef.current.autoplay.stop()
+      : swiperRef.current.autoplay.start()
+    setIsPlaying(!isPlaying)
+  }
 
-  const goToSlide = (index) => {
-    if (swiperRef.current) {
-      swiperRef.current.slideTo(index);
-    }
-  };
+  const goToSlide = (i) => swiperRef.current?.slideTo(i)
 
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Background layers */}
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-dark via-brand-deep to-brand-medium/90">
-        {/* Animated particles */}
-        <div className="absolute inset-0">
-          {[...Array(40)].map((_, i) => (
-            <Particle key={i} index={i} />
-          ))}
-        </div>
-      </div>
+    <section
+      className="relative h-screen flex items-center justify-center overflow-hidden"
+      style={{ background: '#1A1208' }} // surface.DEFAULT (warmBlack)
+    >
+      {/* ── Background layers ─────────────────────────────────────────────── */}
+      {/* Amber radial glow — top-right */}
+      <div
+        className="absolute top-0 right-0 w-2/3 h-full opacity-10 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse at top right, #F59E0B, transparent 70%)' }}
+      />
+      {/* African geometric pattern */}
+      <AfricanPattern />
 
-      {/* Main Content */}
+      {/* ── Swiper ────────────────────────────────────────────────────────── */}
       <div className="relative z-10 w-full h-full">
         <Swiper
-          ref={swiperRef}
+          onSwiper={(s) => { swiperRef.current = s }}
           modules={[Autoplay, Pagination, Navigation, EffectFade]}
           spaceBetween={0}
           slidesPerView={1}
           effect="fade"
           fadeEffect={{ crossFade: true }}
-          autoplay={{
-            delay: 5000,
-            disableOnInteraction: false,
-          }}
-          pagination={{
-            clickable: true,
-            renderBullet: (index, className) => {
-              return `<span class="${className} !bg-brand-foam/50 !w-3 !h-3 hover:!bg-brand-accent transition-colors"></span>`;
-            },
-          }}
-          navigation={{
-            nextEl: '.swiper-button-next-custom',
-            prevEl: '.swiper-button-prev-custom',
-          }}
-          onSlideChange={(swiper) => setCurrentSlide(swiper.activeIndex)}
+          autoplay={{ delay: 5000, disableOnInteraction: false }}
+          onSlideChange={(s) => setCurrentSlide(s.activeIndex)}
           className="h-full"
         >
           {content.slides.map((slide, index) => {
-            const IconComponent = slide.icon;
+            const Icon = slide.icon
+            const isGold = slide.accentColor === '#D4AF37'
+
             return (
               <SwiperSlide key={index} className="h-full">
                 <div className="relative h-full flex items-center justify-center">
-                  {/* Slide Background */}
-                  <div className={`absolute inset-0 ${slide.bgColor}`}>
-                    <div className="absolute inset-0 bg-gradient-to-br from-brand-dark/80 via-brand-deep/60 to-brand-medium/40" />
-                  </div>
 
-                  {/* Content Container */}
-                  <div className="container mx-auto px-6 z-10 text-center">
+                  {/* ── Slide content ──────────────────────────────────── */}
+                  <div className="container mx-auto px-6 z-10">
                     <motion.div
-                      initial={{ opacity: 0, y: 50 }}
+                      initial={{ opacity: 0, y: 40 }}
                       animate={isMounted ? { opacity: 1, y: 0 } : {}}
-                      transition={{ duration: 0.8, delay: 0.2 }}
-                      className="max-w-6xl mx-auto"
+                      transition={{ duration: 0.75, ease: 'easeOut' }}
+                      className="max-w-5xl mx-auto text-center"
                     >
-                      {/* Company Name */}
+                      {/* Badge */}
                       <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
+                        initial={{ opacity: 0, scale: 0.85 }}
                         animate={isMounted ? { opacity: 1, scale: 1 } : {}}
-                        transition={{ duration: 0.6, delay: 0.1 }}
-                        className="mb-4"
+                        transition={{ duration: 0.5, delay: 0.1 }}
+                        className="badge-amber inline-flex mb-8"
                       >
-                        <h2 className="text-xl md:text-2xl font-bold text-brand-gold mb-2">
-                          {content.companyName}
-                        </h2>
-                        <p className="text-sm md:text-base text-brand-foam/80 font-medium">
-                          {content.tagline}
-                        </p>
+                        <div
+                          className="rounded-full flex-shrink-0"
+                          style={{ width: 6, height: 6, background: '#F59E0B', marginTop: 1 }}
+                        />
+                        {content.tagline}
                       </motion.div>
 
-                      {/* Service Icon */}
+                      {/* Icon */}
                       <motion.div
                         initial={{ opacity: 0, scale: 0.5 }}
                         animate={isMounted ? { opacity: 1, scale: 1 } : {}}
-                        transition={{ duration: 0.6, delay: 0.3 }}
-                        className="mb-6"
+                        transition={{ duration: 0.55, delay: 0.25 }}
+                        className="flex justify-center mb-6"
                       >
-                        <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r ${slide.gradient} shadow-glow`}>
-                          <IconComponent className="w-10 h-10 text-white" />
+                        <div
+                          className="flex items-center justify-center rounded"
+                          style={{
+                            width: '4.5rem',
+                            height: '4.5rem',
+                            background: 'rgba(245,158,11,0.15)',
+                            border: `2px solid ${slide.accentColor}`,
+                          }}
+                        >
+                          <Icon size={28} style={{ color: slide.accentColor }} />
                         </div>
                       </motion.div>
 
-                      {/* Service Title */}
+                      {/* Headline — multi-line via whitespace-pre */}
                       <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 24 }}
                         animate={isMounted ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.8, delay: 0.4 }}
-                        className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight"
+                        transition={{ duration: 0.75, delay: 0.35 }}
+                        className="font-display font-extrabold uppercase whitespace-pre-line leading-none tracking-tight text-glow-amber"
+                        style={{
+                          fontSize: 'clamp(2.75rem, 8vw, 5.5rem)',
+                          color: slide.accentColor,
+                          letterSpacing: '-0.02em',
+                          marginBottom: '1rem',
+                        }}
                       >
-                        <span className={`bg-gradient-to-r ${slide.gradient} bg-clip-text text-transparent`}>
-                          {slide.title}
-                        </span>
+                        {slide.title}
                       </motion.h1>
 
                       {/* Subtitle */}
-                      <motion.h3
+                      <motion.p
                         initial={{ opacity: 0 }}
                         animate={isMounted ? { opacity: 1 } : {}}
-                        transition={{ duration: 0.8, delay: 0.5 }}
-                        className="text-xl md:text-2xl text-brand-foam/90 font-medium mb-6"
+                        transition={{ duration: 0.7, delay: 0.45 }}
+                        className="font-display font-bold uppercase tracking-widest"
+                        style={{
+                          fontSize: 'clamp(0.85rem, 2vw, 1.1rem)',
+                          color: 'rgba(245,240,232,0.75)',
+                          marginBottom: '1.25rem',
+                        }}
                       >
                         {slide.subtitle}
-                      </motion.h3>
+                      </motion.p>
+
+                      {/* Accent rule */}
+                      <motion.div
+                        initial={{ scaleX: 0 }}
+                        animate={isMounted ? { scaleX: 1 } : {}}
+                        transition={{ duration: 0.5, delay: 0.5 }}
+                        className="flex justify-center mb-6"
+                        style={{ transformOrigin: 'center' }}
+                      >
+                        <div style={{ width: '4rem', height: '3px', background: slide.accentColor, borderRadius: 2 }} />
+                      </motion.div>
 
                       {/* Description */}
                       <motion.p
                         initial={{ opacity: 0 }}
                         animate={isMounted ? { opacity: 1 } : {}}
-                        transition={{ duration: 0.8, delay: 0.6 }}
-                        className="text-lg md:text-xl text-brand-foam/80 max-w-3xl mx-auto mb-8"
+                        transition={{ duration: 0.7, delay: 0.55 }}
+                        className="leading-relaxed mx-auto"
+                        style={{
+                          fontSize: 'clamp(1rem, 1.8vw, 1.15rem)',
+                          color: 'rgba(245,240,232,0.6)',
+                          maxWidth: '620px',
+                          marginBottom: '2rem',
+                        }}
                       >
                         {slide.description}
                       </motion.p>
 
-                      {/* Features */}
+                      {/* Feature tags */}
                       <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 16 }}
                         animate={isMounted ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.8, delay: 0.7 }}
-                        className="flex flex-wrap justify-center gap-4 mb-10"
+                        transition={{ duration: 0.7, delay: 0.65 }}
+                        className="flex flex-wrap justify-center gap-3 mb-10"
                       >
-                        {slide.features.map((feature, idx) => (
-                          <div key={idx} className="px-4 py-2 bg-brand-foam/10 backdrop-blur-sm rounded-full border border-brand-foam/20">
-                            <span className="text-brand-foam/90 font-medium">{feature}</span>
-                          </div>
+                        {slide.features.map((f, i) => (
+                          <span key={i} className="tag-amber rounded">
+                            {f}
+                          </span>
                         ))}
                       </motion.div>
 
-                      {/* CTA Button */}
+                      {/* CTA */}
                       <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 16 }}
                         animate={isMounted ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.8, delay: 0.8 }}
+                        transition={{ duration: 0.7, delay: 0.75 }}
                       >
-                        <button className={`px-8 py-4 bg-gradient-to-r ${slide.gradient} hover:shadow-glow rounded-full font-bold text-white shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 duration-300`}>
-                          {content.cta}
+                        <button
+                          className="inline-flex items-center gap-2 font-display font-extrabold uppercase tracking-widest transition-opacity duration-200 hover:opacity-90 rounded"
+                          style={{
+                            background: slide.accentColor,
+                            color: '#0D0903',
+                            padding: '0.9rem 2.5rem',
+                            fontSize: '0.9rem',
+                          }}
+                        >
+                          {content.cta} <ArrowRight size={16} />
                         </button>
                       </motion.div>
                     </motion.div>
                   </div>
                 </div>
               </SwiperSlide>
-            );
+            )
           })}
         </Swiper>
 
-        {/* Custom Navigation */}
-        <div className="absolute top-1/2 left-4 z-20 transform -translate-y-1/2">
-          <button className="swiper-button-prev-custom w-12 h-12 bg-brand-foam/10 backdrop-blur-sm rounded-full border border-brand-foam/20 flex items-center justify-center hover:bg-brand-foam/20 transition-colors">
-            <ChevronLeft className="w-6 h-6 text-brand-foam" />
-          </button>
-        </div>
-        
-        <div className="absolute top-1/2 right-4 z-20 transform -translate-y-1/2">
-          <button className="swiper-button-next-custom w-12 h-12 bg-brand-foam/10 backdrop-blur-sm rounded-full border border-brand-foam/20 flex items-center justify-center hover:bg-brand-foam/20 transition-colors">
-            <ChevronRight className="w-6 h-6 text-brand-foam" />
-          </button>
-        </div>
+        {/* ── Prev / Next ─────────────────────────────────────────────────── */}
+        {[
+          { side: 'left-4',  Icon: ChevronLeft,  cls: 'swiper-button-prev-custom' },
+          { side: 'right-4', Icon: ChevronRight, cls: 'swiper-button-next-custom' },
+        ].map(({ side, Icon, cls }) => (
+          <div key={cls} className={`absolute top-1/2 ${side} z-20 -translate-y-1/2`}>
+            <button
+              className={`${cls} flex items-center justify-center w-11 h-11 rounded transition-colors duration-200`}
+              style={{
+                background: 'rgba(245,158,11,0.1)',
+                border: '1px solid rgba(245,158,11,0.25)',
+                color: '#F5F0E8',
+              }}
+            >
+              <Icon size={20} />
+            </button>
+          </div>
+        ))}
 
-        {/* Slide Counter & Controls */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex items-center gap-6">
-          {/* Slide indicators */}
+        {/* ── Bottom controls ─────────────────────────────────────────────── */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-6">
+          {/* Dot indicators */}
           <div className="flex gap-2">
-            {content.slides.map((_, index) => (
+            {content.slides.map((_, i) => (
               <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all ${
-                  currentSlide === index ? 'bg-brand-accent scale-125' : 'bg-brand-foam/30 hover:bg-brand-foam/50'
-                }`}
+                key={i}
+                onClick={() => goToSlide(i)}
+                className="rounded-full transition-all duration-300"
+                style={{
+                  width: currentSlide === i ? '1.75rem' : '0.6rem',
+                  height: '0.6rem',
+                  background: currentSlide === i ? '#F59E0B' : 'rgba(245,240,232,0.3)',
+                }}
+                aria-label={`Go to slide ${i + 1}`}
               />
             ))}
           </div>
 
-          {/* Play/Pause */}
+          {/* Play / Pause */}
           <button
             onClick={toggleAutoplay}
-            className="w-10 h-10 bg-brand-foam/10 backdrop-blur-sm rounded-full border border-brand-foam/20 flex items-center justify-center hover:bg-brand-foam/20 transition-colors"
+            className="flex items-center justify-center w-9 h-9 rounded transition-colors duration-200"
+            style={{
+              background: 'rgba(245,158,11,0.1)',
+              border: '1px solid rgba(245,158,11,0.25)',
+              color: '#F5F0E8',
+            }}
+            aria-label={isPlaying ? 'Pause slideshow' : 'Play slideshow'}
           >
-            {isPlaying ? (
-              <Pause className="w-5 h-5 text-brand-foam" />
-            ) : (
-              <Play className="w-5 h-5 text-brand-foam ml-0.5" />
-            )}
+            {isPlaying ? <Pause size={14} /> : <Play size={14} className="ml-0.5" />}
           </button>
 
-          {/* Slide counter */}
-          <div className="text-brand-foam/70 text-sm font-medium">
-            {String(currentSlide + 1).padStart(2, '0')} / {String(content.slides.length).padStart(2, '0')}
+          {/* Counter */}
+          <div
+            className="font-display font-bold tabular-nums text-sm"
+            style={{ color: 'rgba(245,240,232,0.5)' }}
+          >
+            {String(currentSlide + 1).padStart(2, '0')}
+            <span style={{ color: 'rgba(245,158,11,0.5)', margin: '0 0.25rem' }}>/</span>
+            {String(content.slides.length).padStart(2, '0')}
           </div>
         </div>
       </div>
 
-      {/* Decorative elements */}
-      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-brand-dark to-transparent pointer-events-none" />
-      
-      <style jsx global>{`
-        .swiper-pagination {
-          bottom: 60px !important;
-        }
-        
-        .swiper-pagination-bullet {
-          margin: 0 6px !important;
-        }
-        
-        .swiper-pagination-bullet-active {
-          background: #6366F1 !important;
-        }
-        
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-      `}</style>
+      {/* ── Bottom fade ──────────────────────────────────────────────────────── */}
+      <div
+        className="absolute bottom-0 left-0 w-full h-28 pointer-events-none"
+        style={{ background: 'linear-gradient(to top, #1A1208, transparent)' }}
+      />
     </section>
-  );
+  )
 }

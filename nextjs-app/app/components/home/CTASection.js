@@ -1,257 +1,319 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
+
+// ── Design tokens ─────────────────────────────────────────────────────────────
+const AMBER    = '#F59E0B';
+const GOLD     = '#D4AF37';
+const SURFACE  = '#1A1208';
+const DARK     = '#0D0903';
+const CREAM    = '#F5F0E8';
+const MUTED    = 'rgba(245,240,232,0.55)';
+const BORDER   = 'rgba(245,158,11,0.2)';
+const BORDER_S = 'rgba(245,158,11,0.35)';
+
+// ── African geometric SVG pattern ─────────────────────────────────────────────
+const AfricanPattern = () => (
+  <svg
+    width="100%" height="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    className="absolute inset-0 pointer-events-none"
+    style={{ opacity: 0.055 }}
+  >
+    <defs>
+      <pattern id="ctaPattern" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+        <polygon points="30,4 56,30 30,56 4,30" fill="none" stroke="#F59E0B" strokeWidth="1.5" />
+        <polygon points="30,16 44,30 30,44 16,30" fill="none" stroke="#D4AF37" strokeWidth="1" />
+        <line x1="30" y1="0" x2="30" y2="60" stroke="#F59E0B" strokeWidth="0.5" />
+        <line x1="0"  y1="30" x2="60" y2="30" stroke="#F59E0B" strokeWidth="0.5" />
+        <circle cx="30" cy="30" r="2.5" fill="#F59E0B" />
+        <circle cx="0"  cy="0"  r="1.5" fill="#D4AF37" />
+        <circle cx="60" cy="0"  r="1.5" fill="#D4AF37" />
+        <circle cx="0"  cy="60" r="1.5" fill="#D4AF37" />
+        <circle cx="60" cy="60" r="1.5" fill="#D4AF37" />
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#ctaPattern)" />
+  </svg>
+);
+
+const DotGrid = () => (
+  <div
+    className="absolute inset-0 pointer-events-none"
+    style={{
+      opacity: 0.04,
+      backgroundImage: 'radial-gradient(circle at 1px 1px, #F59E0B 1px, transparent 0)',
+      backgroundSize: '40px 40px',
+    }}
+  />
+);
 
 export default function CTASection() {
-  const [scrollY, setScrollY] = useState(0);
+  const { language } = useLanguage();
   const [isClient, setIsClient] = useState(false);
 
-  // Fix hydration by ensuring client-side only rendering for dynamic elements
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Parallax scroll effect
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  useEffect(() => { setIsClient(true); }, []);
 
   const content = {
-    title: "Transform Your Vision Into Reality",
-    subtitle: "Where innovative solutions meet exceptional execution",
-    button: "Start Your Project"
+    en: {
+      badge: 'Get Started Today',
+      title: { line1: 'Transform Your', accent: 'Vision', line2: 'Into Reality' },
+      subtitle: 'Where innovative solutions meet exceptional execution. Join 40+ businesses that chose excellence.',
+      button: 'Start Your Project',
+      secondary: 'Free Consultation',
+    },
+    sw: {
+      badge: 'Anza Leo',
+      title: { line1: 'Badilisha', accent: 'Maono', line2: 'Yako Kuwa Ukweli' },
+      subtitle: 'Suluhisho za ubunifu zinazokutana na utekelezaji wa hali ya juu. Jiunge na biashara 40+ zilizochagua ubora.',
+      button: 'Anza Mradi Wako',
+      secondary: 'Ushauri Bure',
+    },
   };
 
-  // Enhanced floating elements with golden theme
-  const floatingElements = [
-    { left: 8.5, top: 25.2, delay: 0.5, duration: 8.5, size: 'w-4 h-4' },
-    { left: 88.2, top: 15.8, delay: 1.2, duration: 9.8, size: 'w-3 h-3' },
-    { left: 15.7, top: 75.4, delay: 0.8, duration: 10.2, size: 'w-5 h-5' },
-    { left: 82.3, top: 85.6, delay: 1.8, duration: 8.9, size: 'w-3 h-3' },
-    { left: 5.1, top: 65.9, delay: 0.3, duration: 11.1, size: 'w-4 h-4' },
-    { left: 92.4, top: 45.7, delay: 1.5, duration: 9.3, size: 'w-6 h-6' },
-    { left: 25.8, top: 12.3, delay: 0.9, duration: 10.7, size: 'w-3 h-3' },
-    { left: 75.2, top: 78.9, delay: 1.1, duration: 8.6, size: 'w-4 h-4' }
-  ];
+  const t = content[language] ?? content.en;
 
-  const lightRays = [
-    { left: 15, delay: 0, duration: 8, width: 'w-0.5' },
-    { left: 35, delay: 1.5, duration: 6, width: 'w-1' },
-    { left: 55, delay: 2.5, duration: 7, width: 'w-0.5' },
-    { left: 75, delay: 0.8, duration: 9, width: 'w-1' },
-    { left: 85, delay: 1.8, duration: 6.5, width: 'w-0.5' }
-  ];
+  const handleWhatsApp = (msg) => {
+    const text = msg ?? (
+      language === 'sw'
+        ? 'Hujambo! Ningependa kuanza mradi na Future Holders. Je, mnaweza kunisaidia?'
+        : "Hi! I'd like to start a project with Future Holders. Can you help?"
+    );
+    window.open(`https://wa.me/255745787370?text=${encodeURIComponent(text)}`, '_blank');
+  };
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-brand-dark">
-      {/* Enhanced gradient background with gold accents */}
-      <div className="absolute inset-0">
-        {/* Primary dark gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-dark via-brand-deep to-brand-medium" />
-        
-        {/* Golden overlay with animation */}
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-gold/10 via-brand-goldLight/5 to-brand-gold/10 animate-pulse" />
-        
-        {/* Animated mesh pattern */}
-        <div 
-          className="absolute inset-0 opacity-20 transition-transform duration-1000"
-          style={{
-            backgroundImage: `
-              radial-gradient(circle at 30% 20%, rgba(212, 175, 55, 0.15) 0%, transparent 60%),
-              radial-gradient(circle at 70% 80%, rgba(245, 208, 122, 0.1) 0%, transparent 60%),
-              radial-gradient(circle at 20% 70%, rgba(153, 101, 21, 0.1) 0%, transparent 50%)
-            `,
-            transform: `translate(${scrollY * 0.05}px, ${scrollY * 0.03}px) rotate(${scrollY * 0.01}deg)`
-          }}
-        />
-      </div>
+    <section
+      className="relative overflow-hidden"
+      style={{ background: SURFACE, fontFamily: "'Bricolage Grotesque', 'Inter', sans-serif" }}
+    >
+      {/* ── Backgrounds ─────────────────────────────────────────────────── */}
+      <div
+        className="absolute top-0 right-0 w-2/3 h-2/3 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse at top right, rgba(245,158,11,0.09), transparent 70%)' }}
+      />
+      <div
+        className="absolute bottom-0 left-0 w-1/2 h-1/2 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse at bottom left, rgba(212,175,55,0.07), transparent 70%)' }}
+      />
+      <AfricanPattern />
 
-      {/* Animated Golden Light Rays */}
-      {isClient && (
-        <div className="absolute inset-0 pointer-events-none">
-          {lightRays.map((ray, i) => (
-            <div
-              key={i}
-              className={`absolute ${ray.width} bg-gradient-to-t from-transparent via-brand-gold/30 to-transparent animate-pulse`}
-              style={{
-                left: `${ray.left}%`,
-                height: '120%',
-                top: '-10%',
-                transform: 'rotate(15deg)',
-                animationDelay: `${ray.delay}s`,
-                animationDuration: `${ray.duration}s`,
-                filter: 'blur(1px)'
-              }}
-            />
-          ))}
-        </div>
-      )}
+      {/* ── Corner bracket decorations ───────────────────────────────────── */}
+      <div
+        className="absolute top-8 left-8 w-12 h-12 pointer-events-none"
+        style={{ borderLeft: `2px solid ${BORDER_S}`, borderTop: `2px solid ${BORDER_S}` }}
+      />
+      <div
+        className="absolute bottom-8 right-8 w-12 h-12 pointer-events-none"
+        style={{ borderRight: `2px solid ${BORDER_S}`, borderBottom: `2px solid ${BORDER_S}` }}
+      />
 
-      {/* Enhanced Floating Elements */}
-      {isClient && (
-        <div className="absolute inset-0 pointer-events-none">
-          {floatingElements.map((element, i) => (
-            <div
-              key={i}
-              className="absolute animate-float"
-              style={{
-                left: `${element.left}%`,
-                top: `${element.top}%`,
-                animationDelay: `${element.delay}s`,
-                animationDuration: `${element.duration}s`
-              }}
-            >
-              <div className={`${element.size} bg-gradient-to-r from-brand-gold via-brand-goldLight to-brand-gold rounded-full backdrop-blur-sm shadow-gold animate-pulse`} />
+      {/* ── Content ─────────────────────────────────────────────────────── */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+
+            {/* ── Left: copy ────────────────────────────────────────────── */}
+            <div className="order-2 lg:order-1">
+
+              {/* Section label */}
+              <div className="flex items-center gap-3 mb-6">
+                <div style={{ width: '3rem', height: '3px', background: AMBER, borderRadius: 2, flexShrink: 0 }} />
+                <span
+                  className="font-display font-bold uppercase"
+                  style={{ color: AMBER, fontSize: '0.75rem', letterSpacing: '0.2em' }}
+                >
+                  {t.badge}
+                </span>
+              </div>
+
+              {/* Heading */}
+              <h2
+                className="font-display font-extrabold uppercase leading-none tracking-tight mb-6"
+                style={{ fontSize: 'clamp(2.25rem, 5.5vw, 4rem)', color: CREAM, letterSpacing: '-0.02em' }}
+              >
+                {t.title.line1}{' '}
+                <span style={{ color: AMBER }}>{t.title.accent}</span>{' '}
+                {t.title.line2}
+              </h2>
+
+              {/* Subtitle */}
+              <p
+                className="leading-relaxed mb-10"
+                style={{ color: MUTED, fontSize: '1rem', maxWidth: '420px' }}
+              >
+                {t.subtitle}
+              </p>
+
+              {/* CTAs */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={() => handleWhatsApp()}
+                  className="font-display font-extrabold uppercase tracking-widest transition-opacity duration-200 hover:opacity-90 rounded"
+                  style={{
+                    background: AMBER,
+                    color: DARK,
+                    padding: '0.9rem 2rem',
+                    fontSize: '0.8rem',
+                    letterSpacing: '0.1em',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                  }}
+                >
+                  {t.button}
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </button>
+
+                <button
+                  onClick={() => handleWhatsApp(
+                    language === 'sw'
+                      ? 'Hujambo! Ningependa ushauri bure kutoka Future Holders.'
+                      : 'Hi! I would like a free consultation from Future Holders.'
+                  )}
+                  className="font-display font-bold uppercase tracking-widest transition-colors duration-200 rounded"
+                  style={{
+                    background: 'transparent',
+                    border: `2px solid ${BORDER_S}`,
+                    color: AMBER,
+                    padding: '0.9rem 2rem',
+                    fontSize: '0.8rem',
+                    letterSpacing: '0.1em',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {t.secondary}
+                </button>
+              </div>
+
+              {/* Decorative dot row */}
+              <div className="flex items-center gap-3 mt-10">
+                {[AMBER, GOLD, AMBER].map((c, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      width: i === 1 ? '1.5rem' : '0.4rem',
+                      height: '0.4rem',
+                      borderRadius: '2px',
+                      background: c,
+                      opacity: i === 1 ? 1 : 0.4,
+                    }}
+                  />
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
-      )}
 
-      {/* Elegant Grid Pattern */}
-      <div className="absolute inset-0 opacity-5 z-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `
-            linear-gradient(rgba(212, 175, 55, 0.3) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(212, 175, 55, 0.3) 1px, transparent 1px)
-          `,
-          backgroundSize: '80px 80px'
-        }} />
-      </div>
+            {/* ── Right: image card ─────────────────────────────────────── */}
+            <div className="order-1 lg:order-2">
+              <div
+                className="relative overflow-hidden group rounded"
+                style={{
+                  background: DARK,
+                  border: `1px solid ${BORDER_S}`,
+                  boxShadow: '0 24px 60px rgba(0,0,0,0.5)',
+                }}
+              >
+                {/* Top accent stripe */}
+                <div style={{ height: 3, background: AMBER }} />
 
-      {/* Main Content */}
-      <div className="relative z-20 flex items-center justify-center min-h-screen">
-        <div className="container mx-auto px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              
-              {/* Content Side */}
-              <div className="text-center lg:text-left order-2 lg:order-1">
-                {/* Enhanced glassmorphism container */}
-                <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 lg:p-12 border border-brand-gold/20 shadow-gold transform transition-all duration-700 hover:scale-105 hover:shadow-2xl">
-                  
-                  {/* Animated title with gold accent */}
-                  <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 drop-shadow-2xl opacity-0 animate-fade-in leading-tight">
-                    {content.title}
-                    <div className="flex justify-center lg:justify-start mt-6">
-                      <span className="block w-20 h-1.5 bg-gradient-to-r from-brand-gold via-brand-goldLight to-brand-gold rounded-full shadow-gold animate-pulse"></span>
-                    </div>
-                  </h2>
-                  
-                  {/* Enhanced subtitle */}
-                  <p className="text-lg md:text-xl text-brand-goldLight max-w-2xl mx-auto lg:mx-0 mb-8 leading-relaxed drop-shadow-lg opacity-0 animate-fade-in-delay">
-                    {content.subtitle}
-                  </p>
-                  
-                  {/* Premium CTA button */}
-                  <div className="relative inline-block group opacity-0 animate-fade-in-delay-2">
-                    {/* Enhanced glow effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-brand-gold via-brand-goldLight to-brand-gold rounded-2xl blur-xl opacity-60 group-hover:opacity-100 transition-all duration-500 animate-pulse scale-110"></div>
-                    
-                    {/* Main button with enhanced styling */}
-                    <button className="relative inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-brand-gold/90 to-brand-goldLight/90 backdrop-blur-md text-brand-dark text-lg font-bold rounded-2xl shadow-gold hover:shadow-2xl transition-all duration-300 border-2 border-brand-gold/50 hover:border-brand-goldLight transform hover:scale-110 hover:-translate-y-1 group">
-                      <span className="relative z-10 flex items-center">
-                        {content.button}
-                        <svg className="ml-3 w-5 h-5 transition-transform group-hover:translate-x-2 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                      </span>
-                    </button>
+                {/* Image */}
+                <div className="relative overflow-hidden" style={{ aspectRatio: '4/3' }}>
+                  <img
+                    src="/images/client.jpeg"
+                    alt="Future Holders client"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  {/* Dark overlay */}
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background: 'linear-gradient(to top, rgba(13,9,3,0.75) 0%, rgba(13,9,3,0.15) 60%, transparent 100%)',
+                    }}
+                  />
+                  {/* Watermark number */}
+                  <div
+                    className="absolute bottom-4 right-5 font-display font-black select-none pointer-events-none"
+                    style={{ fontSize: '5rem', lineHeight: 1, color: 'rgba(245,158,11,0.1)', letterSpacing: '-0.04em' }}
+                  >
+                    01
                   </div>
+                </div>
 
-                  {/* Decorative elements */}
-                  <div className="mt-8 flex justify-center lg:justify-start space-x-6">
-                    <div className="w-2 h-2 bg-brand-gold rounded-full animate-ping"></div>
-                    <div className="w-2 h-2 bg-brand-goldLight rounded-full animate-ping" style={{animationDelay: '0.5s'}}></div>
-                    <div className="w-2 h-2 bg-brand-gold rounded-full animate-ping" style={{animationDelay: '1s'}}></div>
+                {/* Card footer panel */}
+                <div className="relative p-6">
+                  <DotGrid />
+                  <div className="relative flex items-center justify-between">
+                    <div>
+                      <p
+                        className="font-display font-extrabold uppercase leading-tight"
+                        style={{ color: CREAM, fontSize: '0.95rem', letterSpacing: '-0.01em' }}
+                      >
+                        Future Holders
+                      </p>
+                      <p
+                        className="font-display font-bold uppercase mt-1"
+                        style={{ color: AMBER, fontSize: '0.62rem', letterSpacing: '0.12em' }}
+                      >
+                        {language === 'sw' ? 'Wakala wa Kidijitali wa Tanzania' : "Tanzania's Digital Agency"}
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      {[AMBER, GOLD].map((c, i) => (
+                        <div
+                          key={i}
+                          style={{ width: '0.4rem', height: '2rem', borderRadius: '2px', background: c, opacity: i === 1 ? 0.5 : 1 }}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Image Side */}
-              <div className="order-1 lg:order-2">
-                <div className="relative group">
-                  {/* Image container with golden frame effect */}
-                  <div className="relative overflow-hidden rounded-3xl shadow-gold bg-gradient-to-br from-brand-gold/20 to-brand-goldLight/20 backdrop-blur-sm border border-brand-gold/30 transform transition-all duration-700 hover:scale-105 hover:shadow-2xl">
-                    
-                    {/* Business image with golden overlay */}
-                    <div className="aspect-[4/3] relative overflow-hidden">
-                      <img 
-                        src="/images/client.jpeg" 
-                        alt="Business professional" 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      
-                      {/* Golden overlay gradient */}
-                      <div className="absolute inset-0 bg-gradient-to-tr from-brand-gold/20 via-transparent to-brand-goldLight/10 transition-opacity duration-500 group-hover:opacity-30" />
-                      
-                      {/* Subtle pattern overlay */}
-                      <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-500" style={{
-                        backgroundImage: `
-                          radial-gradient(circle at 25% 25%, rgba(212, 175, 55, 0.3) 0%, transparent 50%),
-                          radial-gradient(circle at 75% 75%, rgba(245, 208, 122, 0.2) 0%, transparent 50%)
-                        `
-                      }} />
-                    </div>
-                    
-                    {/* Golden border animation */}
-                    <div className="absolute inset-0 border-2 border-brand-gold/50 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 animate-pulse"></div>
+              {/* Floating stat badges */}
+              {isClient && (
+                <>
+                  <div
+                    className="absolute -top-4 -right-4 font-display font-extrabold uppercase text-center rounded"
+                    style={{
+                      background: AMBER,
+                      color: DARK,
+                      padding: '0.6rem 0.9rem',
+                      fontSize: '0.65rem',
+                      letterSpacing: '0.08em',
+                      boxShadow: '0 8px 24px rgba(245,158,11,0.35)',
+                    }}
+                  >
+                    <div style={{ fontSize: '1.4rem', letterSpacing: '-0.02em', lineHeight: 1 }}>50+</div>
+                    <div style={{ opacity: 0.7 }}>{language === 'sw' ? 'Tovuti' : 'Websites'}</div>
                   </div>
-                  
-                  {/* Decorative elements around image */}
-                  <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-r from-brand-gold to-brand-goldLight rounded-full shadow-gold animate-bounce"></div>
-                  <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-gradient-to-r from-brand-goldLight to-brand-gold rounded-full shadow-gold animate-bounce" style={{animationDelay: '1s'}}></div>
-                </div>
-              </div>
+                  <div
+                    className="absolute -bottom-4 -left-4 font-display font-extrabold uppercase text-center rounded"
+                    style={{
+                      background: DARK,
+                      border: `2px solid ${BORDER_S}`,
+                      color: GOLD,
+                      padding: '0.6rem 0.9rem',
+                      fontSize: '0.65rem',
+                      letterSpacing: '0.08em',
+                    }}
+                  >
+                    <div style={{ fontSize: '1.4rem', letterSpacing: '-0.02em', lineHeight: 1, color: CREAM }}>40+</div>
+                    <div>{language === 'sw' ? 'Wateja' : 'Clients'}</div>
+                  </div>
+                </>
+              )}
             </div>
+
           </div>
         </div>
       </div>
 
-      {/* Enhanced decorative bottom border */}
-      <div className="absolute bottom-0 left-0 right-0 h-3 bg-gradient-to-r from-transparent via-brand-gold via-brand-goldLight to-transparent animate-pulse shadow-gold"></div>
-      
-      {/* Corner decorations */}
-      <div className="absolute top-10 left-10 w-20 h-20 border-l-2 border-t-2 border-brand-gold/30 rounded-tl-lg"></div>
-      <div className="absolute bottom-10 right-10 w-20 h-20 border-r-2 border-b-2 border-brand-gold/30 rounded-br-lg"></div>
-
-      <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(40px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-20px);
-          }
-        }
-        
-        .animate-fade-in {
-          animation: fade-in 1s ease-out 0.3s forwards;
-        }
-        
-        .animate-fade-in-delay {
-          animation: fade-in 1s ease-out 0.7s forwards;
-        }
-        
-        .animate-fade-in-delay-2 {
-          animation: fade-in 1s ease-out 1.1s forwards;
-        }
-        
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-      `}</style>
+      {/* ── Bottom accent rule ───────────────────────────────────────────── */}
+      <div style={{ height: 3, background: `linear-gradient(to right, transparent, ${AMBER} 30%, ${GOLD} 70%, transparent)` }} />
     </section>
   );
 }

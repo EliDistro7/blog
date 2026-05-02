@@ -3,204 +3,304 @@
 import Link from 'next/link';
 import { Facebook, Instagram, Linkedin, Twitter, Mail, ArrowUp } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
+
+// ── Design tokens ─────────────────────────────────────────────────────────────
+const AMBER    = '#F59E0B';
+const GOLD     = '#D4AF37';
+const SURFACE  = '#1A1208';
+const DARK     = '#0D0903';
+const CREAM    = '#F5F0E8';
+const MUTED    = 'rgba(245,240,232,0.55)';
+const FAINT    = 'rgba(245,240,232,0.3)';
+const BORDER   = 'rgba(245,158,11,0.2)';
+const BORDER_S = 'rgba(245,158,11,0.35)';
+
+// ── African geometric SVG pattern ─────────────────────────────────────────────
+const AfricanPattern = () => (
+  <svg
+    width="100%" height="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    className="absolute inset-0 pointer-events-none"
+    style={{ opacity: 0.045 }}
+  >
+    <defs>
+      <pattern id="footerPattern" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+        <polygon points="30,4 56,30 30,56 4,30" fill="none" stroke="#F59E0B" strokeWidth="1.5" />
+        <polygon points="30,16 44,30 30,44 16,30" fill="none" stroke="#D4AF37" strokeWidth="1" />
+        <line x1="30" y1="0" x2="30" y2="60" stroke="#F59E0B" strokeWidth="0.5" />
+        <line x1="0"  y1="30" x2="60" y2="30" stroke="#F59E0B" strokeWidth="0.5" />
+        <circle cx="30" cy="30" r="2.5" fill="#F59E0B" />
+        <circle cx="0"  cy="0"  r="1.5" fill="#D4AF37" />
+        <circle cx="60" cy="0"  r="1.5" fill="#D4AF37" />
+        <circle cx="0"  cy="60" r="1.5" fill="#D4AF37" />
+        <circle cx="60" cy="60" r="1.5" fill="#D4AF37" />
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#footerPattern)" />
+  </svg>
+);
 
 export default function Footer() {
+  const { language } = useLanguage();
   const [showScrollTop, setShowScrollTop] = useState(false);
-  
-  // Show scroll to top button when user scrolls down
+
   useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 200);
-    };
-    
+    const handleScroll = () => setShowScrollTop(window.scrollY > 200);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  // Translation content - enhanced for luxury design
   const content = {
     en: {
-      description: "Bridging technology and hospitality for complete business solutions.",
-      copyright: "All rights reserved.",
+      description: 'Bridging technology and hospitality for complete business solutions across Tanzania.',
+      copyright: 'All rights reserved.',
+      quickLinks: 'Quick Links',
+      connect: 'Connect With Us',
+      follow: 'Follow us for updates and insights',
+      privacy: 'Privacy Policy',
+      terms: 'Terms of Service',
       links: [
-        { name: "Services", path: "/services" },
-        { name: "About", path: "/about" },
-        { name: "Portfolio", path: "/portfolio" },
-        { name: "Contact", path: "/contact" },
-      ]
+        { name: 'Services',  path: '/services'  },
+        { name: 'About',     path: '/about'     },
+        { name: 'Portfolio', path: '/portfolio' },
+        { name: 'Contact',   path: '/contact'   },
+      ],
     },
     sw: {
-      description: "Teknolojia na ukarimu kwa ufumbuzi kamili wa biashara.",
-      copyright: "Haki zote zimehifadhiwa.",
+      description: 'Teknolojia na ukarimu kwa ufumbuzi kamili wa biashara kote Tanzania.',
+      copyright: 'Haki zote zimehifadhiwa.',
+      quickLinks: 'Viungo vya Haraka',
+      connect: 'Unganika Nasi',
+      follow: 'Tufuate kwa habari na maarifa',
+      privacy: 'Sera ya Faragha',
+      terms: 'Masharti ya Huduma',
       links: [
-        { name: "Huduma", path: "/services" },
-        { name: "Portfolio", path: "/portfolio" },
-        { name: "Mawasiliano", path: "/contact" },
-      ]
-    }
+        { name: 'Huduma',      path: '/services'  },
+        { name: 'Portfolio',   path: '/portfolio' },
+        { name: 'Mawasiliano', path: '/contact'   },
+      ],
+    },
   };
 
   const socials = [
-    { icon: <Facebook className="w-5 h-5" />, path: "https://www.facebook.com/f.hmarketers", name: "Facebook" },
-    { icon: <Instagram className="w-5 h-5" />, path: "https://www.instagram.com/fh_marketers/", name: "Instagram" },
-    { icon: <Twitter className="w-5 h-5" />, path: "https://x.com/fh_marketers", name: "Twitter" },
-    { icon: <Linkedin className='w-5 h-5' />, path: "https://www.linkedin.com/company/future-holders-company-limited/posts/?feedView=all", name: "LinkedIn" }
+    { icon: <Facebook  className="w-4 h-4" />, path: 'https://www.facebook.com/f.hmarketers',                                                                   name: 'Facebook'  },
+    { icon: <Instagram className="w-4 h-4" />, path: 'https://www.instagram.com/fh_marketers/',                                                                  name: 'Instagram' },
+    { icon: <Twitter   className="w-4 h-4" />, path: 'https://x.com/fh_marketers',                                                                              name: 'Twitter'   },
+    { icon: <Linkedin  className="w-4 h-4" />, path: 'https://www.linkedin.com/company/future-holders-company-limited/posts/?feedView=all', name: 'LinkedIn'  },
   ];
 
-  return (
-    <footer className="relative bg-gradient-to-br from-brand-dark via-brand-deep to-brand-medium text-white overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0">
-        {/* Golden gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-gold/5 via-transparent to-brand-goldLight/5" />
-        
-        {/* Animated background pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-32 h-32 bg-gradient-to-r from-brand-gold to-brand-goldLight rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-20 w-24 h-24 bg-gradient-to-r from-brand-goldLight to-brand-gold rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
-          <div className="absolute top-1/2 left-1/3 w-16 h-16 bg-brand-gold rounded-full blur-xl animate-pulse" style={{animationDelay: '2s'}} />
-        </div>
-        
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 opacity-5" style={{
-          backgroundImage: `
-            linear-gradient(rgba(212, 175, 55, 0.3) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(212, 175, 55, 0.3) 1px, transparent 1px)
-          `,
-          backgroundSize: '60px 60px'
-        }} />
-      </div>
+  const t = content[language] ?? content.en;
 
-      {/* Main footer content */}
-      <div className="relative z-10 container px-6 py-16 mx-auto">
-        {/* Top decorative border */}
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-brand-gold to-transparent mb-12" />
-        
-        {/* Main content grid */}
+  return (
+    <footer
+      className="relative overflow-hidden"
+      style={{ background: DARK, fontFamily: "'Bricolage Grotesque', 'Inter', sans-serif" }}
+    >
+      {/* ── Backgrounds ─────────────────────────────────────────────────── */}
+      <div
+        className="absolute top-0 left-0 w-1/2 h-1/2 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse at top left, rgba(245,158,11,0.06), transparent 70%)' }}
+      />
+      <div
+        className="absolute bottom-0 right-0 w-1/3 h-1/3 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse at bottom right, rgba(212,175,55,0.05), transparent 70%)' }}
+      />
+      <AfricanPattern />
+
+      {/* ── Top accent rule ──────────────────────────────────────────────── */}
+      <div style={{ height: 3, background: `linear-gradient(to right, transparent, ${AMBER} 30%, ${GOLD} 70%, transparent)` }} />
+
+      {/* ── Main content ────────────────────────────────────────────────── */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid md:grid-cols-3 gap-12 mb-12">
-          
-          {/* Company Info */}
-          <div className="md:col-span-1 text-center md:text-left">
-            <Link href="/" className="inline-flex items-center gap-3 mb-6 group">
-              <div className="w-10 h-10 bg-gradient-to-r from-brand-gold to-brand-goldLight rounded-xl flex items-center justify-center shadow-gold group-hover:scale-110 transition-transform duration-300">
-                <span className="text-brand-dark font-bold text-lg">FH</span>
-              </div>
-              <span className="text-2xl font-serif font-bold text-white group-hover:text-brand-goldLight transition-colors duration-300">
+
+          {/* ── Brand column ──────────────────────────────────────────── */}
+          <div className="md:col-span-1">
+            {/* Logo */}
+            <Link href="/" className="inline-flex items-center gap-3 mb-6">
+              <img
+                src="/logo.png"
+                alt="Future Holders"
+                className="h-12 w-auto object-contain"
+              />
+              <span
+                className="font-display font-extrabold uppercase tracking-tight"
+                style={{ color: CREAM, fontSize: '1.1rem', letterSpacing: '-0.01em' }}
+              >
                 Future Holders
               </span>
             </Link>
-            
-            <p className="text-brand-foam/80 text-base leading-relaxed mb-6 max-w-sm">
-              {content.en.description}
+
+            <p className="leading-relaxed mb-6" style={{ color: MUTED, fontSize: '0.875rem', maxWidth: '280px' }}>
+              {t.description}
             </p>
-            
-            {/* Contact info with icon */}
-            <div className="flex items-center justify-center md:justify-start gap-3 mb-6">
-              <div className="w-8 h-8 bg-gradient-to-r from-brand-gold/20 to-brand-goldLight/20 rounded-lg flex items-center justify-center">
-                <Mail className="w-4 h-4 text-brand-goldLight" />
+
+            {/* Email */}
+            <a
+              href="mailto:info@futureholders.pro"
+              className="inline-flex items-center gap-3 group"
+            >
+              <div
+                className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0"
+                style={{ background: 'rgba(245,158,11,0.1)', border: `1px solid ${BORDER}` }}
+              >
+                <Mail className="w-3.5 h-3.5" style={{ color: AMBER }} />
               </div>
-              <a 
-                href="mailto:info@futureholders.pro" 
-                className="text-brand-foam/80 hover:text-brand-goldLight transition-colors duration-300 text-sm"
+              <span
+                className="font-display font-semibold uppercase"
+                style={{ color: MUTED, fontSize: '0.7rem', letterSpacing: '0.08em', transition: 'color .2s' }}
+                onMouseEnter={e => (e.currentTarget.style.color = AMBER)}
+                onMouseLeave={e => (e.currentTarget.style.color = MUTED)}
               >
                 info@futureholders.pro
-              </a>
-            </div>
+              </span>
+            </a>
           </div>
-          
-          {/* Quick Links */}
-          <div className="md:col-span-1 text-center">
-            <h3 className="text-xl font-semibold text-brand-goldLight mb-6 relative">
-              Quick Links
-              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-12 h-0.5 bg-gradient-to-r from-brand-gold to-brand-goldLight rounded-full" />
-            </h3>
-            
-            <div className="grid grid-cols-2 gap-4">
-              {content.en.links.map((link, index) => (
-                <Link 
-                  key={index} 
-                  href={link.path} 
-                  className="text-brand-foam/80 hover:text-brand-goldLight transition-all duration-300 text-sm py-2 px-4 rounded-lg hover:bg-brand-gold/10 transform hover:scale-105"
+
+          {/* ── Quick links ───────────────────────────────────────────── */}
+          <div className="md:col-span-1">
+            {/* Section label */}
+            <div className="flex items-center gap-3 mb-6">
+              <div style={{ width: '2rem', height: '3px', background: AMBER, borderRadius: 2, flexShrink: 0 }} />
+              <span
+                className="font-display font-bold uppercase"
+                style={{ color: AMBER, fontSize: '0.7rem', letterSpacing: '0.18em' }}
+              >
+                {t.quickLinks}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              {t.links.map((link, i) => (
+                <Link
+                  key={i}
+                  href={link.path}
+                  className="font-display font-bold uppercase transition-colors duration-200"
+                  style={{ color: MUTED, fontSize: '0.72rem', letterSpacing: '0.08em', padding: '0.4rem 0' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = AMBER)}
+                  onMouseLeave={e => (e.currentTarget.style.color = MUTED)}
                 >
                   {link.name}
                 </Link>
               ))}
             </div>
           </div>
-          
-          {/* Social Media */}
-          <div className="md:col-span-1 text-center">
-            <h3 className="text-xl font-semibold text-brand-goldLight mb-6 relative">
-              Connect With Us
-              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-12 h-0.5 bg-gradient-to-r from-brand-gold to-brand-goldLight rounded-full" />
-            </h3>
-            
-            <div className="flex justify-center gap-4 mb-6">
-              {socials.map((social, index) => (
-                <a 
-                  key={index} 
-                  href={social.path} 
-                  className="group relative"
-                  aria-label={`${social.name} social media`}
+
+          {/* ── Socials ───────────────────────────────────────────────── */}
+          <div className="md:col-span-1">
+            {/* Section label */}
+            <div className="flex items-center gap-3 mb-6">
+              <div style={{ width: '2rem', height: '3px', background: GOLD, borderRadius: 2, flexShrink: 0 }} />
+              <span
+                className="font-display font-bold uppercase"
+                style={{ color: GOLD, fontSize: '0.7rem', letterSpacing: '0.18em' }}
+              >
+                {t.connect}
+              </span>
+            </div>
+
+            <div className="flex gap-3 mb-5">
+              {socials.map((social, i) => (
+                <a
+                  key={i}
+                  href={social.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.name}
+                  className="flex items-center justify-center rounded transition-all duration-200"
+                  style={{
+                    width: '2.5rem',
+                    height: '2.5rem',
+                    background: 'rgba(245,158,11,0.08)',
+                    border: `1px solid ${BORDER}`,
+                    color: MUTED,
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget ).style.borderColor = AMBER;
+                    (e.currentTarget ).style.color = AMBER;
+                    (e.currentTarget ).style.background = 'rgba(245,158,11,0.15)';
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget ).style.borderColor = BORDER;
+                    (e.currentTarget ).style.color = MUTED;
+                    (e.currentTarget ).style.background = 'rgba(245,158,11,0.08)';
+                  }}
                 >
-                  {/* Glow effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-brand-gold to-brand-goldLight rounded-xl blur-md opacity-0 group-hover:opacity-50 transition-all duration-300 scale-110" />
-                  
-                  {/* Icon container */}
-                  <div className="relative w-12 h-12 bg-gradient-to-r from-brand-gold/20 to-brand-goldLight/20 rounded-xl flex items-center justify-center border border-brand-gold/30 group-hover:border-brand-goldLight group-hover:bg-gradient-to-r group-hover:from-brand-gold/30 group-hover:to-brand-goldLight/30 transition-all duration-300 transform group-hover:scale-110 group-hover:-translate-y-1">
-                    <div className="text-brand-foam/80 group-hover:text-brand-goldLight transition-colors duration-300">
-                      {social.icon}
-                    </div>
-                  </div>
+                  {social.icon}
                 </a>
               ))}
             </div>
-            
-            <p className="text-brand-foam/60 text-sm">
-              Follow us for updates and insights
+
+            <p
+              className="font-display font-semibold uppercase"
+              style={{ color: FAINT, fontSize: '0.62rem', letterSpacing: '0.1em' }}
+            >
+              {t.follow}
             </p>
           </div>
         </div>
-        
-        {/* Bottom decorative border */}
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-brand-gold to-transparent mb-8" />
-        
-        {/* Copyright and additional info */}
+
+        {/* ── Divider ─────────────────────────────────────────────────── */}
+        <div style={{ height: '1px', background: BORDER, marginBottom: '2rem' }} />
+
+        {/* ── Copyright row ───────────────────────────────────────────── */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-center md:text-left">
-            <p className="text-brand-foam/60 text-sm">
-              © {new Date().getFullYear()} Future Holders. {content.en.copyright}
-            </p>
-          </div>
-          
-          <div className="flex items-center gap-6">
-            <Link href="/privacy" className="text-brand-foam/60 hover:text-brand-goldLight transition-colors text-sm">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="text-brand-foam/60 hover:text-brand-goldLight transition-colors text-sm">
-              Terms of Service
-            </Link>
+          <p
+            className="font-display font-semibold uppercase"
+            style={{ color: FAINT, fontSize: '0.62rem', letterSpacing: '0.1em' }}
+          >
+            © {new Date().getFullYear()} Future Holders — {t.copyright}
+          </p>
+
+          <div className="flex items-center gap-2">
+            {[
+              { label: t.privacy, path: '/privacy' },
+              { label: t.terms,   path: '/terms'   },
+            ].map((item, i) => (
+              <span key={i} className="flex items-center gap-2">
+                {i > 0 && <span style={{ color: BORDER, fontSize: '0.6rem' }}>|</span>}
+                <Link
+                  href={item.path}
+                  className="font-display font-semibold uppercase transition-colors duration-200"
+                  style={{ color: FAINT, fontSize: '0.62rem', letterSpacing: '0.1em' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = AMBER)}
+                  onMouseLeave={e => (e.currentTarget.style.color = FAINT)}
+                >
+                  {item.label}
+                </Link>
+              </span>
+            ))}
           </div>
         </div>
       </div>
-      
-      {/* Scroll to top button */}
+
+      {/* ── Bottom accent rule ───────────────────────────────────────────── */}
+      <div style={{ height: 3, background: `linear-gradient(to right, ${AMBER}, ${GOLD} 50%, ${AMBER})` }} />
+
+      {/* ── Scroll to top ────────────────────────────────────────────────── */}
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-brand-gold to-brand-goldLight rounded-full flex items-center justify-center shadow-gold hover:shadow-2xl transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 z-50 group"
           aria-label="Scroll to top"
+          className="fixed bottom-8 right-8 z-50 flex items-center justify-center rounded font-display font-extrabold transition-all duration-200"
+          style={{
+            width: '2.75rem',
+            height: '2.75rem',
+            background: AMBER,
+            color: DARK,
+            border: 'none',
+            cursor: 'pointer',
+            boxShadow: '0 8px 24px rgba(245,158,11,0.4)',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.background = GOLD)}
+          onMouseLeave={e => (e.currentTarget.style.background = AMBER)}
         >
-          <ArrowUp className="w-5 h-5 text-brand-dark group-hover:animate-bounce" />
+          <ArrowUp className="w-4 h-4" />
         </button>
       )}
-      
-      {/* Bottom golden accent */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-gold via-brand-goldLight to-brand-gold" />
     </footer>
   );
 }

@@ -2,177 +2,225 @@
 import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
 import { LanguageSwitcher } from "@/app/components/LanguageSwitcher"
-import { Menu, X, Share2, Smartphone, Globe, Users, ChevronDown, DoorOpen, MessageCircle, Phone, FileText, ShoppingCart, Palette } from 'lucide-react'
+import {
+  Menu, X, Share2, Globe, Users, ChevronDown,
+  DoorOpen, Phone, FileText, ShoppingCart, Palette
+} from 'lucide-react'
 
+// ── Inline African SVG pattern (decorative, mobile menu bg) ──────────────────
+const AfricanPatternBg = () => (
+  <svg
+    width="100%" height="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    className="absolute inset-0 opacity-[0.04] pointer-events-none"
+  >
+    <defs>
+      <pattern id="hdrPattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+        <polygon points="20,3 37,20 20,37 3,20" fill="none" stroke="#F59E0B" strokeWidth="1" />
+        <circle cx="20" cy="20" r="2" fill="#F59E0B" />
+        <circle cx="0"  cy="0"  r="1" fill="#D4AF37" />
+        <circle cx="40" cy="0"  r="1" fill="#D4AF37" />
+        <circle cx="0"  cy="40" r="1" fill="#D4AF37" />
+        <circle cx="40" cy="40" r="1" fill="#D4AF37" />
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#hdrPattern)" />
+  </svg>
+)
+
+// ── Data ─────────────────────────────────────────────────────────────────────
+const services = [
+  {
+    name: "Door-to-Door Marketing",
+    shortName: "Door-to-Door",
+    icon: <DoorOpen className="w-4 h-4" />,
+    path: "/services/door-to-door",
+    description: "Personal engagement & direct sales",
+  },
+  {
+    name: "Social Media Management",
+    shortName: "Social Media",
+    icon: <Share2 className="w-4 h-4" />,
+    path: "/services/social-media",
+    description: "Complete digital presence management",
+  },
+  {
+    name: "Web Development",
+    shortName: "Web Building",
+    icon: <Globe className="w-4 h-4" />,
+    path: "/services/web-development",
+    description: "Professional websites & e-commerce",
+  },
+  {
+    name: "Tender Applications",
+    shortName: "Tender Apps",
+    icon: <FileText className="w-4 h-4" />,
+    path: "/services/tender-applications",
+    description: "Professional tender & proposal writing",
+  },
+  {
+    name: "Equipment Sales",
+    shortName: "Equipment",
+    icon: <ShoppingCart className="w-4 h-4" />,
+    path: "/services/equipment-sales",
+    description: "Quality equipment & supply solutions",
+  },
+  {
+    name: "Branding",
+    shortName: "Branding",
+    icon: <Palette className="w-4 h-4" />,
+    path: "/services/branding",
+    description: "Complete brand identity & design",
+  },
+]
+
+const navItems = [
+  { name: "About Us", path: "/team", icon: <Users className="w-4 h-4" /> },
+]
+
+// ── Component ─────────────────────────────────────────────────────────────────
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const [servicesOpen, setServicesOpen] = useState(false)
-  const dropdownRef = useRef(null)
+  const [scrolled, setScrolled]             = useState(false)
+  const [servicesOpen, setServicesOpen]     = useState(false)
+  const dropdownRef   = useRef(null)
   const mobileMenuRef = useRef(null)
 
-  // Detect scroll for header styling
+  // Scroll detection
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const onScroll = () => setScrolled(window.scrollY > 10)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Lock body scroll when menu is open
+  // Body scroll lock
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'auto'
-    }
+    document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'auto'
     return () => { document.body.style.overflow = 'auto' }
   }, [mobileMenuOpen])
-  
-  // Close dropdown when clicking outside
+
+  // Click-outside dropdown
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handler = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setServicesOpen(false)
       }
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [dropdownRef])
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
 
-  const services = [
-    { 
-      name: "Door-to-Door Marketing", 
-      shortName: "Door-to-Door",
-      icon: <DoorOpen className="w-5 h-5" />,
-      path: "/services/door-to-door",
-      description: "Personal engagement & direct sales",
-      gradient: "from-brand-accent to-brand-teal"
-    },
-    { 
-      name: "Social Media Management", 
-      shortName: "Social Media",
-      icon: <Share2 className="w-5 h-5" />,
-      path: "/services/social-media",
-      description: "Complete digital presence management",
-      gradient: "from-brand-coral to-brand-gold"
-    },
-   
-    { 
-      name: "Web Development", 
-      shortName: "Web Building",
-      icon: <Globe className="w-5 h-5" />,
-      path: "/services/web-development",
-      description: "Professional websites & e-commerce",
-      gradient: "from-brand-gold to-brand-coral"
-    },
-    { 
-      name: "Tender Applications", 
-      shortName: "Tender Apps",
-      icon: <FileText className="w-5 h-5" />,
-      path: "/services/tender-applications",
-      description: "Professional tender & proposal writing",
-      gradient: "from-brand-accent to-brand-gold"
-    },
-    { 
-      name: "Equipment Sales", 
-      shortName: "Equipment",
-      icon: <ShoppingCart className="w-5 h-5" />,
-      path: "/services/equipment-sales",
-      description: "Quality equipment & supply solutions",
-      gradient: "from-brand-teal to-brand-coral"
-    },
-    { 
-      name: "Branding", 
-      shortName: "Branding",
-      icon: <Palette className="w-5 h-5" />,
-      path: "/services/branding",
-      description: "Complete brand identity & design",
-      gradient: "from-brand-coral to-brand-accent"
-    },
-  ]
-
-  const navItems = [
-    
-    {
-      name: "About Us",
-      path: "/team",
-      icon: <Users className="w-5 h-5" />
-    },
-  
-  ]
+  const navBase = scrolled
+    ? 'h-16 border-b-2 border-warning/40 shadow-warm'
+    : 'h-20 border-b border-amber-border'
 
   return (
     <>
-      <header 
-        className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
-          scrolled 
-            ? 'h-16 bg-brand-dark/95 backdrop-blur-md shadow-depth border-b border-brand-gold/20' 
-            : 'h-20 bg-brand-dark/80 backdrop-blur-sm border-b border-brand-medium/20'
-        }`}
+      {/* ── HEADER ─────────────────────────────────────────────────────────── */}
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 nav-blur ${navBase}`}
       >
         <div className="container h-full px-4 mx-auto">
           <div className="flex items-center justify-between h-full">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 group" aria-label="Future Holders Home">
-              <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-brand-accent via-brand-gold to-brand-coral shadow-glow group-hover:shadow-gold transition-all duration-300">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-brand-accent/20 to-brand-coral/20 animate-pulse" />
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-white relative z-10">
-                  <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" />
-                  <path d="M12 8v8m-4-4h8" stroke="currentColor" strokeWidth="1.5" fill="none" />
-                </svg>
-              </div>
+
+            {/* ── Logo ─────────────────────────────────────────────────────── */}
+            <Link href="/" className="flex items-center gap-3" aria-label="Future Holders Home">
+              <img
+                src="/logo.png"
+                alt="Future Holders logo"
+                style={{
+                  height: scrolled ? '34px' : '40px',
+                  width: 'auto',
+                  objectFit: 'contain',
+                  transition: 'height 0.3s',
+                }}
+              />
+              {/* Desktop: full brand name */}
               <div className="hidden sm:block">
-                <span className="text-xl font-bold text-white group-hover:text-brand-gold transition-colors duration-300">
-                  Future<span className="text-brand-gold">Holders</span>
-                </span>
-                <div className="text-xs text-brand-foam/60 font-medium -mt-1">
+                <div
+                  className="font-display font-extrabold tracking-wide leading-none"
+                  style={{ fontSize: '1.1rem', color: '#F5F0E8' }}
+                >
+                  FUTURE<span className="text-warning">HOLDERS</span>
+                </div>
+                <div
+                  className="text-2xs uppercase font-bold mt-0.5"
+                  style={{ letterSpacing: '0.2em', color: 'rgba(245,158,11,0.7)' }}
+                >
                   Marketing Solutions
                 </div>
               </div>
-              <span className="sm:hidden text-lg font-bold text-white group-hover:text-brand-gold transition-colors duration-300">
-                Future<span className="text-brand-gold">H</span>
+              {/* Mobile: short abbreviation */}
+              <span
+                className="sm:hidden font-display font-extrabold"
+                style={{ fontSize: '1.05rem', color: '#F5F0E8', letterSpacing: '-0.01em' }}
+              >
+                FH<span style={{ color: '#F59E0B' }}>.</span>
               </span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-1">
-              {/* Services Dropdown */}
+            {/* ── Desktop Nav ──────────────────────────────────────────────── */}
+            <nav className="hidden lg:flex items-center gap-1">
+
+              {/* Services dropdown */}
               <div className="relative" ref={dropdownRef}>
-                <button 
+                <button
                   onClick={() => setServicesOpen(!servicesOpen)}
-                  className="flex items-center gap-1 px-4 py-2 rounded-lg text-brand-foam hover:text-white hover:bg-brand-medium/20 transition-all duration-300 group"
+                  className="flex items-center gap-1.5 px-4 py-2 font-display font-bold uppercase tracking-wider text-sm transition-colors duration-200 rounded"
+                  style={{ color: 'rgba(245,240,232,0.75)' }}
                 >
-                  <span className="font-medium">Services</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${servicesOpen ? 'rotate-180' : ''} group-hover:text-brand-gold`} />
+                  Services
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-300 ${servicesOpen ? 'rotate-180' : ''}`}
+                    style={{ color: '#F59E0B' }}
+                  />
                 </button>
-                
+
+                {/* Dropdown panel */}
                 {servicesOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-96 p-3 rounded-xl bg-brand-dark/95 backdrop-blur-md border border-brand-gold/20 shadow-depth z-[100]"
+                  <div
+                    className="absolute top-full left-0 mt-2 w-[28rem] rounded p-4 z-[100]"
+                    style={{
+                      background: 'rgba(13,9,3,0.97)',
+                      backdropFilter: 'blur(16px)',
+                      border: '1px solid rgba(245,158,11,0.25)',
+                      boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
+                    }}
                   >
-                    <div className="mb-2">
-                      <h3 className="text-sm font-semibold text-brand-gold mb-1">Our Services</h3>
-                      <p className="text-xs text-brand-foam/60">Complete marketing solutions for your business</p>
+                    {/* Accent stripe */}
+                    <div className="stripe-amber animate-stripe-in" />
+
+                    <div className="flex items-center gap-3 mb-4 pt-2">
+                      <div className="accent-rule" />
+                      <span className="font-display font-bold uppercase tracking-widest text-xs text-warning">
+                        Our Services
+                      </span>
                     </div>
+
                     <div className="grid grid-cols-2 gap-2">
-                      {services.map((service) => (
+                      {services.map((svc) => (
                         <Link
-                          key={service.name}
-                          href={service.path}
-                          className="flex items-start gap-3 p-3 rounded-lg hover:bg-brand-medium/20 group transition-all duration-300 border border-transparent hover:border-brand-gold/20"
+                          key={svc.name}
+                          href={svc.path}
                           onClick={() => setServicesOpen(false)}
+                          className="card-warm flex items-start gap-3 p-3 rounded group transition-all duration-200"
                         >
-                          <div className={`p-2 rounded-lg bg-gradient-to-r ${service.gradient} opacity-80 group-hover:opacity-100 transition-opacity duration-300`}>
-                            {service.icon}
+                          <div
+                            className="flex items-center justify-center w-8 h-8 rounded flex-shrink-0"
+                            style={{ background: 'rgba(245,158,11,0.12)' }}
+                          >
+                            <span className="text-warning">{svc.icon}</span>
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="text-sm font-medium text-white group-hover:text-brand-gold transition-colors duration-300">
-                              {service.shortName}
-                            </h4>
-                            <p className="text-xs text-brand-foam/60 mt-1">
-                              {service.description}
-                            </p>
+                          <div className="min-w-0">
+                            <div
+                              className="font-display font-bold text-sm leading-tight mb-0.5 transition-colors duration-200"
+                              style={{ color: '#F5F0E8' }}
+                            >
+                              {svc.shortName}
+                            </div>
+                            <div className="text-xs leading-snug" style={{ color: 'rgba(245,240,232,0.45)' }}>
+                              {svc.description}
+                            </div>
                           </div>
                         </Link>
                       ))}
@@ -180,126 +228,141 @@ export default function Header() {
                   </div>
                 )}
               </div>
-              
-              {/* Regular Nav Items */}
+
+              {/* Regular nav links */}
               {navItems.map((item) => (
                 <Link
                   key={item.name}
                   href={item.path}
-                  className="px-4 py-2 rounded-lg text-brand-foam hover:text-white hover:bg-brand-medium/20 transition-all duration-300 font-medium group"
+                  className="px-4 py-2 font-display font-bold uppercase tracking-wider text-sm transition-colors duration-200"
+                  style={{ color: 'rgba(245,240,232,0.75)' }}
                 >
-                  <span className="group-hover:text-brand-gold transition-colors duration-300">
-                    {item.name}
-                  </span>
+                  {item.name}
                 </Link>
               ))}
-              
+
+              {/* CTA */}
               <Link
                 href="/contact"
-                className="ml-3 px-6 py-2 rounded-full bg-gradient-to-r from-brand-gold to-brand-coral hover:from-brand-coral hover:to-brand-gold text-white font-semibold transition-all duration-300 shadow-glow hover:shadow-gold transform hover:-translate-y-0.5"
+                className="ml-4 px-6 py-2.5 font-display font-extrabold uppercase tracking-widest text-sm transition-opacity duration-200 hover:opacity-90 rounded"
+                style={{ background: '#F59E0B', color: '#0D0903', letterSpacing: '0.08em' }}
               >
                 Contact Us
               </Link>
             </nav>
 
-            <div className="flex items-center gap-2 md:gap-3">
+            {/* Right side */}
+            <div className="flex items-center gap-2">
               <LanguageSwitcher />
-
-              {/* Mobile Menu Button */}
               <button
-                className="lg:hidden flex items-center justify-center h-10 w-10 rounded-lg text-brand-foam hover:bg-brand-medium/20 hover:text-brand-gold transition-all duration-300"
+                className="lg:hidden flex items-center justify-center h-10 w-10 rounded transition-colors duration-200"
+                style={{ color: '#F5F0E8' }}
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={mobileMenuOpen}
                 aria-controls="mobile-menu"
               >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Overlay for mobile menu background */}
+      {/* ── Mobile overlay ──────────────────────────────────────────────────── */}
       {mobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+        <div
+          className="fixed inset-0 z-40 lg:hidden"
+          style={{ background: 'rgba(13,9,3,0.7)', backdropFilter: 'blur(4px)' }}
           onClick={() => setMobileMenuOpen(false)}
           aria-hidden="true"
         />
       )}
-      
-      {/* Enhanced Mobile Menu */}
+
+      {/* ── Mobile Menu ─────────────────────────────────────────────────────── */}
       <div
         id="mobile-menu"
         ref={mobileMenuRef}
-        className={`fixed left-0 right-0 bg-brand-dark/95 backdrop-blur-md border-b border-brand-gold/20 shadow-depth lg:hidden transition-all duration-300 ease-in-out z-40 ${
+        className={`fixed left-0 right-0 lg:hidden z-40 transition-all duration-300 ease-in-out ${
           mobileMenuOpen
             ? 'translate-y-0 opacity-100'
             : '-translate-y-full opacity-0 pointer-events-none'
         }`}
-        style={{ top: scrolled ? '4rem' : '5rem' }}
+        style={{
+          top: scrolled ? '4rem' : '5rem',
+          background: 'rgba(13,9,3,0.97)',
+          backdropFilter: 'blur(16px)',
+          borderBottom: '2px solid rgba(245,158,11,0.3)',
+          boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
+        }}
       >
-        <div className="container px-4 py-6 mx-auto max-h-[calc(100vh-6rem)] overflow-y-auto">
-          <nav className="space-y-6">
-            {/* Services Section */}
+        {/* Decorative pattern */}
+        <AfricanPatternBg />
+
+        <div className="relative container px-4 py-6 mx-auto max-h-[calc(100vh-6rem)] overflow-y-auto">
+          <nav className="space-y-8">
+
+            {/* Services */}
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-brand-gold to-brand-coral flex items-center justify-center">
-                  <Share2 className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white">Our Services</h3>
-                  <p className="text-xs text-brand-foam/60">Complete marketing solutions</p>
-                </div>
+              <div className="flex items-center gap-3 mb-5">
+                <div className="accent-rule" />
+                <span className="font-display font-bold uppercase tracking-widest text-xs text-warning">
+                  Our Services
+                </span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {services.map((service) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {services.map((svc) => (
                   <Link
-                    key={service.name}
-                    href={service.path}
-                    className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-brand-medium/10 to-brand-medium/5 hover:from-brand-medium/20 hover:to-brand-medium/10 border border-brand-medium/20 hover:border-brand-gold/30 transition-all duration-300 group"
+                    key={svc.name}
+                    href={svc.path}
                     onClick={() => setMobileMenuOpen(false)}
+                    className="card-warm flex items-center gap-3 p-4 rounded group transition-all duration-200"
                   >
-                    <div className={`p-2.5 rounded-lg bg-gradient-to-r ${service.gradient} shadow-glow`}>
-                      {service.icon}
+                    <div
+                      className="flex items-center justify-center w-9 h-9 rounded flex-shrink-0"
+                      style={{ background: 'rgba(245,158,11,0.12)' }}
+                    >
+                      <span className="text-warning">{svc.icon}</span>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-semibold text-white group-hover:text-brand-gold transition-colors duration-300">
-                        {service.shortName}
-                      </h4>
-                      <p className="text-xs text-brand-foam/60 mt-1 line-clamp-2">
-                        {service.description}
-                      </p>
+                    <div className="min-w-0">
+                      <div
+                        className="font-display font-bold text-sm transition-colors duration-200"
+                        style={{ color: '#F5F0E8' }}
+                      >
+                        {svc.shortName}
+                      </div>
+                      <div className="text-xs mt-0.5 line-clamp-1" style={{ color: 'rgba(245,240,232,0.45)' }}>
+                        {svc.description}
+                      </div>
                     </div>
                   </Link>
                 ))}
               </div>
             </div>
-            
-            {/* Navigation Section */}
+
+            {/* Navigation */}
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-brand-accent to-brand-teal flex items-center justify-center">
-                  <Users className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white">Navigation</h3>
-                  <p className="text-xs text-brand-foam/60">Explore our company</p>
-                </div>
+              <div className="flex items-center gap-3 mb-5">
+                <div className="accent-rule" />
+                <span className="font-display font-bold uppercase tracking-widest text-xs text-warning">
+                  Navigation
+                </span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {navItems.map((item) => (
                   <Link
                     key={item.name}
                     href={item.path}
-                    className="flex items-center gap-3 p-4 rounded-xl bg-brand-medium/10 hover:bg-brand-medium/20 border border-brand-medium/20 hover:border-brand-gold/30 transition-all duration-300 group"
                     onClick={() => setMobileMenuOpen(false)}
+                    className="card-warm flex items-center gap-3 p-4 rounded group transition-all duration-200"
                   >
-                    <div className="p-2.5 rounded-lg bg-brand-foam/10 text-brand-foam group-hover:bg-brand-gold/20 group-hover:text-brand-gold transition-all duration-300">
-                      {item.icon}
+                    <div
+                      className="flex items-center justify-center w-9 h-9 rounded flex-shrink-0"
+                      style={{ background: 'rgba(245,158,11,0.08)' }}
+                    >
+                      <span className="text-warning">{item.icon}</span>
                     </div>
-                    <span className="text-sm font-semibold text-white group-hover:text-brand-gold transition-colors duration-300">
+                    <span className="font-display font-bold text-sm" style={{ color: '#F5F0E8' }}>
                       {item.name}
                     </span>
                   </Link>
@@ -307,15 +370,16 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Contact Section */}
-            <div className="pt-4 border-t border-brand-medium/20">
+            {/* Contact CTA */}
+            <div style={{ borderTop: '1px solid rgba(245,158,11,0.15)', paddingTop: '1.5rem', paddingBottom: '0.5rem' }}>
               <Link
                 href="/contact"
-                className="flex items-center justify-center gap-3 p-4 rounded-xl bg-gradient-to-r from-brand-gold to-brand-coral hover:from-brand-coral hover:to-brand-gold text-white font-semibold transition-all duration-300 shadow-glow hover:shadow-gold group"
                 onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-center gap-3 p-4 w-full font-display font-extrabold uppercase tracking-widest text-sm transition-opacity duration-200 hover:opacity-90 rounded"
+                style={{ background: '#F59E0B', color: '#0D0903' }}
               >
-                <Phone className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
-                <span>Contact Us Today</span>
+                <Phone className="w-4 h-4" />
+                Contact Us Today
               </Link>
             </div>
           </nav>

@@ -28,7 +28,7 @@ import { StoriesSection } from "./components/home/StoriesSection";
       <ServicesVisualization />
       <TestimonialSection />
       <CTASection />
-      <ChatBot />
+      {/* <ChatBot /> */}
     </div>
   );
 }
