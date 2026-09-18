@@ -52,15 +52,15 @@ export default function ContactPage() {
           {
             title: "Web Design",
             details: "For website development and digital solutions",
-            email: "web@futureholders.co.tz",
-            phone: "+255 789 111 111"
+            email: "sales@futureholders.pro",
+            phone: "+255 745 787 370"
           },
       
           {
             title: "Social Media",
             details: "For digital marketing and brand growth",
-            email: "social@futureholders.co.tz",
-            phone: "+255 789 333 333"
+            email: "sales@futureholders.pro",
+            phone: "+255 745 787 370"
           },
        
         ]
@@ -70,7 +70,7 @@ export default function ContactPage() {
         items: [
           {
             title: "General Inquiries",
-            email: "info@futureholders.com",
+            email: "info@futureholders.pro",
             phone: "+255 745 787 370"
           },
       
@@ -117,15 +117,15 @@ export default function ContactPage() {
           {
             title: "Uundaji wa Tovuti",
             details: "Kwa uundaji wa tovuti na suluhisho za kidijitali",
-            email: "web@futureholders.co.tz",
-            phone: "+255 789 111 111"
+            email: "sales@futureholders.pro",
+            phone: "+255 745 787 370"
           },
          
           {
             title: "Mitandao ya Kijamii",
             details: "Kwa uuzaji wa kidijitali na ukuaji wa chapa",
-            email: "social@futureholders.co.tz",
-            phone: "+255 789 333 333"
+            email: "social@futureholders.pro",
+            phone: "+255 745 787 370"
           },
      
         ]
@@ -135,18 +135,18 @@ export default function ContactPage() {
         items: [
           {
             title: "Maswali ya Jumla",
-            email: "info@futureholders.com",
-            phone: "+255 789 000 000"
+            email: "info@futureholders.pro",
+            phone: "+255 745 787 370"
           },
           {
             title: "Kazi",
-            email: "careers@futureholders.co.tz",
-            phone: "+255 789 555 555"
+            email: "careers@futureholders.pro",
+            phone: "+255 745 787 370"
           },
           {
-            title: "Maonyesho ya Portfolio",
-            email: "portfolio@futureholders.co.tz",
-            phone: "+255 789 666 666"
+            title: "Kuona Portfolio",
+            email: "portfolio@futureholders.pro",
+            phone: "+255 745 787 370"
           }
         ]
       },

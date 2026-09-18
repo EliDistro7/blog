@@ -140,7 +140,7 @@ export default function Footer() {
 
             {/* Email */}
             <a
-              href="mailto:info@futureholders.pro"
+              href="mailto:info@futureholder.pro"
               className="inline-flex items-center gap-3 group"
             >
               <div

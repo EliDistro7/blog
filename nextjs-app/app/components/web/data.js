@@ -28,7 +28,7 @@
       features: ["Member Management", "Event Planning", "Communication Tools", "Admin Dashboard"]
     },
     {
-      url: "www.futureholders.pro",
+      url: "www.futureholder.pro",
       title: "Future Holders (In Progress)",
       description: "Our own company website showcasing our full range of services and team capabilities",
       category: "Company Website",

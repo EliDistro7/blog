@@ -178,7 +178,7 @@
         ]
       }
     },
-   {
+  /* {
   name: "Abel",
   role: {
     en: "Head of Door to Door Sales",
@@ -217,6 +217,7 @@
     ]
   }
 },
+*/
     {
       name: "Bariki Kaneno",
       role: {
