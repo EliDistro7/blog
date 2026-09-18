@@ -131,8 +131,13 @@ export default function ContactPage() {
         ]
       },
       companyContacts: {
-        title: "Mawasiliano ya Kampuni",
+        title: "Mawasiliano ya Ofisi",
         items: [
+            {
+            title: "CEO / Mkurugenzi",
+            email: "info@futureholder.pro",
+            phone: "+255 745 787 370"
+          },
           {
             title: "Maswali ya Jumla",
             email: "info@futureholder.pro",
@@ -140,7 +145,7 @@ export default function ContactPage() {
           },
           {
             title: "Kazi",
-            email: "info@futureholder.pro",
+            email: "sales@futureholder.pro",
             phone: "+255 745 787 370"
           },
           {
