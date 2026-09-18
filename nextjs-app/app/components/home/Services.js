@@ -81,7 +81,7 @@ const services = [
       sw: "Ushirikiano wa moja kwa moja na walengwa wako kupitia mazungumzo ya ana kwa ana yanayojenga imani.",
     },
     icon: Users,
-    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    image: "/services/door.jpeg",
     accent: GOLD,
     features: [
       { en: "Personal Engagement", sw: "Ushirikiano wa Binafsi" },
