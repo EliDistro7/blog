@@ -155,7 +155,7 @@ export default function Footer() {
                 onMouseEnter={e => (e.currentTarget.style.color = AMBER)}
                 onMouseLeave={e => (e.currentTarget.style.color = MUTED)}
               >
-                info@futureholders.pro
+                info@futureholder.pro
               </span>
             </a>
           </div>

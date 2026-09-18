@@ -52,14 +52,14 @@ export default function ContactPage() {
           {
             title: "Web Design",
             details: "For website development and digital solutions",
-            email: "sales@futureholders.pro",
+            email: "sales@futureholder.pro",
             phone: "+255 745 787 370"
           },
       
           {
             title: "Social Media",
             details: "For digital marketing and brand growth",
-            email: "sales@futureholders.pro",
+            email: "sales@futureholder.pro",
             phone: "+255 745 787 370"
           },
        
@@ -70,7 +70,7 @@ export default function ContactPage() {
         items: [
           {
             title: "General Inquiries",
-            email: "info@futureholders.pro",
+            email: "info@futureholder.pro",
             phone: "+255 745 787 370"
           },
       
@@ -117,14 +117,14 @@ export default function ContactPage() {
           {
             title: "Uundaji wa Tovuti",
             details: "Kwa uundaji wa tovuti na suluhisho za kidijitali",
-            email: "sales@futureholders.pro",
+            email: "sales@futureholder.pro",
             phone: "+255 745 787 370"
           },
          
           {
             title: "Mitandao ya Kijamii",
             details: "Kwa uuzaji wa kidijitali na ukuaji wa chapa",
-            email: "social@futureholders.pro",
+            email: "info@futureholder.pro",
             phone: "+255 745 787 370"
           },
      
@@ -135,17 +135,17 @@ export default function ContactPage() {
         items: [
           {
             title: "Maswali ya Jumla",
-            email: "info@futureholders.pro",
+            email: "info@futureholder.pro",
             phone: "+255 745 787 370"
           },
           {
             title: "Kazi",
-            email: "info@futureholders.pro",
+            email: "info@futureholder.pro",
             phone: "+255 745 787 370"
           },
           {
             title: "Kuona Portfolio",
-            email: "info@futureholders.pro",
+            email: "info@futureholder.pro",
             phone: "+255 745 787 370"
           }
         ]

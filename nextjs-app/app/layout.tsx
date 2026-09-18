@@ -32,7 +32,7 @@ export const viewport: Viewport = {
 export async function generateMetadata(): Promise<Metadata> {
   const title = "Future Holders | Digital Innovation Studio";
   const description = "We build digital experiences that shape the future. Web design, development, and digital strategy services.";
-  const metadataBase = new URL("https://www.futureholders.pro");
+  const metadataBase = new URL("https://www.futureholder.pro");
   
   return {
     metadataBase,
