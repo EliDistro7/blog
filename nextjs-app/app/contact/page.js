@@ -141,7 +141,7 @@ export default function ContactPage() {
           {
             title: "Maswali ya Jumla",
             email: "info@futureholder.pro",
-            phone: "+255 765 762 688, +255 746 252 524, +255 628 673 512"
+            phone: "+255 765 762 688, +255 697 093 672, +255 628 673 512"
           },
           {
             title: "Kazi",
