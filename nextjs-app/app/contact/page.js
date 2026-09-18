@@ -140,12 +140,12 @@ export default function ContactPage() {
           },
           {
             title: "Kazi",
-            email: "careers@futureholders.pro",
+            email: "info@futureholders.pro",
             phone: "+255 745 787 370"
           },
           {
             title: "Kuona Portfolio",
-            email: "portfolio@futureholders.pro",
+            email: "info@futureholders.pro",
             phone: "+255 745 787 370"
           }
         ]
