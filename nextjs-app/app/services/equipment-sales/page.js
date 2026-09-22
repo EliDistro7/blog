@@ -530,8 +530,8 @@ const CTASection = ({ language }) => (
           <h3 className="text-lg font-bold text-brand-goldLight mb-2">
             {language === 'en' ? 'Call Us' : 'Tupigie Simu'}
           </h3>
-          <p className="text-brand-goldLight">+255 789 123 456</p>
-          <p className="text-brand-goldLight">+255 654 987 321</p>
+          <p className="text-brand-goldLight">+255 745 787 370</p>
+         
         </div>
         
         <div className="text-center">
@@ -541,8 +541,8 @@ const CTASection = ({ language }) => (
           <h3 className="text-lg font-bold text-brand-goldLight mb-2">
             {language === 'en' ? 'Email Us' : 'Tutumie Barua Pepe'}
           </h3>
-          <p className="text-brand-goldLight">sales@equipmentkenya.com</p>
-          <p className="text-brand-goldLight">info@equipmentkenya.com</p>
+          <p className="text-brand-goldLight">sales@futureholder.pro</p>
+          <p className="text-brand-goldLight">info@futureholder.pro</p>
         </div>
         
         <div className="text-center">

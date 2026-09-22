@@ -98,7 +98,7 @@ const services = [
       sw: "Mauzo ya vifaa vya hali ya juu na huduma za ushauri, kutoa biashara zifaa sahihi na suluhisho za teknolojia.",
     },
     icon: Smartphone,
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    image: "/services/tractor.jpeg",
     accent: AMBER,
     features: [
       { en: "Equipment Consultation", sw: "Ushauri wa Vifaa" },
@@ -132,8 +132,8 @@ const services = [
       sw: "Huduma za kitaalamu za maombi ya zabuni ikiwa ni pamoja na utayarishaji wa nyaraka na uandishi wa mapendekezo.",
     },
     icon: ChevronRight,
-    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    accent: AMBER,
+    image: "https://images.unsplash.com/photo-1600132806608-231446b2e7af?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  accent: AMBER,
     features: [
       { en: "Document Preparation", sw: "Utayarishaji wa Nyaraka" },
       { en: "Compliance Check",     sw: "Ukaguzi wa Kufuata" },
@@ -250,7 +250,7 @@ const ServicesShowcase = () => {
                   />
 
                   {/* Image */}
-                  <div className="relative overflow-hidden" style={{ height: '13rem' }}>
+                  <div className="relative overflow-hidden" style={{ height: '32rem' }}>
                     <img
                       src={svc.image}
                       alt={t(svc.title)}
