@@ -1,24 +1,33 @@
 'use client';
+
+// @/app/components/tender/LanguageToggle.js
 import React from 'react';
-import { Globe } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import { AMBER, CREAM, BORDER_S, focusRing } from './shared';
 
 const LanguageToggle = () => {
   const { language, setLanguage } = useLanguage();
-
-  const toggleLanguage = () => {
-    setLanguage(language === 'en' ? 'sw' : 'en');
-  };
+  const isEn = language !== 'sw';
 
   return (
     <button
-      onClick={toggleLanguage}
-      className="fixed top-4 right-4 z-50 bg-brand-primary hover:bg-brand-primary/80 text-white px-4 py-2 rounded-full flex items-center gap-2 transition-colors duration-200 shadow-lg"
+      type="button"
+      onClick={() => setLanguage(isEn ? 'sw' : 'en')}
+      aria-label={isEn ? 'Badilisha lugha kuwa Kiswahili' : 'Switch language to English'}
+      className={`fixed top-4 right-4 z-50 rounded font-display font-bold text-sm transition-colors hover:bg-amber/10 ${focusRing}`}
+      style={{
+        background: 'rgba(26,18,8,0.95)',
+        border: `1px solid ${BORDER_S}`,
+        color: CREAM,
+        padding: '0.5rem 0.9rem',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        letterSpacing: '0.04em',
+      }}
     >
-      <Globe className="w-4 h-4" />
-      <span className="font-medium">
-        {language === 'en' ? 'Kiswahili' : 'English'}
-      </span>
+      <span style={{ color: isEn ? AMBER : CREAM, opacity: isEn ? 1 : 0.6 }}>EN</span>
+      <span aria-hidden="true" style={{ opacity: 0.4 }}>{'  /  '}</span>
+      <span style={{ color: isEn ? CREAM : AMBER, opacity: isEn ? 0.6 : 1 }}>SW</span>
     </button>
   );
 };

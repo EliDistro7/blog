@@ -1,56 +1,5 @@
-import { 
-  Instagram, 
-  Facebook, 
-  Twitter, 
-  Linkedin, 
-  Youtube, 
-  TicketIcon as TikTok,
-  TrendingUp, 
-  Users, 
-  BarChart3, 
-  Target, 
-  Camera, 
-  Video, 
-  Edit3, 
-  MessageCircle,
-  Heart,
-  Share2,
-  Eye,
-  Calendar,
-  Clock,
-  Zap,
-  Award,
-  Smartphone,
-  Monitor,
-  Palette,
-  Megaphone,
-  Lightbulb,
-  CheckCircle,
-  Building,
-  ShoppingBag,
-  Stethoscope,
-  GraduationCap,
-  Home,
-  Car,
-  Utensils,
-  Dumbbell,
-  Shirt,
-  Coffee,
-  ChevronDown,
-  ChevronUp,
-  ArrowRight,
-  Quote,
-  Shield,
-  Globe,
-  Search,
-  PlayCircle,
-  Image,
-  FileText,
-  Mic,
-  Settings,
-  Crown,
-  Sparkles
-} from 'lucide-react';
+// Bilingual data. Every user-facing string is { en, sw }; components resolve it with tr().
+// Decorative icon / logo / brand-colour fields were removed for the corporate-minimal theme.
 
 export const heroStats = [
   {
@@ -73,32 +22,26 @@ export const heroStats = [
 
 export const services = [
   {
-    icon: Calendar,
     title: { en: "Content Planning & Creation", sw: "Upangaji na Uundaji wa Maudhui" },
     description: { en: "Strategic content calendar with high-quality posts, stories, and campaigns tailored to your brand", sw: "Kalenda ya maudhui ya kimkakati yenye machapisho ya ubora wa juu, hadithi, na kampeni zilizofanywa kwa brand yako" }
   },
   {
-    icon: Users,
     title: { en: "Community Management", sw: "Uongozi wa Jumuiya" },
     description: { en: "Engage with your audience, respond to comments, and build meaningful relationships with followers", sw: "Shirikiana na watazamaji wako, jibu maoni, na kujenga mahusiano muhimu na wafuasi" }
   },
   {
-    icon: BarChart3,
     title: { en: "Analytics & Reporting", sw: "Uchanganuzi na Uripoti" },
     description: { en: "Detailed performance metrics, insights, and monthly reports to track your social media growth", sw: "Vipimo vya utendaji wa kina, maarifa, na ripoti za kila mwezi kufuatilia ukuaji wa mitandao ya kijamii" }
   },
   {
-    icon: Megaphone,
     title: { en: "Paid Advertising", sw: "Matangazo ya Kulipwa" },
     description: { en: "Targeted social media ads to increase reach, drive traffic, and generate leads for your business", sw: "Matangazo ya mitandao ya kijamii yaliyolengwa kuongeza ufikaji, kuongoza trafiki, na kupata viongozi kwa biashara yako" }
   },
   {
-    icon: Camera,
     title: { en: "Visual Content Creation", sw: "Uundaji wa Maudhui ya Kuona" },
     description: { en: "Professional photography, graphic design, and video content to make your brand stand out", sw: "Upigaji picha wa kitaalamu, muundo wa michoro, na maudhui ya video kufanya brand yako ionekane" }
   },
   {
-    icon: TrendingUp,
     title: { en: "Influencer Marketing", sw: "Uuzaji wa Washawishi" },
     description: { en: "Connect with relevant influencers to amplify your brand message and reach new audiences", sw: "Unganisha na washawishi husika kupanua ujumbe wa brand yako na kufikia watazamaji wapya" }
   }
@@ -135,8 +78,6 @@ export const process = [
 export const platforms = [
   {
     name: "Instagram",
-    icon: Instagram,
-    color: "bg-gradient-to-r from-purple-500 to-pink-500",
     features: [
       { en: "Feed Posts & Stories", sw: "Machapisho ya Mlisho na Hadithi" },
       { en: "Reels & IGTV", sw: "Reels na IGTV" },
@@ -146,8 +87,6 @@ export const platforms = [
   },
   {
     name: "Facebook",
-    icon: Facebook,
-    color: "bg-blue-600",
     features: [
       { en: "Page Management", sw: "Uongozi wa Ukurasa" },
       { en: "Event Promotion", sw: "Uongozaji wa Matukio" },
@@ -157,8 +96,6 @@ export const platforms = [
   },
   {
     name: "TikTok",
-    icon: TikTok,
-    color: "bg-black",
     features: [
       { en: "Viral Video Content", sw: "Maudhui ya Video ya Viral" },
       { en: "Trend Participation", sw: "Ushiriki wa Mienendo" },
@@ -168,8 +105,6 @@ export const platforms = [
   },
   {
     name: "LinkedIn",
-    icon: Linkedin,
-    color: "bg-blue-700",
     features: [
       { en: "Professional Content", sw: "Maudhui ya Kitaalamu" },
       { en: "Thought Leadership", sw: "Uongozi wa Mawazo" },
@@ -179,8 +114,6 @@ export const platforms = [
   },
   {
     name: "YouTube",
-    icon: Youtube,
-    color: "bg-red-600",
     features: [
       { en: "Video Production", sw: "Uzalishaji wa Video" },
       { en: "Channel Optimization", sw: "Kuboresha Kituo" },
@@ -190,8 +123,6 @@ export const platforms = [
   },
   {
     name: "Twitter",
-    icon: Twitter,
-    color: "bg-sky-500",
     features: [
       { en: "Real-time Updates", sw: "Sasisho za Wakati Halisi" },
       { en: "Hashtag Strategy", sw: "Mkakati wa Hashtag" },
@@ -204,7 +135,6 @@ export const platforms = [
 export const currentClients = [
   {
     company: "AMKA KIJANA",
-    logo: Monitor,
     image: "/images/kijana.webp",
     industry: { en: "Reproductive Health Education", sw: "Elimu ya Afya ya Uzazi" },
     platforms: ["Instagram"],
@@ -221,19 +151,16 @@ export const currentClients = [
     services: [
       {
         name: { en: "Reproductive health Content Creation", sw: "Uundaji wa Maudhui ya Afya ya uzazi" },
-        icon: Smartphone,
         description: { en: "Educational reproductive health content", sw: "Maudhui ya kielimu ya ya afya ya uzazi" }
       },
       {
         name: { en: "B2B Lead Generation", sw: "Uongozaji wa B2B" },
-        icon: Target,
         description: { en: "Instagram campaigns targeting young adults in Tanzania", sw: "Kampeni za Instagram zilizowalenga wazazi vijana" }
       }
     ]
   },
   {
     company: "FH AGRO",
-    logo: Camera,
     image: "/images/fh.webp",
     industry: { en: "Agro-Business", sw: "Kilimo Biashara" },
     platforms: ["Instagram"],
@@ -248,19 +175,16 @@ export const currentClients = [
     services: [
       {
         name: { en: "Visual Storytelling", sw: "Content za story kwa njia ya video" },
-        icon: Video,
         description: { en: "Stunning story telling videos", sw: "Video za kuvutia kuhusu ubora wa vifaa vya FH Agro" }
       },
       {
         name: { en: "Influencer Partnerships", sw: "Ushirikiano wa Washawishi" },
-        icon: Users,
         description: { en: "Collaborations with public influencers and content creators", sw: "Ushirikiano na watu wenye washawishi na waundaji wa maudhui" }
       }
     ]
   },
   {
     company: "A&F Advisory LTD",
-    logo: Utensils,
     image: "/images/af.webp",
     industry: { en: "Food & Restaurant", sw: "Chakula na Mgahawa" },
     platforms: ["Instagram"],
@@ -277,19 +201,16 @@ export const currentClients = [
     services: [
       {
         name: { en: "Accounting & Legal services", sw: "Uhasibu na Huduma za kisheria" },
-        icon: Camera,
         description: { en: "Professional accounting and Legal services education directing them to use A&F Advisory LTD guidelines", sw: "Huduma zenye weledi za kihasibu na kisheria" }
       },
       {
         name: { en: "Educational content about compliance", sw: "Maudhui ya kuelimisha kuhusu wafanya biashara wanavyoweza kufuata sheria huku kwa kuwatumia A & F LTD" },
-        icon: FileText,
         description: { en: "Engaging advisory videos ", sw: "Video za kuelimisha na kushauri zinazovutia" }
       }
     ]
   },
   {
     company: "BabyStuff_TZ",
-    logo: Dumbbell,
     image: "/images/kids.webp",
     industry: { en: "Kid's clothes", sw: "Nguo za Watoto" },
     platforms: ["Instagram", "YouTube", "TikTok"],
@@ -305,19 +226,16 @@ export const currentClients = [
     services: [
       {
         name: { en: "Sales offer Content", sw: "Maudhui ya ofa za mauzo" },
-        icon: PlayCircle,
         description: { en: "Sales videos and offer tips", sw: "Video za mauzo na vidokezo vya bidhaa mpya" }
       },
       {
         name: { en: "Transformation Stories", sw: "Stori za Mabadiliko " },
-        icon: TrendingUp,
         description: { en: "Client success stories and testimonials", sw: "Stori za mafanikio kutoka kwa wateja na ushahidi" }
       }
     ]
   },
   {
     company: "PICHAZANGU STORE",
-    logo: Shirt,
     image: "/images/pichazangu.jpg",
     industry: { en: "Media & Storage", sw: "Media na Storage" },
     platforms: ["Instagram"],
@@ -333,12 +251,10 @@ export const currentClients = [
     services: [
       {
         name: { en: "Fashion Photography", sw: "Upigaji Picha wa Mitindo" },
-        icon: Camera,
         description: { en: "Professional fashion shoots and styling", sw: "Upigaji picha wa mitindo wa kitaalamu na urembo" }
       },
       {
         name: { en: "Trend Content", sw: "Maudhui ya Mienendo" },
-        icon: Sparkles,
         description: { en: "Latest fashion trends and styling tips", sw: "Mienendo ya hivi karibuni ya mitindo na vidokezo vya urembo" }
       }
     ]
@@ -348,37 +264,31 @@ export const currentClients = [
 export const contentTypes = [
   {
     type: { en: "Static Posts", sw: "Machapisho ya Utulivu" },
-    icon: Image,
     description: { en: "High-quality graphics and photography", sw: "Michoro ya ubora wa juu na upigaji picha" },
     platforms: ["Instagram", "Facebook", "LinkedIn", "Twitter"]
   },
   {
     type: { en: "Video Content", sw: "Maudhui ya Video" },
-    icon: Video,
     description: { en: "Reels, stories, and promotional videos", sw: "Reels, hadithi, na video za uongozaji" },
     platforms: ["Instagram", "TikTok", "YouTube", "Facebook"]
   },
   {
     type: { en: "Live Streaming", sw: "Kutangaza Moja kwa Moja" },
-    icon: PlayCircle,
     description: { en: "Live events, Q&A sessions, and product launches", sw: "Matukio ya moja kwa moja, vipindi vya maswali, na uzinduzi wa bidhaa" },
     platforms: ["Instagram", "Facebook", "YouTube", "TikTok"]
   },
   {
     type: { en: "Stories & Highlights", sw: "Hadithi na Vipengele" },
-    icon: Sparkles,
     description: { en: "Engaging stories with polls, quizzes, and interactive elements", sw: "Hadithi zinazovutia na kura, maswali, na vipengele vya ushirikiano" },
     platforms: ["Instagram", "Facebook"]
   },
   {
     type: { en: "Educational Content", sw: "Maudhui ya Kielimu" },
-    icon: GraduationCap,
     description: { en: "Tutorials, tips, and industry insights", sw: "Mafunzo, vidokezo, na maarifa ya sekta" },
     platforms: ["LinkedIn", "YouTube", "Instagram"]
   },
   {
     type: { en: "User-Generated Content", sw: "Maudhui ya Watumiaji" },
-    icon: Users,
     description: { en: "Customer testimonials and brand advocacy", sw: "Ushahidi wa wateja na uongozaji wa brand" },
     platforms: ["Instagram", "Facebook", "TikTok"]
   }
@@ -469,43 +379,34 @@ export const pricingPlans = [
 export const industries = [
   {
     name: { en: "Technology", sw: "Teknolojia" },
-    icon: Monitor,
     description: { en: "Software, apps, and tech solutions", sw: "Programu, programu, na suluhisho za teknolojia" }
   },
   {
     name: { en: "Healthcare", sw: "Huduma za Afya" },
-    icon: Stethoscope,
     description: { en: "Medical services and health products", sw: "Huduma za kimatibabu na bidhaa za afya" }
   },
   {
     name: { en: "Food & Beverage", sw: "Chakula na Kinywaji" },
-    icon: Utensils,
     description: { en: "Restaurants, cafes, and food products", sw: "Migahawa, vikahawa, na bidhaa za chakula" }
   },
   {
     name: { en: "Fashion & Retail", sw: "Mitindo na Uuzaji" },
-    icon: Shirt,
     description: { en: "Clothing, accessories, and retail stores", sw: "Nguo, vifaa, na maduka ya reja reja" }
   },
   {
     name: { en: "Real Estate", sw: "Mali Isiyohamishika" },
-    icon: Home,
     description: { en: "Property sales and real estate services", sw: "Mauzo ya mali na huduma za mali isiyohamishika" }
   },
   {
     name: { en: "Education", sw: "Elimu" },
-    icon: GraduationCap,
     description: { en: "Schools, courses, and educational services", sw: "Shule, kozi, na huduma za elimu" }
   },
   {
     name: { en: "Fitness & Wellness", sw: "Afya na Ustawi" },
-    icon: Dumbbell,
     description: { en: "Gyms, wellness centers, and fitness products", sw: "Majimu, vituo vya ustawi, na bidhaa za mazoezi" }
   },
   {
     name: { en: "Tourism & Travel", sw: "Utalii na Usafiri" },
-    icon: Camera,
     description: { en: "Travel agencies, hotels, and tourism services", sw: "Wakala wa usafiri, hoteli, na huduma za utalii" }
   }
 ];
-

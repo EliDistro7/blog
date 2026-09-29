@@ -1,47 +1,64 @@
-// components/social/PlatformsSection.jsx
-import React from 'react';
-import { CheckCircle } from 'lucide-react';
+'use client';
 
-const PlatformsSection = ({ language, platforms }) => {
+import { AMBER, GOLD, SURFACE, CREAM, MUTED, RULE, AfricanPattern, SectionHead, useLang } from './shared';
+import { platforms as defaultPlatforms } from './data';
+
+const copy = {
+  en: {
+    label: 'Where we work',
+    title: 'Platforms we manage',
+    subtitle: 'Expert management across all major social media platforms.',
+  },
+  sw: {
+    label: 'Tunapofanyia kazi',
+    title: 'Mitandao tunayosimamia',
+    subtitle: 'Uongozi wa mtaalamu katika mitandao yote mikuu ya kijamii.',
+  },
+};
+
+export default function PlatformsSection({ platforms = defaultPlatforms }) {
+  const { lang, tr } = useLang();
+  const c = copy[lang];
+
   return (
-    <section className="py-20 px-0 bg-brand-deep">
-      <div className="container">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
-            {language === 'en' ? 'Platforms We Master' : 'Mitandao Tunayoshinda'}
-          </h2>
-          <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-            {language === 'en' 
-              ? 'Expert management across all major social media platforms'
-              : 'Uongozi wa mtaalamu katika mitandao yote mikuu ya kijamii'
-            }
-          </p>
-        </div>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {platforms.map((platform, index) => {
-            const Icon = platform.icon;
+    <section
+      id="platforms"
+      aria-labelledby="social-platforms-title"
+      className="relative overflow-hidden pb-24 scroll-mt-24"
+      style={{ background: SURFACE }}
+    >
+      <AfricanPattern id="socialPlatformsPattern" />
+
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHead id="social-platforms-title" label={c.label} title={c.title} subtitle={c.subtitle} />
+
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14">
+          {platforms.map((platform, i) => {
+            const accent = i % 2 === 0 ? AMBER : GOLD;
             return (
-              <div key={index} className="bg-brand-medium hover:bg-brand-medium/80 p-8 rounded-xl transition-all duration-300 hover:transform hover:scale-105 border border-brand-gold/10 hover:border-brand-gold/30">
-                <div className={`w-16 h-16 rounded-lg flex items-center justify-center mb-6 ${platform.color}`}>
-                  <Icon className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold mb-4 text-white">{platform.name}</h3>
-                <ul className="space-y-2">
-                  {platform.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center text-brand-light">
-                      <CheckCircle className="w-4 h-4 text-brand-gold mr-2 flex-shrink-0" />
-                      {feature[language]}
+              <li key={platform.name} className="pt-5" style={{ borderTop: `2px solid ${accent}` }}>
+                <h3
+                  className="font-display font-extrabold"
+                  style={{ fontSize: '1.6rem', lineHeight: 1.08, color: CREAM, letterSpacing: '-0.02em' }}
+                >
+                  {platform.name}
+                </h3>
+                <ul className="mt-5" style={{ borderTop: `1px solid ${RULE}` }}>
+                  {platform.features.map((feature) => (
+                    <li
+                      key={feature.en}
+                      className="py-2.5 text-sm"
+                      style={{ borderBottom: `1px solid ${RULE}`, color: MUTED }}
+                    >
+                      {tr(feature)}
                     </li>
                   ))}
                 </ul>
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
       </div>
     </section>
   );
-};
-
-export default PlatformsSection;
+}

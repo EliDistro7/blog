@@ -1,101 +1,132 @@
 'use client';
+
+// @/app/components/tender/Pricing.js
 import React from 'react';
-import { Check, Star } from 'lucide-react';
+import {
+  SURFACE, AMBER, GOLD, DARK, CREAM, MUTED, RULE, BORDER_S,
+  AfricanPattern, SectionHead, openWhatsApp,
+  btnPrimary, btnPrimaryStyle, btnGhost, btnGhostStyle,
+} from './shared';
+
+const copy = {
+  en: {
+    label: 'Pricing',
+    popular: 'Most popular',
+    choose: 'Choose plan',
+    note: 'All plans include our success guarantee and post-submission support.',
+    assurances: ['No hidden fees', 'Money-back guarantee', 'Expert consultation'],
+    whatsapp: (n) => `Hi! I'm interested in the ${n} tender plan.`,
+  },
+  sw: {
+    label: 'Bei',
+    popular: 'Maarufu zaidi',
+    choose: 'Chagua mpango',
+    note: 'Mipango yote inajumuisha dhamana yetu ya mafanikio na msaada wa baada ya uwasilishaji.',
+    assurances: ['Hakuna ada zilizofichwa', 'Dhamana ya kurudishia pesa', 'Ushauri wa kitaalamu'],
+    whatsapp: (n) => `Hujambo! Ninavutiwa na mpango wa ${n} wa zabuni.`,
+  },
+};
 
 const TenderPricingSection = ({ language, pricingPlans }) => {
-  const data = pricingPlans[language];
+  const lang = language === 'sw' ? 'sw' : 'en';
+  const data = pricingPlans[lang];
+  const c = copy[lang];
 
   return (
-    <section className="py-20 bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            {data.title}
-          </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            {data.subtitle}
-          </p>
-        </div>
+    <section
+      aria-labelledby="tender-pricing-title"
+      className="relative overflow-hidden pb-24"
+      style={{ background: SURFACE }}
+    >
+      <AfricanPattern id="tenderPricingPattern" />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {data.plans.map((plan, index) => (
-            <div
-              key={index}
-              className={`relative rounded-2xl p-8 ${
-                plan.popular
-                  ? 'bg-gradient-to-b from-brand-primary/20 to-brand-secondary/20 border-2 border-brand-primary'
-                  : 'bg-gray-800 border-2 border-gray-700'
-              } hover:shadow-xl transition-shadow duration-300`}
-            >
-              {/* Popular badge */}
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-gradient-to-r from-brand-primary to-brand-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center gap-1">
-                    <Star className="w-4 h-4 fill-current" />
-                    {language === 'en' ? 'Most Popular' : 'Maarufu Zaidi'}
-                  </div>
-                </div>
-              )}
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHead id="tender-pricing-title" label={c.label} title={data.title} subtitle={data.subtitle} />
 
-              {/* Plan header */}
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-white mb-2">
-                  {plan.name}
-                </h3>
-                <p className="text-gray-300 mb-6">
-                  {plan.description}
-                </p>
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-white">
-                    {plan.price}
-                  </span>
-                  <span className="text-gray-400 ml-2">
-                    {plan.period}
-                  </span>
-                </div>
-              </div>
+        <ul className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+          {data.plans.map((plan, i) => {
+            const accent = plan.popular ? AMBER : i % 2 === 0 ? GOLD : AMBER;
+            return (
+              <li key={plan.name} className="flex">
+                <article
+                  className="relative flex flex-col w-full rounded p-8"
+                  style={{
+                    background: plan.popular ? 'rgba(245,158,11,0.06)' : 'rgba(255,255,255,0.03)',
+                    border: `1px solid ${plan.popular ? BORDER_S : RULE}`,
+                  }}
+                >
+                  {/* Top stripe */}
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-x-0 top-0"
+                    style={{ height: 3, background: accent, borderRadius: '0.25rem 0.25rem 0 0' }}
+                  />
 
-              {/* Features */}
-              <div className="space-y-4 mb-8">
-                {plan.features.map((feature, featureIndex) => (
-                  <div key={featureIndex} className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-5 h-5 bg-gradient-to-r from-brand-primary to-brand-secondary rounded-full flex items-center justify-center mt-0.5">
-                      <Check className="w-3 h-3 text-white" />
-                    </div>
-                    <span className="text-gray-300 text-sm">
-                      {feature}
+                  <p
+                    className="font-display font-bold text-sm mb-3"
+                    style={{ color: plan.popular ? AMBER : 'transparent', letterSpacing: '0.04em' }}
+                    aria-hidden={!plan.popular}
+                  >
+                    {c.popular}
+                  </p>
+
+                  <h3
+                    className="font-display font-extrabold"
+                    style={{ fontSize: '1.75rem', lineHeight: 1.05, color: CREAM, letterSpacing: '-0.02em' }}
+                  >
+                    {plan.name}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed" style={{ color: MUTED }}>
+                    {plan.description}
+                  </p>
+
+                  <p className="mt-6 flex items-baseline gap-2">
+                    <span
+                      className="font-display font-extrabold leading-none"
+                      style={{ color: CREAM, fontSize: 'clamp(2.5rem, 4vw, 3.25rem)', letterSpacing: '-0.03em' }}
+                    >
+                      {plan.price}
                     </span>
-                  </div>
-                ))}
-              </div>
+                    <span className="text-sm" style={{ color: MUTED }}>{plan.period}</span>
+                  </p>
 
-              {/* CTA Button */}
-              <button
-                className={`w-full py-3 px-6 rounded-lg font-semibold transition-all duration-300 ${
-                  plan.popular
-                    ? 'bg-gradient-to-r from-brand-primary to-brand-secondary text-white hover:shadow-lg'
-                    : 'bg-gray-700 text-white hover:bg-gray-600'
-                }`}
-              >
-                {language === 'en' ? 'Choose Plan' : 'Chagua Mpango'}
-              </button>
-            </div>
-          ))}
-        </div>
+                  <ul className="mt-8 mb-8" style={{ borderTop: `1px solid ${RULE}` }}>
+                    {plan.features.map((feature) => (
+                      <li
+                        key={feature}
+                        className="py-3 text-sm"
+                        style={{ borderBottom: `1px solid ${RULE}`, color: CREAM }}
+                      >
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
 
-        {/* Additional info */}
-        <div className="text-center mt-12">
-          <p className="text-gray-400 mb-4">
-            {language === 'en' 
-              ? 'All plans include our success guarantee and post-submission support'
-              : 'Mipango yote inajumuisha dhamana yetu ya mafanikio na msaada wa baada ya uwasilishaji'
-            }
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-300">
-            <span>✓ {language === 'en' ? 'No hidden fees' : 'Hakuna ada zilizofichwa'}</span>
-            <span>✓ {language === 'en' ? 'Money-back guarantee' : 'Dhamana ya kurudishia pesa'}</span>
-            <span>✓ {language === 'en' ? 'Expert consultation' : 'Ushauri wa kitaalamu'}</span>
-          </div>
+                  <button
+                    type="button"
+                    onClick={() => openWhatsApp(c.whatsapp(plan.name))}
+                    className={`${plan.popular ? btnPrimary : btnGhost} mt-auto w-full`}
+                    style={plan.popular ? { ...btnPrimaryStyle, color: DARK } : btnGhostStyle}
+                  >
+                    {c.choose}
+                  </button>
+                </article>
+              </li>
+            );
+          })}
+        </ul>
+
+        {/* Assurances */}
+        <div className="mt-12 pt-8 lg:flex lg:items-center lg:justify-between gap-8" style={{ borderTop: `1px solid ${RULE}` }}>
+          <p className="mb-6 lg:mb-0 max-w-md" style={{ color: MUTED }}>{c.note}</p>
+          <ul className="flex flex-wrap gap-x-8 gap-y-2 text-sm font-semibold" style={{ color: CREAM }}>
+            {c.assurances.map((a) => (
+              <li key={a} className="flex items-center gap-3">
+                <span aria-hidden="true" style={{ width: '1.25rem', height: 2, background: AMBER, borderRadius: 2 }} />
+                {a}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

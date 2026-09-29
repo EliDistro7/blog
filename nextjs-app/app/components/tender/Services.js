@@ -1,38 +1,68 @@
 'use client';
+
+// @/app/components/tender/Services.js
 import React from 'react';
+import { SURFACE, AMBER, GOLD, CREAM, MUTED, RULE, IMAGES, AfricanPattern, SectionHead, Photo } from './shared';
+
+const copy = {
+  en: { label: 'What we do', caption: 'From the first search to the signed contract' },
+  sw: { label: 'Tunachofanya', caption: 'Kuanzia utafutaji wa kwanza hadi mkataba uliosainiwa' },
+};
 
 const TenderServicesSection = ({ language, services }) => {
-  const data = services[language];
+  const lang = language === 'sw' ? 'sw' : 'en';
+  const data = services[lang];
+  const c = copy[lang];
 
   return (
-    <section className="py-20 bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            {data.title}
-          </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            {data.subtitle}
-          </p>
-        </div>
+    <section
+      aria-labelledby="tender-services-title"
+      className="relative overflow-hidden pb-24"
+      style={{ background: SURFACE }}
+    >
+      <AfricanPattern id="tenderSvcPattern" />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {data.services.map((service, index) => (
-            <div
-              key={index}
-              className="bg-gray-800 p-8 rounded-xl hover:bg-gray-700 transition-colors duration-300 group"
-            >
-              <div className="text-4xl mb-6 group-hover:scale-110 transition-transform duration-300">
-                {service.icon}
-              </div>
-              <h3 className="text-xl font-bold text-white mb-4">
-                {service.title}
-              </h3>
-              <p className="text-gray-300 leading-relaxed">
-                {service.description}
-              </p>
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHead id="tender-services-title" label={c.label} title={data.title} subtitle={data.subtitle} />
+
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
+          {/* Sticky photo */}
+          <div className="lg:col-span-5">
+            <div className="lg:sticky lg:top-28">
+              <Photo src={IMAGES.services} aspect="4 / 5" sizes="(min-width: 1024px) 40vw, 100vw" />
+              <p className="mt-3 text-xs italic" style={{ color: MUTED }}>{c.caption}</p>
             </div>
-          ))}
+          </div>
+
+          {/* Numbered list */}
+          <ol className="lg:col-span-7" style={{ borderBottom: `1px solid ${RULE}` }}>
+            {data.services.map((service, i) => (
+              <li
+                key={service.title}
+                className="grid grid-cols-[3.5rem_1fr] sm:grid-cols-[5rem_1fr] gap-x-4 py-8"
+                style={{ borderTop: `1px solid ${RULE}` }}
+              >
+                <span
+                  aria-hidden="true"
+                  className="font-display font-extrabold tabular-nums"
+                  style={{ color: i % 2 === 0 ? AMBER : GOLD, fontSize: '1.5rem', letterSpacing: '-0.02em' }}
+                >
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <div>
+                  <h3
+                    className="font-display font-extrabold"
+                    style={{ fontSize: 'clamp(1.3rem, 2.2vw, 1.7rem)', lineHeight: 1.1, color: CREAM, letterSpacing: '-0.02em' }}
+                  >
+                    {service.title}
+                  </h3>
+                  <p className="mt-3 leading-relaxed max-w-xl" style={{ color: MUTED }}>
+                    {service.description}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
     </section>

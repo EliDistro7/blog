@@ -1,129 +1,171 @@
-// components/social/ClientSuccessSection.jsx
-import React from 'react';
-import { Instagram, Facebook, Twitter, Linkedin, Youtube, Music } from 'lucide-react';
+'use client';
 
-const ClientSuccessSection = ({ language, currentClients }) => {
-  // Helper function to get social media icon
-  const getSocialIcon = (platform) => {
-    switch (platform.toLowerCase()) {
-      case 'instagram':
-        return Instagram;
-      case 'facebook':
-        return Facebook;
-      case 'twitter':
-        return Twitter;
-      case 'linkedin':
-        return Linkedin;
-      case 'youtube':
-        return Youtube;
-      case 'tiktok':
-        return Music; // Using Music icon for TikTok
-      default:
-        return null;
-    }
+import Image from 'next/image';
+import { ArrowUpRight } from 'lucide-react';
+import {
+  AMBER, GOLD, DARK, CREAM, MUTED, RULE,
+  AfricanPattern, SectionHead, focusRing, useLang,
+} from './shared';
+import { currentClients as defaultClients } from './data';
+
+const copy = {
+  en: {
+    label: 'Our clients',
+    title: 'Client success stories',
+    subtitle: 'Real results from real businesses across Tanzania.',
+    followers: 'Followers',
+    engagement: 'Engagement',
+    conversions: 'Conversions',
+    newTab: '(opens in a new tab)',
+    imageAlt: (name) => `${name}: social media content`,
+  },
+  sw: {
+    label: 'Wateja wetu',
+    title: 'Hadithi za mafanikio ya wateja',
+    subtitle: 'Matokeo halisi kutoka biashara halisi katika Tanzania.',
+    followers: 'Wafuasi',
+    engagement: 'Ushirikiano',
+    conversions: 'Mabadiliko',
+    newTab: '(inafunguka kwenye kichupo kipya)',
+    imageAlt: (name) => `${name}: maudhui ya mitandao ya kijamii`,
+  },
+};
+
+export default function ClientSuccessSection({ currentClients = defaultClients }) {
+  const { lang, tr } = useLang();
+  const c = copy[lang];
+
+  const Card = ({ client, number, large }) => {
+    const accent = number % 2 === 1 ? AMBER : GOLD;
+    const conversion =
+      client.results.leads ||
+      client.results.bookings ||
+      client.results.orders ||
+      client.results.memberships ||
+      client.results.sales;
+
+    const metrics = [
+      { value: client.results.followers, label: c.followers },
+      { value: client.results.engagement, label: c.engagement },
+      { value: conversion, label: c.conversions },
+    ];
+
+    return (
+      <article>
+        <div
+          className="relative overflow-hidden rounded"
+          style={{ aspectRatio: large ? '16 / 10' : '4 / 3', background: DARK }}
+        >
+          <Image
+            src={client.image}
+            alt={c.imageAlt(client.company)}
+            fill
+            sizes={large ? '(min-width: 1024px) 50vw, 100vw' : '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw'}
+            className="object-cover object-top"
+          />
+          <div className="absolute inset-0 pointer-events-none rounded" style={{ border: `1px solid ${RULE}` }} />
+        </div>
+
+        <div className="pt-4 mt-5" style={{ borderTop: `2px solid ${accent}` }}>
+          <div className="flex items-center gap-3 mb-2">
+            <span aria-hidden="true" className="font-display font-bold text-sm tabular-nums" style={{ color: MUTED }}>
+              {String(number).padStart(2, '0')}
+            </span>
+            <span className="font-display font-semibold text-sm" style={{ color: accent }}>
+              {tr(client.industry)}
+            </span>
+          </div>
+          <h3
+            className="font-display font-extrabold"
+            style={{ fontSize: large ? '2rem' : '1.6rem', lineHeight: 1.08, color: CREAM, letterSpacing: '-0.02em' }}
+          >
+            {client.company}
+          </h3>
+
+          {/* Results */}
+          <dl className="grid grid-cols-3 mt-6 pt-5" style={{ borderTop: `1px solid ${RULE}` }}>
+            {metrics.map((m, i) => (
+              <div
+                key={m.label}
+                className="flex flex-col-reverse justify-end px-3 first:pl-0"
+                style={{ borderLeft: i === 0 ? 'none' : `1px solid ${RULE}` }}
+              >
+                <dt className="mt-1 text-xs leading-snug" style={{ color: MUTED }}>{m.label}</dt>
+                <dd
+                  className="font-display font-extrabold leading-none"
+                  style={{ color: CREAM, fontSize: '1.6rem', letterSpacing: '-0.02em' }}
+                >
+                  {m.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+
+          {/* Platforms: linked only where a real profile URL exists */}
+          <ul className="flex flex-wrap gap-x-5 gap-y-1 mt-5">
+            {client.platforms.map((platform) => {
+              const href = client.socialLinks?.[platform.toLowerCase()];
+              return (
+                <li key={platform}>
+                  {href ? (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`group inline-flex items-center gap-1 py-1 font-display font-bold text-sm ${focusRing}`}
+                      style={{ color: accent }}
+                    >
+                      {platform}
+                      <span className="sr-only"> {client.company} {c.newTab}</span>
+                      <ArrowUpRight
+                        size={14}
+                        aria-hidden="true"
+                        className="motion-safe:transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      />
+                    </a>
+                  ) : (
+                    <span className="inline-block py-1 font-display font-semibold text-sm" style={{ color: MUTED }}>
+                      {platform}
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </article>
+    );
   };
 
-  // Helper function to get social media link
-  const getSocialLink = (client, platform) => {
-    const platformKey = platform.toLowerCase();
-    return client.socialLinks?.[platformKey] || '#';
-  };
+  const halves = currentClients.slice(0, 2);
+  const thirds = currentClients.slice(2);
 
   return (
-    <section className="py-20 px-0 bg-brand-dark">
-      <div className="container mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
-            {language === 'en' ? 'Client Success Stories' : 'Hadithi za Mafanikio ya Wateja'}
-          </h2>
-          <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-            {language === 'en'
-              ? 'Real results from real businesses across Tanzania'
-              : 'Matokeo halisi kutoka biashara halisi katika Tanzania'
-            }
-          </p>
-        </div>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {currentClients.map((client, index) => {
-            const Logo = client.logo;
-            return (
-              <div key={index} className="bg-brand-medium rounded-xl border border-brand-gold/10 hover:border-brand-gold/30 transition-all duration-300 overflow-hidden">
-                {/* Client Image */}
-                <div className="relative h-96 overflow-hidden">
-                  <img 
-                    src={client.image} 
-                    alt={client.company}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/20 to-transparent" />
-                </div>
-                
-                <div className="p-8">
-                  {/* Company Info */}
-                  <div className="flex items-center mb-6">
-                    <div className="bg-brand-gold/10 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
-                      <Logo className="w-6 h-6 text-brand-gold" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-white">{client.company}</h3>
-                      <p className="text-gray-300 text-sm">{client.industry[language]}</p>
-                    </div>
-                  </div>
-                  
-                  {/* Results */}
-                  <div className="grid grid-cols-3 gap-4 mb-6">
-                    <div className="text-center">
-                      <div className="text-brand-gold font-bold text-lg">{client.results.followers}</div>
-                      <div className="text-gray-300 text-xs">
-                        {language === 'en' ? 'Followers' : 'Wafuasi'}
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-brand-gold font-bold text-lg">{client.results.engagement}</div>
-                      <div className="text-gray-300 text-xs">
-                        {language === 'en' ? 'Engagement' : 'Ushirikiano'}
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-brand-gold font-bold text-lg">
-                        {client.results.leads || client.results.bookings || client.results.orders || client.results.memberships || client.results.sales}
-                      </div>
-                      <div className="text-brand-light text-xs">
-                        {language === 'en' ? 'Conversions' : 'Mabadiliko'}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Social Media Platforms with Links */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {client.platforms.map((platform, platformIndex) => {
-                      const SocialIcon = getSocialIcon(platform);
-                      const socialLink = getSocialLink(client, platform);
-                      
-                      return (
-                        <a
-                          key={platformIndex}
-                          href={socialLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="bg-brand-gold/10 text-brand-gold px-3 py-2 rounded-full text-sm flex items-center gap-2 hover:bg-brand-gold/20 transition-colors duration-200"
-                        >
-                          {SocialIcon && <SocialIcon className="w-4 h-4" />}
-                          {platform}
-                        </a>
-                      );
-                    })}
-                  </div>
-                 
-                </div>
-              </div>
-            );
-          })}
-        </div>
+    <section
+      id="clients"
+      aria-labelledby="social-clients-title"
+      className="relative overflow-hidden pb-24 scroll-mt-24"
+      style={{ background: DARK }}
+    >
+      <AfricanPattern id="socialClientsPattern" />
+
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHead id="social-clients-title" label={c.label} title={c.title} subtitle={c.subtitle} />
+
+        {/* Two half-width stories, then the rest in thirds */}
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-x-8 gap-y-16">
+          {halves.map((client, i) => (
+            <li key={client.company} className="lg:col-span-6">
+              <Card client={client} number={i + 1} large />
+            </li>
+          ))}
+          {thirds.map((client, i) => (
+            <li key={client.company} className="lg:col-span-4">
+              <Card client={client} number={i + 3} />
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
-};
-
-export default ClientSuccessSection;
+}

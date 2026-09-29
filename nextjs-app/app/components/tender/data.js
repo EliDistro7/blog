@@ -1,10 +1,10 @@
-
-
 // @/app/components/tender/data.js
 
 export const tenderHeroStats = {
   en: {
+    kicker: "Tender application support",
     title: "Professional Tender Application Services",
+    titleAccent: "Tender Application",
     subtitle: "Win More Contracts with Expert Tender Preparation",
     description: "We help businesses secure government and private sector contracts through professionally crafted tender applications with proven success rates.",
     cta: "Get Started Today",
@@ -16,13 +16,15 @@ export const tenderHeroStats = {
     ]
   },
   sw: {
+    kicker: "Msaada wa maombi ya zabuni",
     title: "Huduma za Maombi ya Zabuni za Kitaaluma",
+    titleAccent: "Maombi ya Zabuni",
     subtitle: "Shinda Mikataba Zaidi kwa Maandalizi ya Kitaaluma ya Zabuni",
     description: "Tunasaidia biashara kupata mikataba ya serikali na sekta binafsi kupitia maombi ya zabuni yaliyoandaliwa kwa ustadi na kiwango cha mafanikio kilichothibitishwa.",
     cta: "Anza Leo",
     stats: [
       { number: "95%", label: "Kiwango cha Mafanikio" },
-      { number: "500+", label: "Zabuni Zilizoshindwa" },
+      { number: "500+", label: "Zabuni Zilizoshinda" },
       { number: "200+", label: "Wateja Wenye Furaha" },
       { number: "24/7", label: "Msaada" }
     ]
@@ -35,32 +37,26 @@ export const tenderServices = {
     subtitle: "Comprehensive tender application support from start to finish",
     services: [
       {
-        icon: "📋",
         title: "Tender Research & Identification",
         description: "We monitor and identify relevant tender opportunities that match your business capabilities and interests."
       },
       {
-        icon: "📝",
         title: "Proposal Writing & Development",
         description: "Expert crafting of compelling tender proposals that highlight your strengths and meet all requirements."
       },
       {
-        icon: "📊",
         title: "Financial Modeling & Pricing",
         description: "Accurate cost analysis and competitive pricing strategies to maximize your chances of winning."
       },
       {
-        icon: "🔍",
         title: "Compliance Review",
         description: "Thorough review of all requirements to ensure 100% compliance with tender specifications."
       },
       {
-        icon: "📤",
         title: "Submission Management",
         description: "Timely and professional submission of your tender applications through proper channels."
       },
       {
-        icon: "📞",
         title: "Post-Submission Support",
         description: "Follow-up services including clarifications, presentations, and contract negotiations."
       }
@@ -71,32 +67,26 @@ export const tenderServices = {
     subtitle: "Msaada wa kina wa maombi ya zabuni kutoka mwanzo hadi mwisho",
     services: [
       {
-        icon: "📋",
         title: "Utafiti na Utambuzi wa Zabuni",
         description: "Tunafuatilia na kutambua fursa za zabuni zinazofaa uwezo na maslahi ya biashara yako."
       },
       {
-        icon: "📝",
         title: "Uandishi na Ukuzaji wa Mapendekezo",
         description: "Ubunifu wa kitaaluma wa mapendekezo ya zabuni yanayovutia ambayo yanasisitiza nguvu zako na kutimiza mahitaji yote."
       },
       {
-        icon: "📊",
         title: "Uundaji wa Kifedha na Bei",
         description: "Uchambuzi sahihi wa gharama na mikakati ya bei za ushindani ili kuongeza uwezekano wako wa kushinda."
       },
       {
-        icon: "🔍",
         title: "Ukaguzi wa Kufuata Sheria",
         description: "Ukaguzi wa kina wa mahitaji yote ili kuhakikisha kufuata 100% vipimo vya zabuni."
       },
       {
-        icon: "📤",
         title: "Usimamizi wa Kuwasilisha",
         description: "Uwasilishaji wa wakati na wa kitaaluma wa maombi yako ya zabuni kupitia njia sahihi."
       },
       {
-        icon: "📞",
         title: "Msaada wa Baada ya Kuwasilisha",
         description: "Huduma za kufuatilia ikiwa ni pamoja na ufafanuzi, maonyesho, na mazungumzo ya mikataba."
       }

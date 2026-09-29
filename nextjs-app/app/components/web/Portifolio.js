@@ -1,62 +1,121 @@
-import React from 'react';
-import { CheckCircle, ExternalLink } from 'lucide-react';
+'use client';
 
-const PortfolioSection = ({ portfolioProjects }) => {
-  return (
-    <div className="py-20 bg-gradient-to-b from-gray-950 to-gray-900">
-      <div className="container mx-auto px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Our Portfolio
-            </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Discover the websites and applications we built for our clients
-            </p>
-          </div>
+import { Check, ArrowUpRight } from 'lucide-react';
+import {
+  AMBER, GOLD, SURFACE, CREAM, MUTED, RULE,
+  AfricanPattern, SectionHead, focusRing, useLang,
+} from './shared';
+import { portfolioProjects as defaultProjects } from './data';
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {portfolioProjects.map((project, index) => (
-              <div key={index} className="bg-gradient-to-br from-brand-medium/30 to-brand-deep/30 backdrop-blur-md rounded-xl border border-brand-light/20 hover:border-brand-accent/40 transition-all overflow-hidden group">
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="text-brand-accent text-sm font-semibold bg-brand-accent/20 px-3 py-1 rounded-full">
-                      {project.category}
-                    </div>
-                    {project.inProgress && (
-                      <div className="text-brand-coral text-sm font-semibold bg-brand-coral/20 px-3 py-1 rounded-full">
-                        In Progress
-                      </div>
-                    )}
-                  </div>
-                  
-                  <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
-                  <p className="text-brand-accent font-mono text-sm mb-3">{project.url}</p>
-                  <p className="text-gray-300 mb-4">{project.description}</p>
-                  
-                  <div className="space-y-2 mb-4">
-                    {project.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-center gap-2 text-sm text-gray-300">
-                        <CheckCircle className="w-4 h-4 text-brand-accent" />
-                        {feature}
-                      </div>
-                    ))}
-                  </div>
-                  
-                  {!project.inProgress && (
-                    <button className="w-full bg-brand-accent/20 hover:bg-brand-accent/30 text-brand-accent font-semibold py-2 px-4 rounded-lg transition-all flex items-center justify-center gap-2">
-                      Visit Website
-                      <ExternalLink className="w-4 h-4" />
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+const copy = {
+  en: {
+    label: 'Our work',
+    title: 'Our portfolio',
+    subtitle: 'Discover the websites and applications we built for our clients.',
+    inProgress: 'In progress',
+    visit: 'Visit website',
+    newTab: '(opens in a new tab)',
+  },
+  sw: {
+    label: 'Kazi zetu',
+    title: 'Portfolio yetu',
+    subtitle: 'Gundua tovuti na programu tulizojenga kwa wateja wetu.',
+    inProgress: 'Inaendelea',
+    visit: 'Tembelea tovuti',
+    newTab: '(inafunguka kwenye kichupo kipya)',
+  },
 };
 
-export default PortfolioSection;
+export default function PortfolioSection({ portfolioProjects = defaultProjects }) {
+  const { lang, tr } = useLang();
+  const c = copy[lang];
+
+  return (
+    <section
+      id="portfolio"
+      aria-labelledby="web-portfolio-title"
+      className="relative overflow-hidden pb-24 scroll-mt-24"
+      style={{ background: SURFACE }}
+    >
+      <AfricanPattern id="webPortfolioPattern" />
+
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHead id="web-portfolio-title" label={c.label} title={c.title} subtitle={c.subtitle} />
+
+        {/* Table-of-contents style index */}
+        <ol style={{ borderTop: `1px solid ${RULE}` }}>
+          {portfolioProjects.map((project, i) => {
+            const accent = i % 2 === 0 ? AMBER : GOLD;
+            return (
+              <li
+                key={project.url}
+                className="grid lg:grid-cols-12 gap-6 lg:gap-8 py-8 lg:py-10"
+                style={{ borderBottom: `1px solid ${RULE}` }}
+              >
+                {/* Title block */}
+                <div className="lg:col-span-5">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-3">
+                    <span aria-hidden="true" className="font-display font-bold text-sm tabular-nums" style={{ color: MUTED }}>
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span className="font-display font-semibold text-sm" style={{ color: accent }}>
+                      {tr(project.category)}
+                    </span>
+                    {project.inProgress && (
+                      <span className="font-display font-semibold text-sm" style={{ color: GOLD }}>
+                        · {c.inProgress}
+                      </span>
+                    )}
+                  </div>
+                  <h3
+                    className="font-display font-extrabold"
+                    style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', lineHeight: 1.05, color: CREAM, letterSpacing: '-0.025em' }}
+                  >
+                    {project.title}
+                  </h3>
+                  <p className="font-mono text-sm mt-3" style={{ color: accent }}>
+                    {project.url}
+                  </p>
+                </div>
+
+                {/* Detail block */}
+                <div className="lg:col-span-6 lg:col-start-7">
+                  <p className="leading-relaxed" style={{ color: CREAM, fontSize: '1.05rem' }}>
+                    {tr(project.description)}
+                  </p>
+
+                  <ul className="flex flex-wrap gap-x-6 gap-y-2 mt-5">
+                    {project.features.map((feature) => (
+                      <li key={feature.en} className="flex items-center gap-2 text-sm" style={{ color: MUTED }}>
+                        <Check size={14} aria-hidden="true" style={{ color: accent }} />
+                        {tr(feature)}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {!project.inProgress && (
+                    <a
+                      href={`https://${project.url}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`group inline-flex items-center gap-2 mt-6 font-display font-bold text-sm ${focusRing}`}
+                      style={{ color: accent }}
+                    >
+                      {c.visit}
+                      <span className="sr-only"> {project.title} {c.newTab}</span>
+                      <ArrowUpRight
+                        size={16}
+                        aria-hidden="true"
+                        className="motion-safe:transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      />
+                    </a>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
+  );
+}

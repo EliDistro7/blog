@@ -1,69 +1,123 @@
 'use client';
+
+// @/app/components/tender/TenderTypes.js
 import React from 'react';
-import { Check } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import {
+  SURFACE, AMBER, GOLD, CREAM, MUTED, RULE, IMAGES,
+  AfricanPattern, SectionHead, Photo, openWhatsApp, focusRing,
+  btnPrimary, btnPrimaryStyle,
+} from './shared';
+
+const copy = {
+  en: { label: 'Categories', cta: 'Get a quote for this type', whatsapp: (n) => `Hi! I'd like a quote for a ${n} application.` },
+  sw: { label: 'Makundi', cta: 'Pata bei kwa aina hii', whatsapp: (n) => `Hujambo! Ningependa bei ya ombi la ${n}.` },
+};
 
 const TenderTypesSection = ({ language, tenderTypes, selectedTenderType, setSelectedTenderType }) => {
-  const data = tenderTypes[language];
+  const lang = language === 'sw' ? 'sw' : 'en';
+  const data = tenderTypes[lang];
+  const c = copy[lang];
+  const active = data.types[selectedTenderType] ? selectedTenderType : 0;
+  const selected = data.types[active];
+  const accent = active % 2 === 0 ? AMBER : GOLD;
 
   return (
-    <section className="py-20 bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            {data.title}
-          </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            {data.subtitle}
-          </p>
-        </div>
+    <section
+      aria-labelledby="tender-types-title"
+      className="relative overflow-hidden pb-24"
+      style={{ background: SURFACE }}
+    >
+      <AfricanPattern id="tenderTypesPattern" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Tender type buttons */}
-          <div className="lg:col-span-1">
-            <div className="space-y-4">
-              {data.types.map((type, index) => (
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHead id="tender-types-title" label={c.label} title={data.title} subtitle={data.subtitle} />
+
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-14">
+          {/* Type selector */}
+          <div className="lg:col-span-4" role="tablist" aria-orientation="vertical" aria-label={data.title}>
+            {data.types.map((type, i) => {
+              const isActive = i === active;
+              return (
                 <button
-                  key={index}
-                  onClick={() => setSelectedTenderType(index)}
-                  className={`w-full text-left p-6 rounded-xl transition-all duration-300 ${
-                    selectedTenderType === index
-                      ? 'bg-gradient-to-r from-brand-primary to-brand-secondary text-white shadow-lg'
-                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-                  }`}
+                  key={type.name}
+                  type="button"
+                  role="tab"
+                  id={`tender-type-tab-${i}`}
+                  aria-selected={isActive}
+                  aria-controls="tender-type-panel"
+                  onClick={() => setSelectedTenderType(i)}
+                  className={`block w-full text-left py-6 pl-5 transition-colors ${focusRing}`}
+                  style={{
+                    borderTop: `1px solid ${RULE}`,
+                    borderBottom: i === data.types.length - 1 ? `1px solid ${RULE}` : 'none',
+                    borderLeft: `3px solid ${isActive ? (i % 2 === 0 ? AMBER : GOLD) : 'transparent'}`,
+                  }}
                 >
-                  <h3 className="text-lg font-bold mb-2">{type.name}</h3>
-                  <p className="text-sm opacity-90">{type.description}</p>
+                  <span
+                    className="font-display font-extrabold block"
+                    style={{
+                      fontSize: '1.35rem',
+                      lineHeight: 1.1,
+                      letterSpacing: '-0.02em',
+                      color: isActive ? CREAM : MUTED,
+                    }}
+                  >
+                    {type.name}
+                  </span>
+                  <span className="block mt-2 text-sm leading-relaxed" style={{ color: MUTED }}>
+                    {type.description}
+                  </span>
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
 
-          {/* Selected tender type details */}
-          <div className="lg:col-span-2">
-            <div className="bg-gray-800 p-8 rounded-xl">
-              <h3 className="text-2xl font-bold text-white mb-6">
-                {data.types[selectedTenderType].name}
-              </h3>
-              <p className="text-gray-300 mb-8 text-lg">
-                {data.types[selectedTenderType].description}
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {data.types[selectedTenderType].features.map((feature, index) => (
-                  <div key={index} className="flex items-center gap-3">
-                    <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-brand-primary to-brand-secondary rounded-full flex items-center justify-center">
-                      <Check className="w-4 h-4 text-white" />
-                    </div>
-                    <span className="text-gray-300">{feature}</span>
-                  </div>
-                ))}
-              </div>
+          {/* Selected type */}
+          <div
+            className="lg:col-span-8"
+            role="tabpanel"
+            id="tender-type-panel"
+            aria-labelledby={`tender-type-tab-${active}`}
+          >
+            <Photo
+              src={IMAGES.types[active] || IMAGES.types[0]}
+              aspect="16 / 8"
+              sizes="(min-width: 1024px) 65vw, 100vw"
+            />
 
-              <div className="mt-8 pt-8 border-t border-gray-700">
-                <button className="bg-gradient-to-r from-brand-primary to-brand-secondary text-white px-6 py-3 rounded-lg hover:shadow-lg transition-shadow duration-300 font-semibold">
-                  {language === 'en' ? 'Get Quote for This Type' : 'Pata Bei kwa Aina Hii'}
-                </button>
-              </div>
+            <div className="pt-4 mt-6" style={{ borderTop: `2px solid ${accent}` }}>
+              <h3
+                className="font-display font-extrabold"
+                style={{ fontSize: 'clamp(1.9rem, 3.2vw, 2.6rem)', lineHeight: 1.02, color: CREAM, letterSpacing: '-0.025em' }}
+              >
+                {selected.name}
+              </h3>
+              <p className="mt-3 leading-relaxed max-w-2xl" style={{ color: MUTED, fontSize: '1.05rem' }}>
+                {selected.description}
+              </p>
+
+              <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-x-8" style={{ borderTop: `1px solid ${RULE}` }}>
+                {selected.features.map((feature) => (
+                  <li
+                    key={feature}
+                    className="py-3 text-sm font-semibold"
+                    style={{ borderBottom: `1px solid ${RULE}`, color: CREAM }}
+                  >
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                type="button"
+                onClick={() => openWhatsApp(c.whatsapp(selected.name))}
+                className={`${btnPrimary} mt-8`}
+                style={btnPrimaryStyle}
+              >
+                {c.cta}
+                <ArrowRight size={16} aria-hidden="true" />
+              </button>
             </div>
           </div>
         </div>

@@ -1,104 +1,97 @@
-// @/app/components/tender/Hero.jsx
+'use client';
 
+// @/app/components/tender/Hero.js
 import React from 'react';
-import { ArrowRight, TrendingUp, Users, Award, Clock } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowRight } from 'lucide-react';
+import {
+  AMBER, DARK, CREAM, MUTED, RULE,
+  IMAGES, openWhatsApp,
+  btnPrimary, btnPrimaryStyle, btnGhost, btnGhostStyle,
+} from './shared';
+
+const copy = {
+  en: {
+    secondary: 'View our results',
+    imageAlt: 'A tender proposal being prepared at a desk',
+    whatsapp: "Hi! I'd like help with a tender application. Can we talk?",
+  },
+  sw: {
+    secondary: 'Tazama matokeo yetu',
+    imageAlt: 'Ombi la zabuni likiandaliwa mezani',
+    whatsapp: 'Hujambo! Ningependa msaada wa ombi la zabuni. Tunaweza kuzungumza?',
+  },
+};
 
 const TenderHeroSection = ({ language, heroStats }) => {
-  const content = heroStats[language];
+  const lang = language === 'sw' ? 'sw' : 'en';
+  const content = heroStats[lang];
+  const c = copy[lang];
 
-  const iconMap = {
-    0: TrendingUp,
-    1: Award, 
-    2: Users,
-    3: Clock
+  // Highlight the key phrase in amber when the data provides `titleAccent`
+  const renderTitle = () => {
+    const { title, titleAccent } = content;
+    const i = titleAccent ? title.indexOf(titleAccent) : -1;
+    if (i < 0) return title;
+    return (
+      <>
+        {title.slice(0, i)}
+        <span style={{ color: AMBER }}>{titleAccent}</span>
+        {title.slice(i + titleAccent.length)}
+      </>
+    );
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-brand-dark via-brand-primary to-brand-secondary min-h-screen flex items-center overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-brand-accent rounded-full mix-blend-overlay filter blur-3xl animate-pulse delay-1000"></div>
-      </div>
+    <section aria-labelledby="tender-hero-title">
+      {/* ═════════ COVER: image first ═════════ */}
+      <div
+        className="relative w-full overflow-hidden h-[clamp(34rem,90vh,54rem)] lg:h-auto lg:aspect-[16/9] lg:min-h-[36rem] lg:max-h-[60rem]"
+        style={{ background: DARK }}
+      >
+        <Image
+          src={IMAGES.hero}
+          alt={c.imageAlt}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[60%_40%]"
+        />
+        {/* Top scrim keeps the fixed header readable; bottom scrim carries the headline */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to bottom, rgba(13,9,3,0.55) 0%, rgba(13,9,3,0) 22%), linear-gradient(to top, rgba(26,18,8,1) 0%, rgba(26,18,8,0.75) 28%, rgba(26,18,8,0) 65%)',
+          }}
+        />
 
-      <div className="container mx-auto px-6 py-20 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          
-          {/* Left Column - Content */}
-          <div className="space-y-8">
-            <div className="space-y-6">
-              <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
-                <span className="bg-gradient-to-r from-white to-brand-accent bg-clip-text text-transparent">
-                  {content.title.split(' ').slice(0, 2).join(' ')}
-                </span>
-                <br />
-                <span className="text-white">
-                  {content.title.split(' ').slice(2).join(' ')}
-                </span>
-              </h1>
-              
-              <h2 className="text-xl lg:text-2xl text-brand-accent font-medium">
-                {content.subtitle}
-              </h2>
-              
-              <p className="text-lg text-gray-300 leading-relaxed max-w-xl">
-                {content.description}
-              </p>
+        <div className="absolute inset-x-0 bottom-0">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-10 lg:pb-6">
+            <div className="flex items-center gap-3 mb-5">
+              <div style={{ width: '3rem', height: 3, background: AMBER, borderRadius: 2, flexShrink: 0 }} />
+              <span className="font-display font-bold text-sm" style={{ color: AMBER, letterSpacing: '0.04em' }}>
+                {content.kicker}
+              </span>
             </div>
 
-            {/* CTA Button */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button className="group relative bg-gradient-to-r from-brand-accent to-brand-secondary hover:from-brand-secondary hover:to-brand-accent text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl">
-                <span className="flex items-center justify-center gap-3">
-                  {content.cta}
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                </span>
-                <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 rounded-2xl transition-opacity duration-300"></div>
-              </button>
-              
-              <button className="border-2 border-white/20 hover:border-white/40 text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 hover:bg-white/10">
-                {language === 'en' ? 'View Portfolio' : 'Ona Kazi Zetu'}
-              </button>
-            </div>
-          </div>
-
-          {/* Right Column - Stats */}
-          <div className="grid grid-cols-2 gap-6">
-            {content.stats.map((stat, index) => {
-              const IconComponent = iconMap[index];
-              return (
-                <div
-                  key={index}
-                  className="group bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-                >
-                  <div className="flex flex-col items-center text-center space-y-4">
-                    <div className="p-4 bg-gradient-to-br from-brand-accent to-brand-secondary rounded-2xl group-hover:scale-110 transition-transform duration-300">
-                      <IconComponent className="w-8 h-8 text-white" />
-                    </div>
-                    <div>
-                      <div className="text-3xl lg:text-4xl font-bold text-white mb-2">
-                        {stat.number}
-                      </div>
-                      <div className="text-gray-300 font-medium">
-                        {stat.label}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            <h1
+              id="tender-hero-title"
+              className="font-display font-extrabold max-w-5xl"
+              style={{
+                fontSize: 'clamp(2.5rem, 7.5vw, 6.25rem)',
+                lineHeight: 0.98,
+                letterSpacing: '-0.035em',
+                color: CREAM,
+              }}
+            >
+              {renderTitle()}
+            </h1>
           </div>
         </div>
       </div>
 
-      {/* Animated Elements */}
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2">
-        <div className="animate-bounce">
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
-          </div>
-        </div>
-      </div>
+    
     </section>
   );
 };

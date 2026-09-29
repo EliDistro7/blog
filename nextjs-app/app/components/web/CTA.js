@@ -1,33 +1,86 @@
+'use client';
 
-import React from 'react';
-import { Calendar, Phone } from 'lucide-react';
+import { MessageCircle, Phone } from 'lucide-react';
+import {
+  AMBER, SURFACE, DARK, CREAM, MUTED, RULE, BORDER_S,
+  AfricanPattern, focusRing, openWhatsApp, useLang, PHONE_HREF,
+} from './shared';
 
-const CTASection = () => {
+const copy = {
+  en: {
+    label: 'Get started',
+    title: ['Ready to start', 'your project?'],
+    text: "Let's discuss your vision and create something amazing together.",
+    primary: 'Get a free consultation',
+    secondary: 'Call us now',
+    whatsapp: 'Hi! I would like a free consultation about a website from Future Holders.',
+  },
+  sw: {
+    label: 'Anza sasa',
+    title: ['Uko tayari kuanza', 'mradi wako?'],
+    text: 'Tuzungumzie maono yako na tuunde kitu cha kipekee pamoja.',
+    primary: 'Pata ushauri bure',
+    secondary: 'Tupigie sasa',
+    whatsapp: 'Hujambo! Ningependa ushauri bure kuhusu tovuti kutoka Future Holders.',
+  },
+};
+
+export default function CTASection() {
+  const { lang } = useLang();
+  const c = copy[lang];
+
   return (
-    <div className="py-20 bg-gradient-to-t from-gray-900 via-gray-950 to-gray-900">
-      <div className="container mx-auto px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Ready to Start Your Project?
-          </h2>
-          <p className="text-xl text-gray-300 mb-8">
-            Lets discuss your vision and create something amazing together
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-4 bg-gradient-to-r from-brand-accent to-brand-coral text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center justify-center gap-3">
-              Get Free Consultation
-              <Calendar className="w-5 h-5" />
-            </button>
-            <button className="px-8 py-4 bg-white/10 backdrop-blur-md text-white font-bold rounded-xl border border-white/20 hover:bg-white/20 transition-all flex items-center justify-center gap-3">
-              Call Us Now
-              <Phone className="w-5 h-5" />
-            </button>
+    <section
+      aria-labelledby="web-cta-title"
+      className="relative overflow-hidden"
+      style={{ background: SURFACE }}
+    >
+      <AfricanPattern id="webCtaPattern" />
+
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-8 pt-8 items-end" style={{ borderTop: `1px solid ${RULE}` }}>
+          <div className="lg:col-span-7">
+            <div className="flex items-center gap-3 mb-5">
+              <div style={{ width: '3rem', height: 3, background: AMBER, borderRadius: 2, flexShrink: 0 }} />
+              <span className="font-display font-bold text-sm" style={{ color: AMBER, letterSpacing: '0.04em' }}>
+                {c.label}
+              </span>
+            </div>
+            <h2
+              id="web-cta-title"
+              className="font-display font-extrabold"
+              style={{ fontSize: 'clamp(2.25rem, 5.5vw, 4rem)', lineHeight: 1, color: CREAM, letterSpacing: '-0.03em' }}
+            >
+              {c.title[0]} <span style={{ color: AMBER }}>{c.title[1]}</span>
+            </h2>
+          </div>
+
+          <div className="lg:col-span-4 lg:col-start-9">
+            <p className="leading-relaxed mb-6" style={{ color: MUTED, fontSize: '1.05rem' }}>
+              {c.text}
+            </p>
+            <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-3">
+              <button
+                type="button"
+                onClick={() => openWhatsApp(c.whatsapp)}
+                className={`inline-flex items-center justify-center gap-2 rounded font-display font-extrabold text-sm transition-opacity hover:opacity-90 ${focusRing}`}
+                style={{ background: AMBER, color: DARK, padding: '1rem 1.75rem' }}
+              >
+                <MessageCircle size={18} aria-hidden="true" />
+                {c.primary}
+              </button>
+              <a
+                href={PHONE_HREF}
+                className={`inline-flex items-center justify-center gap-2 rounded font-display font-bold text-sm transition-colors hover:bg-amber/10 ${focusRing}`}
+                style={{ border: `2px solid ${BORDER_S}`, color: AMBER, padding: '1rem 1.75rem' }}
+              >
+                <Phone size={16} aria-hidden="true" />
+                {c.secondary}
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
-};
-
-export default CTASection;
+}
