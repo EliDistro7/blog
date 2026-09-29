@@ -178,7 +178,7 @@ export default function TestimonialCarousel() {
 
   return (
     <div
-      className="relative w-full py-20 overflow-hidden"
+      className="relative w-full py-4 overflow-hidden"
       style={{ background: SURFACE, fontFamily: "'Bricolage Grotesque', 'Inter', sans-serif" }}
     >
       {/* ── Backgrounds ─────────────────────────────────────────────────── */}
@@ -410,7 +410,7 @@ export default function TestimonialCarousel() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
           {[
             { label: t.stats.websites, value: '50+', accent: AMBER },
             { label: t.stats.clients,  value: '40+', accent: GOLD  },

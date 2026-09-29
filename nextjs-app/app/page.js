@@ -7,6 +7,7 @@ import TestimonialSection from "@/app/components/home/TestimonialSection";
 import CTASection from "@/app/components/home/CTASection";
 import Blog from "@/app/components/Blog";
 import ServicesVisualization from '@/app/components/home/Services'
+import TrustedPartners from '@/app/components/home/TrustedPartners'
 import ChatBot from '@/app/components/chatBot/index4';
 
 import Link from "next/link";
@@ -26,7 +27,9 @@ import { StoriesSection } from "./components/home/StoriesSection";
   return (
     <div className="mt-16 flex flex-col gap-20">
       <ServicesVisualization />
-      <TestimonialSection />
+    {/*  <TestimonialSection /> */}
+
+<TrustedPartners />
       <CTASection />
       {/* <ChatBot /> */}
     </div>

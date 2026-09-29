@@ -159,7 +159,7 @@ const services = [
       sw: 'Utayarishaji wa nyaraka, ukaguzi wa kufuata masharti na uandishi wa mapendekezo ili zabuni zako ziwe kamili na kwa wakati.',
     },
     icon: FileText,
-    image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=900&q=75',
+    image: '/partners/nest.jpeg',
     accent: AMBER,
   },
   {
@@ -171,7 +171,7 @@ const services = [
       sw: 'Vifaa vya kilimo na biashara pamoja na ushauri wa kitaalamu na msaada wa kiufundi baada ya kununua.',
     },
     icon: ShoppingCart,
-    image: '/services/tractor.jpeg',
+    image: '/images/equip.jpeg',
     accent: GOLD,
   },
 ];
