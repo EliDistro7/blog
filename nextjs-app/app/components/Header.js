@@ -1,390 +1,469 @@
-'use client'
-import Link from 'next/link'
-import { useState, useEffect, useRef } from 'react'
-import { LanguageSwitcher } from "@/app/components/LanguageSwitcher"
-import {
-  Menu, X, Share2, Globe, Users, ChevronDown,
-  DoorOpen, Phone, FileText, ShoppingCart, Palette
-} from 'lucide-react'
+'use client';
 
-// ── Inline African SVG pattern (decorative, mobile menu bg) ──────────────────
-const AfricanPatternBg = () => (
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import {
+  Menu, X, Share2, Globe, ChevronDown, DoorOpen, Phone,
+  FileText, ShoppingCart, Palette, ArrowRight,
+} from 'lucide-react';
+import { LanguageSwitcher } from '@/app/components/LanguageSwitcher';
+import { useLanguage } from '@/context/LanguageContext';
+
+// ── Design tokens (same set as ServicesShowcase / Footer) ────────────────────
+const AMBER = '#F59E0B';
+const DARK  = '#0D0903';
+const CREAM = '#F5F0E8';
+const MUTED = 'rgba(245,240,232,0.72)';
+const RULE  = 'rgba(245,240,232,0.16)';
+
+const focusRing =
+  'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber';
+
+// ── Subtle African pattern (mobile menu only, decorative) ────────────────────
+const AfricanPattern = ({ id }) => (
   <svg
     width="100%" height="100%"
     xmlns="http://www.w3.org/2000/svg"
-    className="absolute inset-0 opacity-[0.04] pointer-events-none"
+    className="absolute inset-0 pointer-events-none"
+    style={{ opacity: 0.04 }}
+    aria-hidden="true"
   >
     <defs>
-      <pattern id="hdrPattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-        <polygon points="20,3 37,20 20,37 3,20" fill="none" stroke="#F59E0B" strokeWidth="1" />
-        <circle cx="20" cy="20" r="2" fill="#F59E0B" />
-        <circle cx="0"  cy="0"  r="1" fill="#D4AF37" />
-        <circle cx="40" cy="0"  r="1" fill="#D4AF37" />
-        <circle cx="0"  cy="40" r="1" fill="#D4AF37" />
-        <circle cx="40" cy="40" r="1" fill="#D4AF37" />
+      <pattern id={id} x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+        <polygon points="30,4 56,30 30,56 4,30" fill="none" stroke="#F59E0B" strokeWidth="1.5" />
+        <polygon points="30,16 44,30 30,44 16,30" fill="none" stroke="#D4AF37" strokeWidth="1" />
+        <circle cx="30" cy="30" r="2.5" fill="#F59E0B" />
       </pattern>
     </defs>
-    <rect width="100%" height="100%" fill="url(#hdrPattern)" />
+    <rect width="100%" height="100%" fill={`url(#${id})`} />
   </svg>
-)
+);
 
-// ── Data ─────────────────────────────────────────────────────────────────────
+// ── Copy ──────────────────────────────────────────────────────────────────────
+
+
+const copy = {
+  en: {
+    home: 'Future Holders home',
+    tagline: 'Marketing & digital agency',
+    services: 'Services',
+    servicesKicker: 'Our services',
+    viewAll: 'View all services',
+    company: 'Company',
+    about: 'About us',
+    contact: 'Contact us',
+    contactMobile: 'Contact us today',
+    primaryNav: 'Main',
+    mobileNav: 'Mobile',
+    openMenu: 'Open menu',
+    closeMenu: 'Close menu',
+  },
+  sw: {
+    home: 'Ukurasa wa nyumbani wa Future Holders',
+    tagline: 'Wakala wa masoko na kidijitali',
+    services: 'Huduma',
+    servicesKicker: 'Huduma zetu',
+    viewAll: 'Tazama huduma zote',
+    company: 'Kampuni',
+    about: 'Kuhusu sisi',
+    contact: 'Wasiliana nasi',
+    contactMobile: 'Wasiliana nasi leo',
+    primaryNav: 'Kuu',
+    mobileNav: 'Simu',
+    openMenu: 'Fungua menyu',
+    closeMenu: 'Funga menyu',
+  },
+};
+
+// ── Data (same order as the services page) ───────────────────────────────────
 const services = [
   {
-    name: "Door-to-Door Marketing",
-    shortName: "Door-to-Door",
-    icon: <DoorOpen className="w-4 h-4" />,
-    path: "/services/door-to-door",
-    description: "Personal engagement & direct sales",
+    id: 'web-development',
+    Icon: Globe,
+    title: { en: 'Web development', sw: 'Ujenzi wa tovuti' },
+    description: {
+      en: 'Professional websites and online stores',
+      sw: 'Tovuti za kitaalamu na maduka ya mtandaoni',
+    },
   },
   {
-    name: "Social Media Management",
-    shortName: "Social Media",
-    icon: <Share2 className="w-4 h-4" />,
-    path: "/services/social-media",
-    description: "Complete digital presence management",
+    id: 'branding',
+    Icon: Palette,
+    title: { en: 'Branding', sw: 'Utambulisho wa brand' },
+    description: {
+      en: 'Complete brand identity and design',
+      sw: 'Utambulisho kamili wa brand na muundo',
+    },
   },
   {
-    name: "Web Development",
-    shortName: "Web Building",
-    icon: <Globe className="w-4 h-4" />,
-    path: "/services/web-development",
-    description: "Professional websites & e-commerce",
+    id: 'social-media',
+    Icon: Share2,
+    title: { en: 'Social media', sw: 'Mitandao ya kijamii' },
+    description: {
+      en: 'Full management of your online presence',
+      sw: 'Usimamizi kamili wa uwepo wako mtandaoni',
+    },
   },
   {
-    name: "Tender Applications",
-    shortName: "Tender Apps",
-    icon: <FileText className="w-4 h-4" />,
-    path: "/services/tender-applications",
-    description: "Professional tender & proposal writing",
+    id: 'door-to-door',
+    Icon: DoorOpen,
+    title: { en: 'Door-to-door', sw: 'Nyumba kwa nyumba' },
+    description: {
+      en: 'Personal engagement and direct sales',
+      sw: 'Ukaribu wa binafsi na mauzo ya moja kwa moja',
+    },
   },
   {
-    name: "Equipment Sales",
-    shortName: "Equipment",
-    icon: <ShoppingCart className="w-4 h-4" />,
-    path: "/services/equipment-sales",
-    description: "Quality equipment & supply solutions",
+    id: 'tender-applications',
+    Icon: FileText,
+    title: { en: 'Tender applications', sw: 'Maombi ya zabuni' },
+    description: {
+      en: 'Tender and proposal writing',
+      sw: 'Uandishi wa zabuni na mapendekezo',
+    },
   },
   {
-    name: "Branding",
-    shortName: "Branding",
-    icon: <Palette className="w-4 h-4" />,
-    path: "/services/branding",
-    description: "Complete brand identity & design",
+    id: 'equipment-sales',
+    Icon: ShoppingCart,
+    title: { en: 'Equipment sales', sw: 'Mauzo ya vifaa' },
+    description: {
+      en: 'Quality equipment and supply solutions',
+      sw: 'Vifaa vya ubora na suluhisho za usambazaji',
+    },
   },
-]
-
-const navItems = [
-  { name: "About Us", path: "/team", icon: <Users className="w-4 h-4" /> },
-]
+];
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [scrolled, setScrolled]             = useState(false)
-  const [servicesOpen, setServicesOpen]     = useState(false)
-  const dropdownRef   = useRef(null)
-  const mobileMenuRef = useRef(null)
+  const { language } = useLanguage();
+  const lang = language === 'sw' ? 'sw' : 'en';
+  const t = copy[lang];
+  const tr = (obj) => obj[lang] ?? obj.en;
 
-  // Scroll detection
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10)
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  const pathname = usePathname();
+  const isActive = (path) => pathname === path || pathname.startsWith(`${path}/`);
 
-  // Body scroll lock
-  useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'auto'
-    return () => { document.body.style.overflow = 'auto' }
-  }, [mobileMenuOpen])
+  const [mobileOpen, setMobileOpen]     = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const [scrolled, setScrolled]         = useState(false);
 
-  // Click-outside dropdown
+  const servicesRef    = useRef(null);
+  const servicesBtnRef = useRef(null);
+  const menuBtnRef     = useRef(null);
+
+  // Scroll state
   useEffect(() => {
-    const handler = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setServicesOpen(false)
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Close everything when the route changes
+  useEffect(() => {
+    setMobileOpen(false);
+    setServicesOpen(false);
+  }, [pathname]);
+
+  // Close the mobile menu if the viewport grows to desktop
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)');
+    const onChange = () => { if (mq.matches) setMobileOpen(false); };
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
+  // Body scroll lock (restores whatever was there before)
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, [mobileOpen]);
+
+  // Escape closes menus and returns focus to the control that opened them
+  useEffect(() => {
+    if (!servicesOpen && !mobileOpen) return;
+    const onKey = (e) => {
+      if (e.key !== 'Escape') return;
+      if (servicesOpen) { setServicesOpen(false); servicesBtnRef.current?.focus(); }
+      if (mobileOpen)   { setMobileOpen(false);   menuBtnRef.current?.focus(); }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [servicesOpen, mobileOpen]);
+
+  // Click outside the services dropdown
+  useEffect(() => {
+    if (!servicesOpen) return;
+    const onDown = (e) => {
+      if (servicesRef.current && !servicesRef.current.contains(e.target )) {
+        setServicesOpen(false);
       }
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [])
+    };
+    document.addEventListener('pointerdown', onDown);
+    return () => document.removeEventListener('pointerdown', onDown);
+  }, [servicesOpen]);
 
-  const navBase = scrolled
-    ? 'h-16 border-b-2 border-warning/40 shadow-warm'
-    : 'h-20 border-b border-amber-border'
+  const navLink = (active) =>
+    `px-3 py-2 font-display font-semibold text-sm border-b-2 motion-safe:transition-colors hover:text-amber ${
+      active ? 'text-cream border-amber' : 'text-cream/80 border-transparent'
+    } ${focusRing}`;
+
+  const inServices = isActive('/services');
 
   return (
     <>
-      {/* ── HEADER ─────────────────────────────────────────────────────────── */}
+      {/* ═════════════════ HEADER ═════════════════ */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 nav-blur ${navBase}`}
+        className={`fixed top-0 inset-x-0 z-50 w-full motion-safe:transition-[height,background-color] motion-safe:duration-300 ${
+          scrolled ? 'h-16' : 'h-20'
+        }`}
+        style={{
+          background: scrolled ? 'rgba(13,9,3,0.94)' : 'rgba(13,9,3,0.55)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderBottom: `1px solid ${scrolled ? RULE : 'transparent'}`,
+        }}
       >
-        <div className="container h-full px-4 mx-auto">
-          <div className="flex items-center justify-between h-full">
-
-            {/* ── Logo ─────────────────────────────────────────────────────── */}
-            <Link href="/" className="flex items-center gap-3" aria-label="Future Holders Home">
-              <img
+        <div className="container mx-auto h-full px-4 sm:px-6 lg:px-8">
+          <div className="flex h-full items-center justify-between gap-4">
+            {/* ── Brand ── */}
+            <Link href="/" aria-label={t.home} className={`flex items-center gap-3 ${focusRing}`}>
+              <Image
                 src="/logo.png"
-                alt="Future Holders logo"
-                style={{
-                  height: scrolled ? '34px' : '40px',
-                  width: 'auto',
-                  objectFit: 'contain',
-                  transition: 'height 0.3s',
-                }}
+                alt=""
+                width={80}
+                height={40}
+                priority
+                className={`w-auto object-contain motion-safe:transition-[height] motion-safe:duration-300 ${
+                  scrolled ? 'h-[34px]' : 'h-10'
+                }`}
               />
-              {/* Desktop: full brand name */}
-              <div className="hidden sm:block">
-                <div
-                  className="font-display font-extrabold tracking-wide leading-none"
-                  style={{ fontSize: '1.1rem', color: '#F5F0E8' }}
+              <span className="hidden sm:block">
+                <span
+                  className="block font-display font-extrabold leading-none"
+                  style={{ color: CREAM, fontSize: '1.15rem', letterSpacing: '-0.02em' }}
                 >
-                  FUTURE<span className="text-warning">HOLDERS</span>
-                </div>
-                <div
-                  className="text-2xs uppercase font-bold mt-0.5"
-                  style={{ letterSpacing: '0.2em', color: 'rgba(245,158,11,0.7)' }}
-                >
-                  Marketing Solutions
-                </div>
-              </div>
-              {/* Mobile: short abbreviation */}
-              <span
-                className="sm:hidden font-display font-extrabold"
-                style={{ fontSize: '1.05rem', color: '#F5F0E8', letterSpacing: '-0.01em' }}
-              >
-                FH<span style={{ color: '#F59E0B' }}>.</span>
+                  Future Holders
+                </span>
+                <span className="block mt-1 text-xs leading-none" style={{ color: MUTED }}>
+                  {t.tagline}
+                </span>
               </span>
             </Link>
 
-            {/* ── Desktop Nav ──────────────────────────────────────────────── */}
-            <nav className="hidden lg:flex items-center gap-1">
-
-              {/* Services dropdown */}
-              <div className="relative" ref={dropdownRef}>
+            {/* ── Desktop nav ── */}
+            <nav className="hidden lg:flex items-center gap-2" aria-label={t.primaryNav}>
+              <div
+                ref={servicesRef}
+                className="relative"
+                onBlur={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget )) setServicesOpen(false);
+                }}
+              >
                 <button
-                  onClick={() => setServicesOpen(!servicesOpen)}
-                  className="flex items-center gap-1.5 px-4 py-2 font-display font-bold uppercase tracking-wider text-sm transition-colors duration-200 rounded"
-                  style={{ color: 'rgba(245,240,232,0.75)' }}
+                  ref={servicesBtnRef}
+                  type="button"
+                  onClick={() => setServicesOpen((o) => !o)}
+                  aria-expanded={servicesOpen}
+                  aria-controls="services-panel"
+                  className={`inline-flex items-center gap-1.5 ${navLink(inServices || servicesOpen)}`}
                 >
-                  Services
+                  {t.services}
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${servicesOpen ? 'rotate-180' : ''}`}
-                    style={{ color: '#F59E0B' }}
+                    size={16}
+                    aria-hidden="true"
+                    className={`motion-safe:transition-transform motion-safe:duration-300 ${
+                      servicesOpen ? 'rotate-180' : ''
+                    }`}
+                    style={{ color: AMBER }}
                   />
                 </button>
 
-                {/* Dropdown panel */}
                 {servicesOpen && (
                   <div
-                    className="absolute top-full left-0 mt-2 w-[28rem] rounded p-4 z-[100]"
+                    id="services-panel"
+                    className="absolute left-0 top-full mt-3 w-[30rem] rounded p-6"
                     style={{
-                      background: 'rgba(13,9,3,0.97)',
+                      background: 'rgba(13,9,3,0.98)',
                       backdropFilter: 'blur(16px)',
-                      border: '1px solid rgba(245,158,11,0.25)',
-                      boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
+                      border: `1px solid ${RULE}`,
+                      boxShadow: '0 20px 50px rgba(0,0,0,0.55)',
                     }}
                   >
-                    {/* Accent stripe */}
-                    <div className="stripe-amber animate-stripe-in" />
-
-                    <div className="flex items-center gap-3 mb-4 pt-2">
-                      <div className="accent-rule" />
-                      <span className="font-display font-bold uppercase tracking-widest text-xs text-warning">
-                        Our Services
+                    <div className="flex items-center gap-3 mb-4">
+                      <div style={{ width: '2rem', height: 3, background: AMBER, borderRadius: 2, flexShrink: 0 }} />
+                      <span className="font-display font-bold text-sm" style={{ color: AMBER, letterSpacing: '0.04em' }}>
+                        {t.servicesKicker}
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2">
-                      {services.map((svc) => (
-                        <Link
-                          key={svc.name}
-                          href={svc.path}
-                          onClick={() => setServicesOpen(false)}
-                          className="card-warm flex items-start gap-3 p-3 rounded group transition-all duration-200"
-                        >
-                          <div
-                            className="flex items-center justify-center w-8 h-8 rounded flex-shrink-0"
-                            style={{ background: 'rgba(245,158,11,0.12)' }}
+                    <ul className="grid grid-cols-2 gap-x-6" style={{ borderTop: `1px solid ${RULE}` }}>
+                      {services.map(({ id, Icon, title, description }) => (
+                        <li key={id} style={{ borderBottom: `1px solid ${RULE}` }}>
+                          <Link
+                            href={`/services/${id}`}
+                            className={`group flex items-start gap-3 py-3 ${focusRing}`}
                           >
-                            <span className="text-warning">{svc.icon}</span>
-                          </div>
-                          <div className="min-w-0">
-                            <div
-                              className="font-display font-bold text-sm leading-tight mb-0.5 transition-colors duration-200"
-                              style={{ color: '#F5F0E8' }}
-                            >
-                              {svc.shortName}
-                            </div>
-                            <div className="text-xs leading-snug" style={{ color: 'rgba(245,240,232,0.45)' }}>
-                              {svc.description}
-                            </div>
-                          </div>
-                        </Link>
+                            <Icon size={16} aria-hidden="true" className="mt-0.5 flex-shrink-0" style={{ color: AMBER }} />
+                            <span className="min-w-0">
+                              <span className="block font-display font-bold text-sm text-cream group-hover:text-amber motion-safe:transition-colors">
+                                {tr(title)}
+                              </span>
+                              <span className="block mt-0.5 text-xs leading-snug" style={{ color: MUTED }}>
+                                {tr(description)}
+                              </span>
+                            </span>
+                          </Link>
+                        </li>
                       ))}
-                    </div>
+                    </ul>
+
+                    <Link
+                      href="/services"
+                      className={`group inline-flex items-center gap-2 mt-5 font-display font-bold text-sm ${focusRing}`}
+                      style={{ color: AMBER }}
+                    >
+                      {t.viewAll}
+                      <ArrowRight size={16} aria-hidden="true" className="motion-safe:transition-transform group-hover:translate-x-1" />
+                    </Link>
                   </div>
                 )}
               </div>
 
-              {/* Regular nav links */}
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.path}
-                  className="px-4 py-2 font-display font-bold uppercase tracking-wider text-sm transition-colors duration-200"
-                  style={{ color: 'rgba(245,240,232,0.75)' }}
-                >
-                  {item.name}
-                </Link>
-              ))}
+              <Link
+                href="/team"
+                aria-current={isActive('/team') ? 'page' : undefined}
+                className={navLink(isActive('/team'))}
+              >
+                {t.about}
+              </Link>
 
-              {/* CTA */}
               <Link
                 href="/contact"
-                className="ml-4 px-6 py-2.5 font-display font-extrabold uppercase tracking-widest text-sm transition-opacity duration-200 hover:opacity-90 rounded"
-                style={{ background: '#F59E0B', color: '#0D0903', letterSpacing: '0.08em' }}
+                className={`ml-4 rounded font-display font-extrabold text-sm hover:opacity-90 motion-safe:transition-opacity ${focusRing}`}
+                style={{ background: AMBER, color: DARK, padding: '0.7rem 1.4rem' }}
               >
-                Contact Us
+                {t.contact}
               </Link>
             </nav>
 
-            {/* Right side */}
+            {/* ── Right side ── */}
             <div className="flex items-center gap-2">
               <LanguageSwitcher />
               <button
-                className="lg:hidden flex items-center justify-center h-10 w-10 rounded transition-colors duration-200"
-                style={{ color: '#F5F0E8' }}
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-                aria-expanded={mobileMenuOpen}
+                ref={menuBtnRef}
+                type="button"
+                onClick={() => setMobileOpen((o) => !o)}
+                aria-label={mobileOpen ? t.closeMenu : t.openMenu}
+                aria-expanded={mobileOpen}
                 aria-controls="mobile-menu"
+                className={`lg:hidden flex h-11 w-11 items-center justify-center rounded text-cream ${focusRing}`}
               >
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {mobileOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* ── Mobile overlay ──────────────────────────────────────────────────── */}
-      {mobileMenuOpen && (
+      {/* ═════════════════ MOBILE MENU ═════════════════ */}
+      {mobileOpen && (
         <div
           className="fixed inset-0 z-40 lg:hidden"
-          style={{ background: 'rgba(13,9,3,0.7)', backdropFilter: 'blur(4px)' }}
-          onClick={() => setMobileMenuOpen(false)}
+          style={{ background: 'rgba(13,9,3,0.7)' }}
+          onClick={() => setMobileOpen(false)}
           aria-hidden="true"
         />
       )}
 
-      {/* ── Mobile Menu ─────────────────────────────────────────────────────── */}
+      {/* `invisible` when closed removes the links from the tab order */}
       <div
         id="mobile-menu"
-        ref={mobileMenuRef}
-        className={`fixed left-0 right-0 lg:hidden z-40 transition-all duration-300 ease-in-out ${
-          mobileMenuOpen
-            ? 'translate-y-0 opacity-100'
-            : '-translate-y-full opacity-0 pointer-events-none'
+        className={`fixed inset-x-0 z-40 lg:hidden overflow-hidden motion-safe:transition-[transform,opacity,visibility] motion-safe:duration-300 ${
+          mobileOpen ? 'translate-y-0 opacity-100 visible' : '-translate-y-full opacity-0 invisible'
         }`}
         style={{
           top: scrolled ? '4rem' : '5rem',
-          background: 'rgba(13,9,3,0.97)',
-          backdropFilter: 'blur(16px)',
-          borderBottom: '2px solid rgba(245,158,11,0.3)',
-          boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
+          background: 'rgba(13,9,3,0.98)',
+          borderBottom: `1px solid ${RULE}`,
+          boxShadow: '0 20px 50px rgba(0,0,0,0.55)',
         }}
       >
-        {/* Decorative pattern */}
-        <AfricanPatternBg />
+        <AfricanPattern id="headerPattern" />
 
-        <div className="relative container px-4 py-6 mx-auto max-h-[calc(100vh-6rem)] overflow-y-auto">
-          <nav className="space-y-8">
-
-            {/* Services */}
-            <div>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="accent-rule" />
-                <span className="font-display font-bold uppercase tracking-widest text-xs text-warning">
-                  Our Services
-                </span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {services.map((svc) => (
-                  <Link
-                    key={svc.name}
-                    href={svc.path}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="card-warm flex items-center gap-3 p-4 rounded group transition-all duration-200"
-                  >
-                    <div
-                      className="flex items-center justify-center w-9 h-9 rounded flex-shrink-0"
-                      style={{ background: 'rgba(245,158,11,0.12)' }}
-                    >
-                      <span className="text-warning">{svc.icon}</span>
-                    </div>
-                    <div className="min-w-0">
-                      <div
-                        className="font-display font-bold text-sm transition-colors duration-200"
-                        style={{ color: '#F5F0E8' }}
-                      >
-                        {svc.shortName}
-                      </div>
-                      <div className="text-xs mt-0.5 line-clamp-1" style={{ color: 'rgba(245,240,232,0.45)' }}>
-                        {svc.description}
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+        <nav
+          aria-label={t.mobileNav}
+          className="relative container mx-auto px-4 sm:px-6 py-8 space-y-10 overflow-y-auto"
+          style={{ maxHeight: `calc(100dvh - ${scrolled ? '4rem' : '5rem'})` }}
+        >
+          {/* Services */}
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <div style={{ width: '2rem', height: 3, background: AMBER, borderRadius: 2, flexShrink: 0 }} />
+              <h2 className="font-display font-bold text-sm" style={{ color: AMBER, letterSpacing: '0.04em' }}>
+                {t.servicesKicker}
+              </h2>
             </div>
 
-            {/* Navigation */}
-            <div>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="accent-rule" />
-                <span className="font-display font-bold uppercase tracking-widest text-xs text-warning">
-                  Navigation
-                </span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {navItems.map((item) => (
+            <ul style={{ borderTop: `1px solid ${RULE}` }}>
+              {services.map(({ id, Icon, title, description }) => (
+                <li key={id} style={{ borderBottom: `1px solid ${RULE}` }}>
                   <Link
-                    key={item.name}
-                    href={item.path}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="card-warm flex items-center gap-3 p-4 rounded group transition-all duration-200"
+                    href={`/services/${id}`}
+                    className={`flex items-center gap-4 py-4 ${focusRing}`}
                   >
-                    <div
-                      className="flex items-center justify-center w-9 h-9 rounded flex-shrink-0"
-                      style={{ background: 'rgba(245,158,11,0.08)' }}
-                    >
-                      <span className="text-warning">{item.icon}</span>
-                    </div>
-                    <span className="font-display font-bold text-sm" style={{ color: '#F5F0E8' }}>
-                      {item.name}
+                    <Icon size={18} aria-hidden="true" className="flex-shrink-0" style={{ color: AMBER }} />
+                    <span className="min-w-0">
+                      <span className="block font-display font-bold text-base text-cream">{tr(title)}</span>
+                      <span className="block mt-0.5 text-sm leading-snug" style={{ color: MUTED }}>
+                        {tr(description)}
+                      </span>
                     </span>
                   </Link>
-                ))}
-              </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company */}
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <div style={{ width: '2rem', height: 3, background: '#D4AF37', borderRadius: 2, flexShrink: 0 }} />
+              <h2 className="font-display font-bold text-sm" style={{ color: '#D4AF37', letterSpacing: '0.04em' }}>
+                {t.company}
+              </h2>
             </div>
 
-            {/* Contact CTA */}
-            <div style={{ borderTop: '1px solid rgba(245,158,11,0.15)', paddingTop: '1.5rem', paddingBottom: '0.5rem' }}>
-              <Link
-                href="/contact"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-center gap-3 p-4 w-full font-display font-extrabold uppercase tracking-widest text-sm transition-opacity duration-200 hover:opacity-90 rounded"
-                style={{ background: '#F59E0B', color: '#0D0903' }}
-              >
-                <Phone className="w-4 h-4" />
-                Contact Us Today
-              </Link>
-            </div>
-          </nav>
-        </div>
+            <ul style={{ borderTop: `1px solid ${RULE}` }}>
+              <li style={{ borderBottom: `1px solid ${RULE}` }}>
+                <Link
+                  href="/team"
+                  aria-current={isActive('/team') ? 'page' : undefined}
+                  className={`block py-4 font-display font-bold text-base hover:text-amber motion-safe:transition-colors ${
+                    isActive('/team') ? 'text-amber' : 'text-cream'
+                  } ${focusRing}`}
+                >
+                  {t.about}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* CTA */}
+          <Link
+            href="/contact"
+            className={`flex w-full items-center justify-center gap-3 rounded font-display font-extrabold text-sm hover:opacity-90 motion-safe:transition-opacity ${focusRing}`}
+            style={{ background: AMBER, color: DARK, padding: '1rem 1.75rem' }}
+          >
+            <Phone size={18} aria-hidden="true" />
+            {t.contactMobile}
+          </Link>
+        </nav>
       </div>
     </>
-  )
+  );
 }

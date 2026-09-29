@@ -1,545 +1,448 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { DoorOpen, Smartphone, Globe, Users, ChevronRight, ArrowRight, ExternalLink } from 'lucide-react';
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import {
+  Palette, Users, ShoppingCart, Share2, FileText, Globe,
+  ArrowRight, MessageCircle,
+} from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
-import { useRouter } from 'next/navigation';
 
-// ── Inline African geometric SVG pattern ─────────────────────────────────────
-const AfricanPattern = () => (
+// ── Design tokens ─────────────────────────────────────────────────────────────
+const AMBER    = '#F59E0B';
+const GOLD     = '#D4AF37';
+const SURFACE  = '#1A1208';
+const DARK     = '#0D0903';
+const CREAM    = '#F5F0E8';
+const MUTED    = 'rgba(245,240,232,0.72)';
+const RULE     = 'rgba(245,240,232,0.16)';
+const BORDER_S = 'rgba(245,158,11,0.35)';
+
+const WHATSAPP_NUMBER = '255745787370';
+
+// ── Subtle African pattern (kept quiet so the photography leads) ─────────────
+const AfricanPattern = ({ id }) => (
   <svg
     width="100%" height="100%"
     xmlns="http://www.w3.org/2000/svg"
     className="absolute inset-0 pointer-events-none"
-    style={{ opacity: 0.055 }}
+    style={{ opacity: 0.04 }}
+    aria-hidden="true"
   >
     <defs>
-      <pattern id="svcPattern" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+      <pattern id={id} x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
         <polygon points="30,4 56,30 30,56 4,30" fill="none" stroke="#F59E0B" strokeWidth="1.5" />
         <polygon points="30,16 44,30 30,44 16,30" fill="none" stroke="#D4AF37" strokeWidth="1" />
-        <line x1="30" y1="0" x2="30" y2="60" stroke="#F59E0B" strokeWidth="0.5" />
-        <line x1="0"  y1="30" x2="60" y2="30" stroke="#F59E0B" strokeWidth="0.5" />
         <circle cx="30" cy="30" r="2.5" fill="#F59E0B" />
-        <circle cx="0"  cy="0"  r="1.5" fill="#D4AF37" />
-        <circle cx="60" cy="0"  r="1.5" fill="#D4AF37" />
-        <circle cx="0"  cy="60" r="1.5" fill="#D4AF37" />
-        <circle cx="60" cy="60" r="1.5" fill="#D4AF37" />
       </pattern>
     </defs>
-    <rect width="100%" height="100%" fill="url(#svcPattern)" />
+    <rect width="100%" height="100%" fill={`url(#${id})`} />
   </svg>
-)
+);
 
-// ── Dot-grid texture (services panel bg) ─────────────────────────────────────
-const DotGrid = () => (
-  <div
-    className="absolute inset-0 pointer-events-none"
-    style={{
-      opacity: 0.04,
-      backgroundImage: 'radial-gradient(circle at 1px 1px, #F59E0B 1px, transparent 0)',
-      backgroundSize: '40px 40px',
-    }}
-  />
-)
+// ── Copy ──────────────────────────────────────────────────────────────────────
+const copy = {
+  en: {
+    hero: {
+      badge: "Tanzania's marketing & digital agency",
+      title: ['Marketing that puts', 'your business', 'in front of Tanzania'],
+      caption: 'Door-to-door marketing in the field',
+      subtitle:
+        'Branding, websites, social media and door-to-door sales from one local team. Trusted by 40+ businesses across the country.',
+      primary: 'Chat on WhatsApp',
+      secondary: 'See our services',
+      imageAlt: 'Future Holders team talking with a customer at their door',
+      stats: [
+        { value: '50+', label: 'Websites delivered' },
+        { value: '40+', label: 'Happy clients' },
+        { value: '5+',  label: 'Years of experience' },
+      ],
+      whatsapp: "Hi! I'd like to start a project with Future Holders. Can you help?",
+    },
+    services: {
+      label: 'What we offer',
+      title: 'Our services',
+      subtitle: 'Everything you need to build a brand, reach customers and win business, in one place.',
+      explore: 'Explore',
+      featured: 'Most requested',
+    },
+  },
+  sw: {
+    hero: {
+      badge: 'Wakala wa masoko na kidijitali Tanzania',
+      title: ['Masoko yanayoifikisha', 'biashara yako', 'kwa Watanzania'],
+      caption: 'Uuzaji nyumba kwa nyumba uwandani',
+      subtitle:
+        'Utambulisho wa brand, tovuti, mitandao ya kijamii na mauzo ya nyumba kwa nyumba kutoka timu moja ya hapa nchini. Tumeaminiwa na biashara 40+ kote nchini.',
+      primary: 'Ongea nasi WhatsApp',
+      secondary: 'Tazama huduma zetu',
+      imageAlt: 'Timu ya Future Holders ikizungumza na mteja mlangoni kwake',
+      stats: [
+        { value: '50+', label: 'Tovuti zilizotolewa' },
+        { value: '40+', label: 'Wateja wenye furaha' },
+        { value: '5+',  label: 'Miaka ya uzoefu' },
+      ],
+      whatsapp: 'Hujambo! Ningependa kuanza mradi na Future Holders. Je, mnaweza kunisaidia?',
+    },
+    services: {
+      label: 'Tunachotoa',
+      title: 'Huduma zetu',
+      subtitle: 'Kila kitu unachohitaji kujenga brand, kufikia wateja na kushinda biashara, mahali pamoja.',
+      explore: 'Chunguza',
+      featured: 'Inayoombwa zaidi',
+    },
+  },
+};
 
-// ── Design tokens ─────────────────────────────────────────────────────────────
-const AMBER    = '#F59E0B'  // warning
-const GOLD     = '#D4AF37'  // brand.gold
-const SURFACE  = '#1A1208'  // surface.DEFAULT (warmBlack)
-const DARK     = '#0D0903'  // surface.deep (darkBrown)
-const CREAM    = '#F5F0E8'  // cream text
-const MUTED    = 'rgba(245,240,232,0.55)'
-const FAINT    = 'rgba(245,240,232,0.3)'
-const BORDER   = 'rgba(245,158,11,0.2)'
-const BORDER_S = 'rgba(245,158,11,0.35)'
-
-// ── Service data ──────────────────────────────────────────────────────────────
+// ── Services data ─────────────────────────────────────────────────────────────
 const services = [
   {
+    id: 'web-development',
+    title:    { en: 'Web Development', sw: 'Ujenzi wa Tovuti' },
+    subtitle: { en: 'Websites that work for you', sw: 'Tovuti zinazokufanyia kazi' },
+    description: {
+      en: 'Fast, professional websites and online stores, built and launched in as little as 10 days.',
+      sw: 'Tovuti na maduka ya mtandaoni ya kitaalamu na ya haraka, yanayojengwa na kuzinduliwa kwa siku 10 tu.',
+    },
+    icon: Globe,
+    image: '/services/web.jpeg', // add this image to /public/services
+    accent: AMBER,
+    features: [
+      { en: 'Business Websites', sw: 'Tovuti za Biashara' },
+      { en: 'Online Stores',     sw: 'Maduka ya Mtandaoni' },
+      { en: 'Fast Delivery',     sw: 'Utoaji wa Haraka' },
+    ],
+  },
+  {
     id: 'branding',
-    title:       { en: "Branding & Identity",          sw: "Utambulisho wa Brand" },
-    subtitle:    { en: "Build Your Unique Brand",       sw: "Jenga Utambulisho Wako" },
+    title:    { en: 'Branding & Identity', sw: 'Utambulisho wa Brand' },
+    subtitle: { en: 'Build your unique brand', sw: 'Jenga utambulisho wako' },
     description: {
-      en: "Complete brand identity development including logo design, brand guidelines, visual identity systems, and brand positioning strategies that make your business memorable.",
-      sw: "Uundaji kamili wa utambulisho wa brand ikiwa ni pamoja na muundo wa logo, miongozo ya brand, mifumo ya utambulisho wa kuona.",
+      en: 'Logo design, brand guidelines and visual identity that make your business easy to remember.',
+      sw: 'Muundo wa logo, miongozo ya brand na utambulisho wa kuona unaofanya biashara yako ikumbukwe.',
     },
-    icon: DoorOpen,
-    image: "https://images.unsplash.com/photo-1600132806608-231446b2e7af?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    accent: AMBER,
-    features: [
-      { en: "Logo Design",      sw: "Muundo wa Logo" },
-      { en: "Brand Guidelines", sw: "Miongozo ya Brand" },
-      { en: "Visual Identity",  sw: "Utambulisho wa Kuona" },
-    ],
-  },
-  {
-    id: 'door-to-door',
-    title:       { en: "Door-to-Door Marketing",       sw: "Uuzaji Door to Door" },
-    subtitle:    { en: "Personal Connection, Real Results", sw: "Miunganiko ya Binafsi" },
-    description: {
-      en: "Direct engagement with your target audience through personalized face-to-face interactions that build trust, create lasting relationships, and drive immediate conversions.",
-      sw: "Ushirikiano wa moja kwa moja na walengwa wako kupitia mazungumzo ya ana kwa ana yanayojenga imani.",
-    },
-    icon: Users,
-    image: "/services/door.jpeg",
+    icon: Palette,
+    image: 'https://images.unsplash.com/photo-1600132806608-231446b2e7af?auto=format&fit=crop&w=900&q=75',
     accent: GOLD,
-    features: [
-      { en: "Personal Engagement", sw: "Ushirikiano wa Binafsi" },
-      { en: "Local Targeting",     sw: "Lengo la Mtandaoni" },
-      { en: "Direct Feedback",     sw: "Maoni ya Moja kwa Moja" },
-    ],
-  },
-  {
-    id: 'equipment-sales',
-    title:       { en: "Equipment Sales",              sw: "Mauzo ya Vifaa" },
-    subtitle:    { en: "Quality Equipment Solutions",  sw: "Suluhisho za Vifaa vya Ubora" },
-    description: {
-      en: "Premium equipment sales and consultation services, providing businesses with the right tools and technology solutions to enhance productivity.",
-      sw: "Mauzo ya vifaa vya hali ya juu na huduma za ushauri, kutoa biashara zifaa sahihi na suluhisho za teknolojia.",
-    },
-    icon: Smartphone,
-    image: "/services/tractor.jpeg",
-    accent: AMBER,
-    features: [
-      { en: "Equipment Consultation", sw: "Ushauri wa Vifaa" },
-      { en: "Quality Products",       sw: "Bidhaa za Ubora" },
-      { en: "Technical Support",      sw: "Msaada wa Kiufundi" },
-    ],
   },
   {
     id: 'social-media',
-    title:       { en: "Social Media Management",      sw: "Usimamizi wa Mitandao" },
-    subtitle:    { en: "Amplify Your Digital Presence", sw: "Kuongeza Uwepo Wako" },
+    title:    { en: 'Social Media Management', sw: 'Usimamizi wa Mitandao' },
+    subtitle: { en: 'Grow your online presence', sw: 'Kuza uwepo wako mtandaoni' },
     description: {
-      en: "Strategic social media management across all platforms including content creation, community building, analytics, and targeted advertising.",
-      sw: "Usimamizi wa kimkakati wa mitandao ya kijamii katika majukwaa yote ikiwa ni pamoja na uundaji wa maudhui.",
+      en: 'Content, community and paid ads across every platform, with reports that show what is working.',
+      sw: 'Maudhui, jumuiya na matangazo katika majukwaa yote, pamoja na ripoti zinazoonyesha kinachofanya kazi.',
     },
-    icon: Globe,
-    image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    icon: Share2,
+    image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?auto=format&fit=crop&w=900&q=75',
+    accent: AMBER,
+  },
+  {
+    id: 'door-to-door',
+    title:    { en: 'Door-to-Door Marketing', sw: 'Uuzaji Nyumba kwa Nyumba' },
+    subtitle: { en: 'Personal connection, real results', sw: 'Ukaribu wa binafsi, matokeo halisi' },
+    description: {
+      en: 'Face-to-face campaigns that build trust with your customers and turn conversations into sales.',
+      sw: 'Kampeni za ana kwa ana zinazojenga imani kwa wateja wako na kugeuza mazungumzo kuwa mauzo.',
+    },
+    icon: Users,
+    image: '/services/door.jpeg',
     accent: GOLD,
-    features: [
-      { en: "Content Strategy",    sw: "Mkakati wa Maudhui" },
-      { en: "Community Building",  sw: "Ujenzi wa Jumuiya" },
-      { en: "Analytics & Insights", sw: "Uchanganuzi na Maarifa" },
-    ],
   },
   {
     id: 'tender-applications',
-    title:       { en: "Tender Applications",          sw: "Maombi ya Zabuni" },
-    subtitle:    { en: "Win More Contracts",            sw: "Shinda Mikataba Zaidi" },
+    title:    { en: 'Tender Applications', sw: 'Maombi ya Zabuni' },
+    subtitle: { en: 'Win more contracts', sw: 'Shinda mikataba zaidi' },
     description: {
-      en: "Professional tender application services including documentation preparation, compliance checking, proposal writing, and submission management.",
-      sw: "Huduma za kitaalamu za maombi ya zabuni ikiwa ni pamoja na utayarishaji wa nyaraka na uandishi wa mapendekezo.",
+      en: 'Document preparation, compliance checks and proposal writing so your bids are complete and on time.',
+      sw: 'Utayarishaji wa nyaraka, ukaguzi wa kufuata masharti na uandishi wa mapendekezo ili zabuni zako ziwe kamili na kwa wakati.',
     },
-    icon: ChevronRight,
-    image: "https://images.unsplash.com/photo-1600132806608-231446b2e7af?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-  accent: AMBER,
-    features: [
-      { en: "Document Preparation", sw: "Utayarishaji wa Nyaraka" },
-      { en: "Compliance Check",     sw: "Ukaguzi wa Kufuata" },
-      { en: "Proposal Writing",     sw: "Uandishi wa Mapendekezo" },
-    ],
+    icon: FileText,
+    image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=900&q=75',
+    accent: AMBER,
   },
-]
+  {
+    id: 'equipment-sales',
+    title:    { en: 'Equipment Sales', sw: 'Mauzo ya Vifaa' },
+    subtitle: { en: 'Quality equipment solutions', sw: 'Suluhisho za vifaa vya ubora' },
+    description: {
+      en: 'Agricultural and business equipment with expert advice and technical support after you buy.',
+      sw: 'Vifaa vya kilimo na biashara pamoja na ushauri wa kitaalamu na msaada wa kiufundi baada ya kununua.',
+    },
+    icon: ShoppingCart,
+    image: '/services/tractor.jpeg',
+    accent: GOLD,
+  },
+];
+
+const focusRing =
+  'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber';
 
 // ── Component ─────────────────────────────────────────────────────────────────
 const ServicesShowcase = () => {
-  const router = useRouter()
-  const { language } = useLanguage()
-  const [activeId, setActiveId] = useState(null)
-  const [isClient, setIsClient] = useState(false)
+  const { language } = useLanguage();
+  const lang = language === 'sw' ? 'sw' : 'en';
+  const c = copy[lang];
+  const tr = (obj) => obj[lang] || obj.en;
 
-  useEffect(() => { setIsClient(true) }, [])
+  const openWhatsApp = (message) =>
+    window.open(
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
+      '_blank',
+      'noopener,noreferrer'
+    );
 
-  const t = (obj) =>
-    (language === 'sw' ? obj.sw : obj.en) || obj.en
-
-  const activeService = services.find(s => s.id === activeId)
-
-  const handleWhatsApp = () => {
-    const msg = language === 'sw'
-      ? `Hujambo! Ninapendezwa na huduma zenu za masoko. Je, unaweza kutoa maelezo zaidi?`
-      : `Hi! I'm interested in your services. Can you provide more details?`
-    window.open(`https://wa.me/255745787370?text=${encodeURIComponent(msg)}`, '_blank')
-  }
-
-  const navTo = (id) => router.push(`/services/${id}`)
+  const [featured, ...rest] = services;
+  const FeaturedIcon = featured.icon;
 
   return (
-    <div
-      className="min-h-screen relative overflow-hidden"
-      style={{ background: SURFACE, fontFamily: "'Bricolage Grotesque', 'Inter', sans-serif" }}
-    >
-      {/* ── Backgrounds ──────────────────────────────────────────────────── */}
-      {/* Amber radial glow — top right */}
-      <div
-        className="absolute top-0 right-0 w-2/3 h-2/3 pointer-events-none"
-        style={{ background: `radial-gradient(ellipse at top right, rgba(245,158,11,0.09), transparent 70%)` }}
-      />
-      {/* Amber radial glow — bottom left */}
-      <div
-        className="absolute bottom-0 left-0 w-1/2 h-1/2 pointer-events-none"
-        style={{ background: `radial-gradient(ellipse at bottom left, rgba(212,175,55,0.07), transparent 70%)` }}
-      />
-      <AfricanPattern />
+    <div style={{ background: SURFACE }}>
+      {/* ═════════════════ COVER: image first ═════════════════ */}
+      <section aria-labelledby="hero-title">
+        <div
+  className="relative w-full overflow-hidden h-[clamp(34rem,90vh,54rem)] lg:h-auto lg:aspect-[16/9] lg:min-h-[36rem] lg:max-h-[60rem]"
+  style={{ background: DARK }}
+>
+          <Image
+            src="/services/door.jpeg"
+            alt={c.hero.imageAlt}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[60%_30%]"
+          />
+          {/* Top scrim keeps the fixed header readable; bottom scrim carries the headline */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(to bottom, rgba(13,9,3,0.55) 0%, rgba(13,9,3,0) 22%), linear-gradient(to top, rgba(26,18,8,1) 0%, rgba(26,18,8,0.75) 28%, rgba(26,18,8,0) 65%)',
+            }}
+          />
 
-      {/* ── Content ──────────────────────────────────────────────────────── */}
-      <div className="relative z-10">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+          <div className="absolute inset-x-0 bottom-0">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-10 lg:pb-14">
+              <div className="flex items-center gap-3 mb-5">
+                <div style={{ width: '3rem', height: 3, background: AMBER, borderRadius: 2, flexShrink: 0 }} />
+                <span className="font-display font-bold text-sm" style={{ color: AMBER, letterSpacing: '0.04em' }}>
+                  {c.hero.badge}
+                </span>
+              </div>
 
-          {/* ── Section header ─────────────────────────────────────────── */}
-          <div className="mb-16">
-            {/* Label */}
-            <div className="flex items-center gap-3 mb-5">
-              <div style={{ width: '3rem', height: '3px', background: AMBER, borderRadius: 2, flexShrink: 0 }} />
-              <span
-                className="font-display font-bold uppercase"
-                style={{ color: AMBER, fontSize: '0.75rem', letterSpacing: '0.2em' }}
+              <h1
+                id="hero-title"
+                className="font-display font-extrabold max-w-5xl"
+                style={{
+                  fontSize: 'clamp(2.75rem, 8.5vw, 7rem)',
+                  lineHeight: 0.96,
+                  letterSpacing: '-0.035em',
+                  color: CREAM,
+                }}
               >
-                {language === 'sw' ? 'Huduma Zetu' : 'What We Offer'}
+                {c.hero.title[0]}{' '}
+                <span style={{ color: AMBER }}>{c.hero.title[1]}</span>{' '}
+                {c.hero.title[2]}
+              </h1>
+            </div>
+          </div>
+
+          {/* Photo caption, magazine style */}
+          <p
+            className="hidden md:block absolute right-8 top-28 text-xs italic"
+            style={{ color: 'rgba(245,240,232,0.8)', textShadow: '0 1px 8px rgba(0,0,0,0.6)' }}
+          >
+            {c.hero.caption}
+          </p>
+        </div>
+
+        {/* Standfirst + proof */}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 lg:pb-24">
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-8 pt-8" style={{ borderTop: `1px solid ${RULE}` }}>
+            <div className="lg:col-span-6">
+              <p className="leading-snug mb-8" style={{ color: CREAM, fontSize: 'clamp(1.15rem, 2vw, 1.5rem)' }}>
+                {c.hero.subtitle}
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  type="button"
+                  onClick={() => openWhatsApp(c.hero.whatsapp)}
+                  className={`inline-flex items-center justify-center gap-2 rounded font-display font-extrabold text-sm transition-opacity hover:opacity-90 ${focusRing}`}
+                  style={{ background: AMBER, color: DARK, padding: '1rem 1.75rem' }}
+                >
+                  <MessageCircle size={18} />
+                  {c.hero.primary}
+                </button>
+                <a
+                  href="#services"
+                  className={`inline-flex items-center justify-center gap-2 rounded font-display font-bold text-sm transition-colors hover:bg-amber/10 ${focusRing}`}
+                  style={{ border: `2px solid ${BORDER_S}`, color: AMBER, padding: '1rem 1.75rem' }}
+                >
+                  {c.hero.secondary}
+                  <ArrowRight size={16} />
+                </a>
+              </div>
+            </div>
+
+            <dl className="lg:col-span-5 lg:col-start-8 grid grid-cols-3">
+              {c.hero.stats.map((s, i) => (
+                <div
+                  key={s.label}
+                  className="px-4 first:pl-0 sm:px-6"
+                  style={{ borderLeft: i === 0 ? 'none' : `1px solid ${RULE}` }}
+                >
+                  <dd
+                    className="font-display font-extrabold leading-none"
+                    style={{ color: CREAM, fontSize: 'clamp(2rem, 4vw, 3rem)', letterSpacing: '-0.03em' }}
+                  >
+                    {s.value}
+                  </dd>
+                  <dt className="mt-2 text-sm leading-snug" style={{ color: MUTED }}>{s.label}</dt>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      {/* ═════════════════ SERVICES: editorial spread ═════════════════ */}
+      <section
+        id="services"
+        aria-labelledby="services-title"
+        className="relative overflow-hidden pb-24 scroll-mt-24"
+      >
+        <AfricanPattern id="svcPattern" />
+
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section head */}
+          <div
+            className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 pt-8 mb-12"
+            style={{ borderTop: `1px solid ${RULE}` }}
+          >
+            <div>
+              <span className="font-display font-bold text-sm" style={{ color: AMBER, letterSpacing: '0.04em' }}>
+                {c.services.label}
+              </span>
+              <h2
+                id="services-title"
+                className="font-display font-extrabold mt-3"
+                style={{ fontSize: 'clamp(2.25rem, 5.5vw, 4rem)', lineHeight: 1, color: CREAM, letterSpacing: '-0.03em' }}
+              >
+                {c.services.title}
+              </h2>
+            </div>
+            <p className="leading-relaxed lg:max-w-sm" style={{ color: MUTED, fontSize: '1rem' }}>
+              {c.services.subtitle}
+            </p>
+          </div>
+
+          {/* Feature story */}
+          <Link
+            href={`/services/${featured.id}`}
+            className={`group grid lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-16 lg:mb-20 ${focusRing}`}
+          >
+            <div className="relative lg:col-span-7 overflow-hidden rounded" style={{ aspectRatio: '16 / 10', background: DARK }}>
+              <Image
+                src={featured.image}
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 58vw, 100vw"
+                className="object-cover motion-safe:transition-transform motion-safe:duration-700 motion-safe:group-hover:scale-[1.03]"
+              />
+            </div>
+
+            <div className="lg:col-span-5">
+              <div className="flex items-center gap-2 mb-4" style={{ color: featured.accent }}>
+                <FeaturedIcon size={18} />
+                <span className="font-display font-bold text-sm">{c.services.featured}</span>
+              </div>
+              <h3
+                className="font-display font-extrabold"
+                style={{ fontSize: 'clamp(1.9rem, 3.6vw, 3rem)', lineHeight: 1.02, color: CREAM, letterSpacing: '-0.025em' }}
+              >
+                {tr(featured.title)}
+              </h3>
+              <p className="font-display font-semibold mt-3" style={{ color: featured.accent, fontSize: '1rem' }}>
+                {tr(featured.subtitle)}
+              </p>
+              <p className="mt-4 leading-relaxed" style={{ color: MUTED, fontSize: '1.05rem' }}>
+                {tr(featured.description)}
+              </p>
+
+              <ul className="mt-6" style={{ borderTop: `1px solid ${RULE}` }}>
+                {featured.features.map((f, i) => (
+                  <li
+                    key={i}
+                    className="py-3 text-sm font-semibold"
+                    style={{ borderBottom: `1px solid ${RULE}`, color: CREAM }}
+                  >
+                    {tr(f)}
+                  </li>
+                ))}
+              </ul>
+
+              <span
+                className="inline-flex items-center gap-2 mt-6 font-display font-bold text-sm"
+                style={{ color: featured.accent }}
+              >
+                {c.services.explore}
+                <ArrowRight size={16} className="motion-safe:transition-transform group-hover:translate-x-1" />
               </span>
             </div>
+          </Link>
 
-            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-              <h1
-                className="font-display font-extrabold uppercase leading-none tracking-tight"
-                style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', color: CREAM, letterSpacing: '-0.02em' }}
-              >
-                {language === 'sw' ? (
-                  <>OUR<span style={{ color: AMBER }}> SERVICES</span></>
-                ) : (
-                  <>OUR<span style={{ color: AMBER }}> SERVICES</span></>
-                )}
-              </h1>
-              <p
-                className="leading-relaxed lg:max-w-md"
-                style={{ color: MUTED, fontSize: '1rem' }}
-              >
-                {language === 'sw'
-                  ? 'Suluhisho kamili za uuzaji zilizoundwa kuinua biashara yako na kukuunganisha na walengwa wako'
-                  : 'Comprehensive marketing solutions designed to elevate your business and connect you with your target audience'}
-              </p>
-            </div>
-          </div>
-
-          {/* ── Services grid ──────────────────────────────────────────── */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 mb-16">
-            {services.map((svc, i) => {
-              const Icon    = svc.icon
-              const isActive = activeId === svc.id
-              const stripe  = i % 2 === 0 ? AMBER : GOLD
-
+          {/* Remaining stories */}
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14">
+            {rest.map((svc) => {
+              const Icon = svc.icon;
               return (
-                <div
-                  key={svc.id}
-                  onClick={() => { setActiveId(svc.id); navTo(svc.id) }}
-                  onMouseEnter={() => setActiveId(svc.id)}
-                  className="group relative overflow-hidden rounded cursor-pointer transition-all duration-300"
-                  style={{
-                    background: 'rgba(255,255,255,0.04)',
-                    border: `1px solid ${isActive ? svc.accent : BORDER}`,
-                    boxShadow: isActive
-                      ? `0 0 0 1px ${svc.accent}, 0 20px 40px rgba(0,0,0,0.5)`
-                      : '0 4px 20px rgba(0,0,0,0.3)',
-                  }}
-                >
-                  {/* Top accent stripe */}
-                  <div
-                    className="absolute top-0 left-0 right-0 transition-transform duration-500"
-                    style={{ height: 3, background: stripe }}
-                  />
-
-                  {/* Image */}
-                  <div className="relative overflow-hidden" style={{ height: '32rem' }}>
-                    <img
-                      src={svc.image}
-                      alt={t(svc.title)}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    {/* Dark overlay */}
-                    <div
-                      className="absolute inset-0"
-                      style={{ background: 'linear-gradient(to top, rgba(13,9,3,0.85) 30%, rgba(13,9,3,0.2) 100%)' }}
-                    />
-                    {/* Icon badge */}
-                    <div
-                      className="absolute top-3 right-3 flex items-center justify-center w-9 h-9 rounded transition-colors duration-200"
-                      style={{ background: 'rgba(245,158,11,0.15)', border: `1px solid ${svc.accent}` }}
-                    >
-                      <Icon size={16} style={{ color: svc.accent }} />
-                    </div>
-                    {/* Index number watermark */}
-                    <div
-                      className="absolute bottom-3 right-4 font-display font-black select-none"
-                      style={{ fontSize: '3.5rem', lineHeight: 1, color: 'rgba(245,158,11,0.12)', letterSpacing: '-0.04em' }}
-                    >
-                      {String(i + 1).padStart(2, '0')}
-                    </div>
-                    {/* Title overlay on image */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4">
-                      <h3
-                        className="font-display font-extrabold uppercase leading-tight transition-colors duration-200 group-hover:text-warning"
-                        style={{ fontSize: '1rem', color: CREAM, letterSpacing: '-0.01em' }}
-                      >
-                        {t(svc.title)}
-                      </h3>
-                      <p
-                        className="font-display font-bold uppercase tracking-wider mt-0.5"
-                        style={{ fontSize: '0.65rem', color: svc.accent, letterSpacing: '0.12em' }}
-                      >
-                        {t(svc.subtitle)}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Card body */}
-                  <div className="p-4 relative">
-                    <DotGrid />
-                    {/* Features */}
-                    <div className="flex flex-wrap gap-1.5 mb-4">
-                      {svc.features.slice(0, 2).map((f, idx) => (
-                        <span
-                          key={idx}
-                          className="font-display font-semibold uppercase"
-                          style={{
-                            background: 'rgba(245,158,11,0.08)',
-                            border: `1px solid ${BORDER}`,
-                            color: svc.accent,
-                            fontSize: '0.65rem',
-                            padding: '0.2rem 0.55rem',
-                            borderRadius: '2px',
-                            letterSpacing: '0.08em',
-                          }}
-                        >
-                          {t(f)}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Footer row */}
-                    <div
-                      className="flex items-center justify-between pt-3"
-                      style={{ borderTop: `1px solid ${BORDER}` }}
-                    >
-                      <span
-                        className="font-display font-bold uppercase tracking-widest"
-                        style={{ color: svc.accent, fontSize: '0.7rem' }}
-                      >
-                        {language === 'sw' ? 'Chunguza' : 'Explore'}
-                      </span>
-                      <ArrowRight
-                        size={14}
-                        style={{ color: svc.accent }}
-                        className="transition-transform duration-300 group-hover:translate-x-1"
+                <li key={svc.id}>
+                  <Link
+                    href={`/services/${svc.id}`}
+                    className={`group block ${focusRing}`}
+                  >
+                    <div className="relative overflow-hidden rounded mb-5" style={{ aspectRatio: '4 / 3', background: DARK }}>
+                      <Image
+                        src={svc.image}
+                        alt=""
+                        fill
+                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                        className="object-cover motion-safe:transition-transform motion-safe:duration-700 motion-safe:group-hover:scale-[1.03]"
                       />
                     </div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
 
-          {/* ── Active service detail panel ────────────────────────────── */}
-          {activeService && isClient && (
-            <div
-              className="relative overflow-hidden rounded mb-16"
-              style={{
-                background: DARK,
-                border: `1px solid ${BORDER_S}`,
-                boxShadow: '0 24px 60px rgba(0,0,0,0.5)',
-              }}
-            >
-              {/* Top stripe */}
-              <div style={{ height: 3, background: activeService.accent }} />
-
-              <div className="grid lg:grid-cols-5 gap-0">
-                {/* Image col — 3/5 */}
-                <div className="relative lg:col-span-3" style={{ minHeight: '22rem' }}>
-                  <img
-                    src={activeService.image}
-                    alt={t(activeService.title)}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                  {/* Dark overlay */}
-                  <div
-                    className="absolute inset-0"
-                    style={{ background: 'linear-gradient(to right, rgba(13,9,3,0.15), rgba(13,9,3,0.7) 80%), linear-gradient(to top, rgba(13,9,3,0.85), transparent 50%)' }}
-                  />
-                  {/* Icon */}
-                  <div
-                    className="absolute top-6 left-6 flex items-center justify-center w-14 h-14 rounded"
-                    style={{ background: 'rgba(245,158,11,0.15)', border: `2px solid ${activeService.accent}` }}
-                  >
-                    <activeService.icon size={26} style={{ color: activeService.accent }} />
-                  </div>
-                  {/* Title overlay */}
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <h2
-                      className="font-display font-extrabold uppercase leading-none tracking-tight"
-                      style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)', color: CREAM, letterSpacing: '-0.02em', marginBottom: '0.5rem' }}
-                    >
-                      {t(activeService.title)}
-                    </h2>
-                    <div className="flex items-center gap-3">
-                      <div style={{ width: '2rem', height: '2px', background: activeService.accent }} />
-                      <span
-                        className="font-display font-bold uppercase tracking-widest"
-                        style={{ color: activeService.accent, fontSize: '0.7rem' }}
+                    <div className="pt-4" style={{ borderTop: `2px solid ${svc.accent}` }}>
+                      <div className="flex items-center gap-2 mb-2" style={{ color: svc.accent }}>
+                        <Icon size={16} />
+                        <span className="font-display font-semibold text-sm">{tr(svc.subtitle)}</span>
+                      </div>
+                      <h3
+                        className="font-display font-extrabold"
+                        style={{ fontSize: '1.6rem', lineHeight: 1.08, color: CREAM, letterSpacing: '-0.02em' }}
                       >
-                        {t(activeService.subtitle)}
+                        {tr(svc.title)}
+                      </h3>
+                      <p className="mt-3 text-sm leading-relaxed" style={{ color: MUTED }}>
+                        {tr(svc.description)}
+                      </p>
+                      <span
+                        className="inline-flex items-center gap-2 mt-4 font-display font-bold text-sm"
+                        style={{ color: svc.accent }}
+                      >
+                        {c.services.explore}
+                        <ArrowRight size={16} className="motion-safe:transition-transform group-hover:translate-x-1" />
                       </span>
                     </div>
-                  </div>
-                </div>
-
-                {/* Content col — 2/5 */}
-                <div className="lg:col-span-2 flex flex-col justify-between p-7 lg:p-9 relative">
-                  <DotGrid />
-                  <div className="relative">
-                    {/* Description */}
-                    <p className="leading-relaxed mb-7" style={{ color: MUTED, fontSize: '0.9rem' }}>
-                      {t(activeService.description)}
-                    </p>
-
-                    {/* Features */}
-                    <div className="mb-8">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div style={{ width: '2rem', height: '2px', background: activeService.accent }} />
-                        <span
-                          className="font-display font-bold uppercase tracking-widest"
-                          style={{ color: activeService.accent, fontSize: '0.65rem' }}
-                        >
-                          {language === 'sw' ? 'Vipengele Muhimu' : 'Key Features'}
-                        </span>
-                      </div>
-                      <div className="space-y-2">
-                        {activeService.features.map((f, idx) => (
-                          <div
-                            key={idx}
-                            className="flex items-center gap-3 p-3 rounded"
-                            style={{ background: 'rgba(245,158,11,0.06)', border: `1px solid ${BORDER}` }}
-                          >
-                            <div
-                              className="rounded-full flex-shrink-0"
-                              style={{ width: 6, height: 6, background: activeService.accent }}
-                            />
-                            <span
-                              className="font-display font-semibold uppercase tracking-wide"
-                              style={{ color: CREAM, fontSize: '0.8rem', letterSpacing: '0.05em' }}
-                            >
-                              {t(f)}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="relative space-y-3">
-                    <button
-                      onClick={() => navTo(activeService.id)}
-                      className="w-full flex items-center justify-center gap-2 font-display font-extrabold uppercase tracking-widest transition-opacity duration-200 hover:opacity-90 rounded"
-                      style={{
-                        background: activeService.accent,
-                        color: DARK,
-                        padding: '0.85rem 1.5rem',
-                        fontSize: '0.8rem',
-                      }}
-                    >
-                      {language === 'sw' ? 'Tazama Zaidi' : 'Explore Service'}
-                      <ExternalLink size={14} />
-                    </button>
-                    <button
-                      onClick={handleWhatsApp}
-                      className="w-full flex items-center justify-center gap-2 font-display font-bold uppercase tracking-widest transition-colors duration-200 rounded"
-                      style={{
-                        background: 'transparent',
-                        border: `2px solid ${BORDER_S}`,
-                        color: activeService.accent,
-                        padding: '0.85rem 1.5rem',
-                        fontSize: '0.8rem',
-                      }}
-                    >
-                      {language === 'sw' ? 'Pata Ushauri' : 'Get Free Quote'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ── CTA banner ─────────────────────────────────────────────── */}
-          <div
-            className="relative overflow-hidden rounded text-center"
-            style={{ background: AMBER, padding: 'clamp(2.5rem, 5vw, 5rem) 2rem' }}
-          >
-            {/* African pattern overlay on amber bg */}
-            <svg
-              width="100%" height="100%"
-              xmlns="http://www.w3.org/2000/svg"
-              className="absolute inset-0 pointer-events-none"
-              style={{ opacity: 0.08 }}
-            >
-              <defs>
-                <pattern id="ctaPattern" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
-                  <polygon points="30,4 56,30 30,56 4,30" fill="none" stroke="#0D0903" strokeWidth="1.5" />
-                  <circle cx="30" cy="30" r="2" fill="#0D0903" />
-                </pattern>
-              </defs>
-              <rect width="100%" height="100%" fill="url(#ctaPattern)" />
-            </svg>
-
-            <div className="relative z-10 max-w-3xl mx-auto">
-              <h3
-                className="font-display font-extrabold uppercase leading-none tracking-tight"
-                style={{ fontSize: 'clamp(1.75rem, 4.5vw, 3rem)', color: DARK, letterSpacing: '-0.02em', marginBottom: '1rem' }}
-              >
-                {language === 'sw' ? 'Tayari Kuinua Biashara Yako?' : 'Ready to Elevate Your Business?'}
-              </h3>
-              <p
-                className="leading-relaxed mb-10"
-                style={{ color: 'rgba(13,9,3,0.7)', fontSize: '1rem' }}
-              >
-                {language === 'sw'
-                  ? 'Jiunge na maelfu ya biashara zilizofanikiwa ambazo zimebadilisha uuzaji wao kwa suluhisho zetu za ubunifu.'
-                  : 'Join 40+ successful businesses that have transformed their marketing with our innovative solutions and expert team.'}
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-sm mx-auto">
-                <button
-                  onClick={handleWhatsApp}
-                  className="flex-1 font-display font-extrabold uppercase tracking-widest transition-opacity duration-200 hover:opacity-90 rounded"
-                  style={{
-                    background: DARK,
-                    color: AMBER,
-                    padding: '0.9rem 1.75rem',
-                    fontSize: '0.8rem',
-                    letterSpacing: '0.1em',
-                  }}
-                >
-                  {language === 'sw' ? 'Pata Ushauri Bure' : 'Free Consultation'}
-                </button>
-                <button
-                  className="flex-1 font-display font-bold uppercase tracking-widest transition-colors duration-200 rounded"
-                  style={{
-                    background: 'transparent',
-                    border: `2px solid rgba(13,9,3,0.3)`,
-                    color: DARK,
-                    padding: '0.9rem 1.75rem',
-                    fontSize: '0.8rem',
-                    letterSpacing: '0.1em',
-                  }}
-                >
-                  {language === 'sw' ? 'Ona Mafanikio' : 'View Success Stories'}
-                </button>
-              </div>
-            </div>
-          </div>
-
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </div>
-      </div>
+      </section>
     </div>
-  )
-}
+  );
+};
 
 export default ServicesShowcase;
