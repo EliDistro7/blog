@@ -222,7 +222,7 @@ const ServicesShowcase = () => {
           />
 
           <div className="absolute inset-x-0 bottom-0">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-10 lg:pb-14">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-10 lg:pb-6">
               <div className="flex items-center gap-3 mb-5">
                 <div style={{ width: '3rem', height: 3, background: AMBER, borderRadius: 2, flexShrink: 0 }} />
                 <span className="font-display font-bold text-sm" style={{ color: AMBER, letterSpacing: '0.04em' }}>
@@ -407,7 +407,7 @@ const ServicesShowcase = () => {
                         src={svc.image}
                         alt=""
                         fill
-                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 60vw, 100vw"
                         className="object-cover motion-safe:transition-transform motion-safe:duration-700 motion-safe:group-hover:scale-[1.03]"
                       />
                     </div>

@@ -89,9 +89,9 @@ export default function CTASection() {
     >
       <AfricanPattern id="ctaPattern" />
 
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-4">
         <div
-          className="grid lg:grid-cols-12 gap-10 lg:gap-8 pt-8 items-center"
+          className="grid lg:grid-cols-12 gap-10 lg:gap-8 pt-4 items-center"
           style={{ borderTop: `1px solid ${RULE}` }}
         >
           {/* ── Copy ── */}

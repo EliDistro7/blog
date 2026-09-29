@@ -213,7 +213,7 @@ const ClientsShowcase = () => {
     <section
       id="clients"
       aria-labelledby="clients-title"
-      className="relative overflow-hidden pb-24 scroll-mt-24"
+      className="relative overflow-hidden pb-8 scroll-mt-8"
       style={{ background: SURFACE }}
     >
       <AfricanPattern id="clientsPattern" />
