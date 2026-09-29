@@ -106,7 +106,7 @@ const services = [
       sw: 'Tovuti na maduka ya mtandaoni ya kitaalamu na ya haraka, yanayojengwa na kuzinduliwa kwa siku 10 tu.',
     },
     icon: Globe,
-    image: '/services/web.jpeg', // add this image to /public/services
+    image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=75', // add this image to /public/services
     accent: AMBER,
     features: [
       { en: 'Business Websites', sw: 'Tovuti za Biashara' },
@@ -134,9 +134,9 @@ const services = [
       en: 'Content, community and paid ads across every platform, with reports that show what is working.',
       sw: 'Maudhui, jumuiya na matangazo katika majukwaa yote, pamoja na ripoti zinazoonyesha kinachofanya kazi.',
     },
-    icon: Share2,
-    image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?auto=format&fit=crop&w=900&q=75',
-    accent: AMBER,
+   icon: Share2,
+image: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=900&q=75',
+accent: AMBER,
   },
   {
     id: 'door-to-door',

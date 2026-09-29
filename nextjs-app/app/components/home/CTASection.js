@@ -1,319 +1,182 @@
 'use client';
-import { useState, useEffect } from 'react';
+
+import Image from 'next/image';
+import { ArrowRight, MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
-// ── Design tokens ─────────────────────────────────────────────────────────────
+// ── Design tokens (same set as ServicesShowcase / Header / Footer) ───────────
 const AMBER    = '#F59E0B';
-const GOLD     = '#D4AF37';
 const SURFACE  = '#1A1208';
 const DARK     = '#0D0903';
 const CREAM    = '#F5F0E8';
-const MUTED    = 'rgba(245,240,232,0.55)';
-const BORDER   = 'rgba(245,158,11,0.2)';
+const MUTED    = 'rgba(245,240,232,0.72)';
+const RULE     = 'rgba(245,240,232,0.16)';
 const BORDER_S = 'rgba(245,158,11,0.35)';
 
-// ── African geometric SVG pattern ─────────────────────────────────────────────
-const AfricanPattern = () => (
+const WHATSAPP_NUMBER = '255745787370';
+
+const focusRing =
+  'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber';
+
+// ── Subtle African pattern (quiet, decorative) ───────────────────────────────
+const AfricanPattern = ({ id }) => (
   <svg
     width="100%" height="100%"
     xmlns="http://www.w3.org/2000/svg"
     className="absolute inset-0 pointer-events-none"
-    style={{ opacity: 0.055 }}
+    style={{ opacity: 0.04 }}
+    aria-hidden="true"
   >
     <defs>
-      <pattern id="ctaPattern" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+      <pattern id={id} x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
         <polygon points="30,4 56,30 30,56 4,30" fill="none" stroke="#F59E0B" strokeWidth="1.5" />
         <polygon points="30,16 44,30 30,44 16,30" fill="none" stroke="#D4AF37" strokeWidth="1" />
-        <line x1="30" y1="0" x2="30" y2="60" stroke="#F59E0B" strokeWidth="0.5" />
-        <line x1="0"  y1="30" x2="60" y2="30" stroke="#F59E0B" strokeWidth="0.5" />
         <circle cx="30" cy="30" r="2.5" fill="#F59E0B" />
-        <circle cx="0"  cy="0"  r="1.5" fill="#D4AF37" />
-        <circle cx="60" cy="0"  r="1.5" fill="#D4AF37" />
-        <circle cx="0"  cy="60" r="1.5" fill="#D4AF37" />
-        <circle cx="60" cy="60" r="1.5" fill="#D4AF37" />
       </pattern>
     </defs>
-    <rect width="100%" height="100%" fill="url(#ctaPattern)" />
+    <rect width="100%" height="100%" fill={`url(#${id})`} />
   </svg>
 );
 
-const DotGrid = () => (
-  <div
-    className="absolute inset-0 pointer-events-none"
-    style={{
-      opacity: 0.04,
-      backgroundImage: 'radial-gradient(circle at 1px 1px, #F59E0B 1px, transparent 0)',
-      backgroundSize: '40px 40px',
-    }}
-  />
-);
+// ── Copy ──────────────────────────────────────────────────────────────────────
+const copy = {
+  en: {
+    badge: 'Get started today',
+    title: ['Transform your', 'vision', 'into reality'],
+    subtitle:
+      'Where innovative solutions meet exceptional execution. Join 40+ businesses that chose excellence.',
+    primary: 'Start your project',
+    secondary: 'Free consultation',
+    imageAlt: 'A Future Holders client', // replace with a real description of the photo
+    captionName: 'Future Holders',
+    captionSub: "Tanzania's digital agency",
+    whatsappPrimary: "Hi! I'd like to start a project with Future Holders. Can you help?",
+    whatsappSecondary: 'Hi! I would like a free consultation from Future Holders.',
+  },
+  sw: {
+    badge: 'Anza leo',
+    title: ['Badilisha', 'maono', 'yako kuwa ukweli'],
+    subtitle:
+      'Suluhisho za ubunifu zinazokutana na utekelezaji wa hali ya juu. Jiunge na biashara 40+ zilizochagua ubora.',
+    primary: 'Anza mradi wako',
+    secondary: 'Ushauri bure',
+    imageAlt: 'Mteja wa Future Holders', // replace with a real description of the photo
+    captionName: 'Future Holders',
+    captionSub: 'Wakala wa kidijitali wa Tanzania',
+    whatsappPrimary: 'Hujambo! Ningependa kuanza mradi na Future Holders. Je, mnaweza kunisaidia?',
+    whatsappSecondary: 'Hujambo! Ningependa ushauri bure kutoka Future Holders.',
+  },
+};
 
+// ── Component ─────────────────────────────────────────────────────────────────
 export default function CTASection() {
   const { language } = useLanguage();
-  const [isClient, setIsClient] = useState(false);
+  const lang = language === 'sw' ? 'sw' : 'en';
+  const c = copy[lang];
 
-  useEffect(() => { setIsClient(true); }, []);
-
-  const content = {
-    en: {
-      badge: 'Get Started Today',
-      title: { line1: 'Transform Your', accent: 'Vision', line2: 'Into Reality' },
-      subtitle: 'Where innovative solutions meet exceptional execution. Join 40+ businesses that chose excellence.',
-      button: 'Start Your Project',
-      secondary: 'Free Consultation',
-    },
-    sw: {
-      badge: 'Anza Leo',
-      title: { line1: 'Badilisha', accent: 'Maono', line2: 'Yako Kuwa Ukweli' },
-      subtitle: 'Suluhisho za ubunifu zinazokutana na utekelezaji wa hali ya juu. Jiunge na biashara 40+ zilizochagua ubora.',
-      button: 'Anza Mradi Wako',
-      secondary: 'Ushauri Bure',
-    },
-  };
-
-  const t = content[language] ?? content.en;
-
-  const handleWhatsApp = (msg) => {
-    const text = msg ?? (
-      language === 'sw'
-        ? 'Hujambo! Ningependa kuanza mradi na Future Holders. Je, mnaweza kunisaidia?'
-        : "Hi! I'd like to start a project with Future Holders. Can you help?"
+  const openWhatsApp = (message) =>
+    window.open(
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
+      '_blank',
+      'noopener,noreferrer'
     );
-    window.open(`https://wa.me/255745787370?text=${encodeURIComponent(text)}`, '_blank');
-  };
 
   return (
     <section
+      aria-labelledby="cta-title"
       className="relative overflow-hidden"
-      style={{ background: SURFACE, fontFamily: "'Bricolage Grotesque', 'Inter', sans-serif" }}
+      style={{ background: SURFACE }}
     >
-      {/* ── Backgrounds ─────────────────────────────────────────────────── */}
-      <div
-        className="absolute top-0 right-0 w-2/3 h-2/3 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at top right, rgba(245,158,11,0.09), transparent 70%)' }}
-      />
-      <div
-        className="absolute bottom-0 left-0 w-1/2 h-1/2 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at bottom left, rgba(212,175,55,0.07), transparent 70%)' }}
-      />
-      <AfricanPattern />
+      <AfricanPattern id="ctaPattern" />
 
-      {/* ── Corner bracket decorations ───────────────────────────────────── */}
-      <div
-        className="absolute top-8 left-8 w-12 h-12 pointer-events-none"
-        style={{ borderLeft: `2px solid ${BORDER_S}`, borderTop: `2px solid ${BORDER_S}` }}
-      />
-      <div
-        className="absolute bottom-8 right-8 w-12 h-12 pointer-events-none"
-        style={{ borderRight: `2px solid ${BORDER_S}`, borderBottom: `2px solid ${BORDER_S}` }}
-      />
-
-      {/* ── Content ─────────────────────────────────────────────────────── */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-
-            {/* ── Left: copy ────────────────────────────────────────────── */}
-            <div className="order-2 lg:order-1">
-
-              {/* Section label */}
-              <div className="flex items-center gap-3 mb-6">
-                <div style={{ width: '3rem', height: '3px', background: AMBER, borderRadius: 2, flexShrink: 0 }} />
-                <span
-                  className="font-display font-bold uppercase"
-                  style={{ color: AMBER, fontSize: '0.75rem', letterSpacing: '0.2em' }}
-                >
-                  {t.badge}
-                </span>
-              </div>
-
-              {/* Heading */}
-              <h2
-                className="font-display font-extrabold uppercase leading-none tracking-tight mb-6"
-                style={{ fontSize: 'clamp(2.25rem, 5.5vw, 4rem)', color: CREAM, letterSpacing: '-0.02em' }}
-              >
-                {t.title.line1}{' '}
-                <span style={{ color: AMBER }}>{t.title.accent}</span>{' '}
-                {t.title.line2}
-              </h2>
-
-              {/* Subtitle */}
-              <p
-                className="leading-relaxed mb-10"
-                style={{ color: MUTED, fontSize: '1rem', maxWidth: '420px' }}
-              >
-                {t.subtitle}
-              </p>
-
-              {/* CTAs */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={() => handleWhatsApp()}
-                  className="font-display font-extrabold uppercase tracking-widest transition-opacity duration-200 hover:opacity-90 rounded"
-                  style={{
-                    background: AMBER,
-                    color: DARK,
-                    padding: '0.9rem 2rem',
-                    fontSize: '0.8rem',
-                    letterSpacing: '0.1em',
-                    border: 'none',
-                    cursor: 'pointer',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                  }}
-                >
-                  {t.button}
-                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </button>
-
-                <button
-                  onClick={() => handleWhatsApp(
-                    language === 'sw'
-                      ? 'Hujambo! Ningependa ushauri bure kutoka Future Holders.'
-                      : 'Hi! I would like a free consultation from Future Holders.'
-                  )}
-                  className="font-display font-bold uppercase tracking-widest transition-colors duration-200 rounded"
-                  style={{
-                    background: 'transparent',
-                    border: `2px solid ${BORDER_S}`,
-                    color: AMBER,
-                    padding: '0.9rem 2rem',
-                    fontSize: '0.8rem',
-                    letterSpacing: '0.1em',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {t.secondary}
-                </button>
-              </div>
-
-              {/* Decorative dot row */}
-              <div className="flex items-center gap-3 mt-10">
-                {[AMBER, GOLD, AMBER].map((c, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      width: i === 1 ? '1.5rem' : '0.4rem',
-                      height: '0.4rem',
-                      borderRadius: '2px',
-                      background: c,
-                      opacity: i === 1 ? 1 : 0.4,
-                    }}
-                  />
-                ))}
-              </div>
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        <div
+          className="grid lg:grid-cols-12 gap-10 lg:gap-8 pt-8 items-center"
+          style={{ borderTop: `1px solid ${RULE}` }}
+        >
+          {/* ── Copy ── */}
+          <div className="lg:col-span-5 order-2 lg:order-1">
+            <div className="flex items-center gap-3 mb-5">
+              <div style={{ width: '3rem', height: 3, background: AMBER, borderRadius: 2, flexShrink: 0 }} />
+              <span className="font-display font-bold text-sm" style={{ color: AMBER, letterSpacing: '0.04em' }}>
+                {c.badge}
+              </span>
             </div>
 
-            {/* ── Right: image card ─────────────────────────────────────── */}
-            <div className="order-1 lg:order-2">
-              <div
-                className="relative overflow-hidden group rounded"
-                style={{
-                  background: DARK,
-                  border: `1px solid ${BORDER_S}`,
-                  boxShadow: '0 24px 60px rgba(0,0,0,0.5)',
-                }}
+            <h2
+              id="cta-title"
+              className="font-display font-extrabold"
+              style={{
+                fontSize: 'clamp(2.25rem, 5.5vw, 4rem)',
+                lineHeight: 1,
+                letterSpacing: '-0.03em',
+                color: CREAM,
+              }}
+            >
+              {c.title[0]}{' '}
+              <span style={{ color: AMBER }}>{c.title[1]}</span>{' '}
+              {c.title[2]}
+            </h2>
+
+            <p
+              className="leading-snug mt-6 mb-8 max-w-md"
+              style={{ color: CREAM, fontSize: 'clamp(1.05rem, 1.6vw, 1.25rem)' }}
+            >
+              {c.subtitle}
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={() => openWhatsApp(c.whatsappPrimary)}
+                className={`inline-flex items-center justify-center gap-2 rounded font-display font-extrabold text-sm transition-opacity hover:opacity-90 ${focusRing}`}
+                style={{ background: AMBER, color: DARK, padding: '1rem 1.75rem' }}
               >
-                {/* Top accent stripe */}
-                <div style={{ height: 3, background: AMBER }} />
+                <MessageCircle size={18} aria-hidden="true" />
+                {c.primary}
+              </button>
 
-                {/* Image */}
-                <div className="relative overflow-hidden" style={{ aspectRatio: '4/3' }}>
-                  <img
-                    src="/images/client.jpeg"
-                    alt="Future Holders client"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  {/* Dark overlay */}
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      background: 'linear-gradient(to top, rgba(13,9,3,0.75) 0%, rgba(13,9,3,0.15) 60%, transparent 100%)',
-                    }}
-                  />
-                  {/* Watermark number */}
-                  <div
-                    className="absolute bottom-4 right-5 font-display font-black select-none pointer-events-none"
-                    style={{ fontSize: '5rem', lineHeight: 1, color: 'rgba(245,158,11,0.1)', letterSpacing: '-0.04em' }}
-                  >
-                    01
-                  </div>
-                </div>
-
-                {/* Card footer panel */}
-                <div className="relative p-6">
-                  <DotGrid />
-                  <div className="relative flex items-center justify-between">
-                    <div>
-                      <p
-                        className="font-display font-extrabold uppercase leading-tight"
-                        style={{ color: CREAM, fontSize: '0.95rem', letterSpacing: '-0.01em' }}
-                      >
-                        Future Holders
-                      </p>
-                      <p
-                        className="font-display font-bold uppercase mt-1"
-                        style={{ color: AMBER, fontSize: '0.62rem', letterSpacing: '0.12em' }}
-                      >
-                        {language === 'sw' ? 'Wakala wa Kidijitali wa Tanzania' : "Tanzania's Digital Agency"}
-                      </p>
-                    </div>
-                    <div className="flex gap-2">
-                      {[AMBER, GOLD].map((c, i) => (
-                        <div
-                          key={i}
-                          style={{ width: '0.4rem', height: '2rem', borderRadius: '2px', background: c, opacity: i === 1 ? 0.5 : 1 }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating stat badges */}
-              {isClient && (
-                <>
-                  <div
-                    className="absolute -top-4 -right-4 font-display font-extrabold uppercase text-center rounded"
-                    style={{
-                      background: AMBER,
-                      color: DARK,
-                      padding: '0.6rem 0.9rem',
-                      fontSize: '0.65rem',
-                      letterSpacing: '0.08em',
-                      boxShadow: '0 8px 24px rgba(245,158,11,0.35)',
-                    }}
-                  >
-                    <div style={{ fontSize: '1.4rem', letterSpacing: '-0.02em', lineHeight: 1 }}>50+</div>
-                    <div style={{ opacity: 0.7 }}>{language === 'sw' ? 'Tovuti' : 'Websites'}</div>
-                  </div>
-                  <div
-                    className="absolute -bottom-4 -left-4 font-display font-extrabold uppercase text-center rounded"
-                    style={{
-                      background: DARK,
-                      border: `2px solid ${BORDER_S}`,
-                      color: GOLD,
-                      padding: '0.6rem 0.9rem',
-                      fontSize: '0.65rem',
-                      letterSpacing: '0.08em',
-                    }}
-                  >
-                    <div style={{ fontSize: '1.4rem', letterSpacing: '-0.02em', lineHeight: 1, color: CREAM }}>40+</div>
-                    <div>{language === 'sw' ? 'Wateja' : 'Clients'}</div>
-                  </div>
-                </>
-              )}
+              <button
+                type="button"
+                onClick={() => openWhatsApp(c.whatsappSecondary)}
+                className={`inline-flex items-center justify-center gap-2 rounded font-display font-bold text-sm transition-colors hover:bg-amber/10 ${focusRing}`}
+                style={{ border: `2px solid ${BORDER_S}`, color: AMBER, padding: '1rem 1.75rem' }}
+              >
+                {c.secondary}
+                <ArrowRight size={16} aria-hidden="true" />
+              </button>
             </div>
-
           </div>
+
+          {/* ── Photo with magazine caption ── */}
+          <figure className="lg:col-span-6 lg:col-start-7 order-1 lg:order-2">
+            <div
+              className="relative overflow-hidden rounded"
+              style={{ aspectRatio: '4 / 3', background: DARK }}
+            >
+              <Image
+                src="/images/client.jpeg"
+                alt={c.imageAlt}
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover"
+              />
+            </div>
+
+            <figcaption
+              className="mt-5 pt-4 flex items-baseline justify-between gap-4"
+              style={{ borderTop: `2px solid ${AMBER}` }}
+            >
+              <span className="font-display font-extrabold" style={{ color: CREAM, fontSize: '1.15rem', letterSpacing: '-0.02em' }}>
+                {c.captionName}
+              </span>
+              <span className="text-sm italic text-right" style={{ color: MUTED }}>
+                {c.captionSub}
+              </span>
+            </figcaption>
+          </figure>
         </div>
       </div>
-
-      {/* ── Bottom accent rule ───────────────────────────────────────────── */}
-      <div style={{ height: 3, background: `linear-gradient(to right, transparent, ${AMBER} 30%, ${GOLD} 70%, transparent)` }} />
     </section>
   );
 }
