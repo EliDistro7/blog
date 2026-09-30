@@ -16,4 +16,4 @@ export const BRAND_IMAGES = {
   services: u('1542744094-3a31f272c490', 2000),
   process:  u('1572044162444-ad60f128bdea', 1200),
   cta:      u('1626785774573-4b799315345d', 2000),
-};
+}
