@@ -12,7 +12,7 @@ import {
   CONTACT, BRAND_IMAGES, openWhatsApp,
   AfricanPattern, SectionHead, Photo,
   btnPrimary, btnPrimaryStyle, btnGhost, btnGhostStyle,
-} from '@/app/components/branding/shared';
+} from './shared';
 
 const copy = {
   en: {

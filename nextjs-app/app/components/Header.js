@@ -322,14 +322,7 @@ export default function Header() {
                       ))}
                     </ul>
 
-                    <Link
-                      href="/services"
-                      className={`group inline-flex items-center gap-2 mt-5 font-display font-bold text-sm ${focusRing}`}
-                      style={{ color: AMBER }}
-                    >
-                      {t.viewAll}
-                      <ArrowRight size={16} aria-hidden="true" className="motion-safe:transition-transform group-hover:translate-x-1" />
-                    </Link>
+                 
                   </div>
                 )}
               </div>

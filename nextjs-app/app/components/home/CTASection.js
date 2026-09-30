@@ -57,7 +57,7 @@ const copy = {
     badge: 'Anza leo',
     title: ['Badilisha', 'maono', 'yako kuwa ukweli'],
     subtitle:
-      'Suluhisho za ubunifu zinazokutana na utekelezaji wa hali ya juu. Jiunge na biashara 40+ zilizochagua ubora.',
+      'Ubora wa hali ya juu. Jiunge na biashara 40+ zilizochagua ubora.',
     primary: 'Anza mradi wako',
     secondary: 'Ushauri bure',
     imageAlt: 'Mteja wa Future Holders', // replace with a real description of the photo
