@@ -214,7 +214,7 @@ const BrandingServices = () => {
                   {c.cta.primary}
                   <ArrowRight size={16} aria-hidden="true" />
                 </button>
-                <a href={CONTACT.phoneHref} className={btnGhost} style={btnGhostStyle}>{c.cta.secondary}</a>
+                <Link href={CONTACT.phoneHref} className={btnGhost} style={btnGhostStyle}>{c.cta.secondary}</Link>
               </div>
             </div>
           </div>
