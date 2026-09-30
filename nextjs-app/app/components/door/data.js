@@ -1,46 +1,4 @@
-import { 
-  DoorOpen, 
-  MapPin, 
-  Target, 
-  Users, 
-  TrendingUp, 
-  Clock, 
-  CheckCircle, 
-  Cookie,
-  Candy,
-  Gift,
-  Mail,
-  PenTool,
-  BookOpen,
-  Flame,
-  Utensils,
-  Wheat,
-  Leaf,
- 
-  Truck,
-  Sparkles,
-  Milk,
-  Layers,
-  Calendar,
-  ArrowRight,
-  Quote,
-  BarChart3,
-  Shield,
-
-  Award,
-  ChevronDown,
-  ChevronUp,
-  Building,
-  Package,
-  Zap,
-  Smartphone,
-  Shield as ShieldIcon,
-  Wifi,
-  Home,
-  Heart
-} from 'lucide-react';
-
-  export const heroStats = [
+export const heroStats = [
     {
       number: "95%",
       label: { en: "Success Rate", sw: "Kiwango cha Mafanikio" }
@@ -59,30 +17,26 @@ import {
     }
   ];
 
-  export const services = [
+export const services = [
     {
-      icon: Target,
-      title: { en: "Lead Generation", sw: "Uongozaji wa Viongozi" },
+      title: { en: "Lead Generation", sw: "Uzalishaji wa Wateja Watarajiwa" },
       description: { en: "Identify and qualify potential customers through strategic door-to-door campaigns", sw: "Tambua na uhakiki wateja watarajiwa kupitia kampeni za mkakati wa mlango hadi mlango" }
     },
     {
-      icon: Users,
       title: { en: "Brand Awareness", sw: "Ufahamu wa Brand" },
-      description: { en: "Increase brand visibility and recognition in your target neighborhoods", sw: "Ongeza miwani ya brand na utambuzi katika mitaa yako ya lengo" }
+      description: { en: "Increase brand visibility and recognition in your target neighborhoods", sw: "Ongeza mwonekano wa brand na utambuzi katika mitaa yako ya lengo" }
     },
     {
-      icon: BarChart3,
       title: { en: "Market Research", sw: "Utafiti wa Soko" },
       description: { en: "Gather valuable insights about customer preferences and market trends", sw: "Kusanya maarifa muhimu kuhusu mapendeleo ya wateja na mienendo ya soko" }
     },
     {
-      icon: TrendingUp,
       title: { en: "Sales Conversion", sw: "Kubadilisha Mauzo" },
       description: { en: "Convert prospects into customers through personalized interactions", sw: "Badilisha matarajio kuwa wateja kupitia mwingiliano wa kibinafsi" }
     }
   ];
 
-  export const process = [
+export const process = [
     {
       step: "01",
       title: { en: "Strategy Planning", sw: "Upangaji wa Mkakati" },
@@ -108,123 +62,102 @@ import {
 export const currentPartners = [
   {
     company: "MAGNA",
-    logo: Building,
     industry: { en: "Stationery & Office Supplies", sw: "Vifaa vya Ofisi" },
     products: [
       {
         name: { en: "Stationery", sw: "Vifaa vya Uandishi" },
-        icon: PenTool,
         description: { en: "Complete office stationery solutions", sw: "Suluhisho kamili la vifaa vya ofisi" }
       },
       {
         name: { en: "Counter Books", sw: "Vitabu vya Hesabu" },
-        icon: BookOpen,
         description: { en: "Accounting and record keeping books", sw: "Vitabu vya uhasibu na uwekaji rekodi" }
       },
       {
         name: { en: "Kilns", sw: "Tanuru" },
-        icon: Flame,
         description: { en: "Industrial kilns for manufacturing", sw: "Tanuru za viwandani kwa utengenezaji" }
       },
       {
         name: { en: "Envelopes", sw: "Bahasha" },
-        icon: Mail,
         description: { en: "Various sizes of envelopes for mailing", sw: "Bahasha za ukubwa mbalimbali kwa barua" }
       }
     ]
   },
   {
     company: "CHRISTY QUALITY FOODS PVT LTD",
-    logo: Utensils,
     industry: { en: "Food & Beverages", sw: "Chakula na Vinywaji" },
     location: { en: "Arusha - Mbeya", sw: "Arusha - Mbeya" },
     products: [
       {
         name: { en: "Maize Flour", sw: "Unga wa Mahindi" },
-        icon: Wheat,
         description: { en: "High quality maize flour for households", sw: "Unga wa mahindi wa ubora wa juu kwa familia" }
       },
       {
         name: { en: "Bulgur Wheat", sw: "Ngano ya Bulgur" },
-        icon: Wheat,
         description: { en: "Nutritious bulgur wheat products", sw: "Bidhaa za ngano ya bulgur zenye lishe" }
       },
       {
         name: { en: "Mbogi & Cassava", sw: "Mbogi na Muhogo" },
-        icon: Leaf,
         description: { en: "Traditional vegetables and cassava products", sw: "Mboga za jadi na bidhaa za muhogo" }
       },
       {
         name: { en: "Beans (Various)", sw: "Maharage (Aina Mbalimbali)" },
-        icon: Wheat,
         description: { en: "Different varieties of beans including Rosecoco", sw: "Aina mbalimbali za maharage ikiwa ni pamoja na Rosecoco" }
       }
     ]
   },
   {
     company: "TAMTAM",
-    logo: Truck,
     industry: { en: "Food Distribution", sw: "Usambazaji wa Chakula" },
     products: [
       {
         name: { en: "Wholesale Distribution", sw: "Usambazaji wa Jumla" },
-        icon: Package,
         description: { en: "Bulk food distribution services", sw: "Huduma za usambazaji wa chakula kwa wingi" }
       }
     ]
   },
   {
     company: "EX-PIDO",
-    logo: Truck,
     industry: { en: "Food & Spices", sw: "Chakula na Viungo" },
     products: [
       {
-        name: { en: "Malguito Repellant", sw: "Dawa ya Mbu" },
-        icon: Shield,
+        name: { en: "Mosquito Repellent", sw: "Dawa ya Mbu" },
         description: { en: "Natural mosquito repellent products", sw: "Bidhaa za asili za kuzuia mbu" }
       },
       {
         name: { en: "Thyme Sticks", sw: "Vijiti vya Thyme" },
-        icon: Leaf,
         description: { en: "Natural thyme sticks for flavoring", sw: "Vijiti vya thyme vya asili kwa ladha" }
       },
       {
         name: { en: "Turmeric", sw: "Manjano" },
-        icon: Sparkles,
         description: { en: "Pure turmeric powder and sticks", sw: "Unga na vijiti vya manjano safi" }
       }
     ]
   },
   {
     company: "SAADO FOODS",
-    logo: Utensils,
     industry: { en: "Confectionery & Food Products", sw: "Peremende na Bidhaa za Chakula" },
     products: [
       {
         name: { en: "Chocolate", sw: "Chokoleti" },
-        icon: Gift,
         description: { en: "Premium chocolate products and confectionery", sw: "Bidhaa za chokoleti na peremende za hali ya juu" }
       },
       {
         name: { en: "Finger Chocolate", sw: "Chokoleti ya Kidole" },
-        icon: Candy,
         description: { en: "Finger-shaped chocolate snacks", sw: "Vitafunio vya chokoleti vya umbo la kidole" }
       },
       {
         name: { en: "Top Corn", sw: "Mahindi Bora" },
-        icon: Wheat,
         description: { en: "Premium corn-based snack products", sw: "Vitafunio vya mahindi vya hali ya juu" }
       },
       {
         name: { en: "Biscuits", sw: "Biskuti" },
-        icon: Cookie,
         description: { en: "Various types of biscuits and cookies", sw: "Aina mbalimbali za biskuti na mikate" }
       }
     ]
   }
 ];
 
-  export const faqs = [
+export const faqs = [
     {
       question: { en: "How do you target the right neighborhoods?", sw: "Unavipi mitaa sahihi ya lengo?" },
       answer: { en: "We use demographic data, market research, and your customer profiles to identify high-potential areas for maximum campaign effectiveness.", sw: "Tunatumia data za kidemografia, utafiti wa soko, na maelezo ya wateja wako kutambua maeneo yenye uwezekano mkubwa kwa ufanisi mkubwa wa kampeni." }
@@ -235,7 +168,7 @@ export const currentPartners = [
     },
     {
       question: { en: "How do you measure campaign success?", sw: "Unawezaje kupima mafanikio ya kampeni?" },
-      answer: { en: "We track key metrics including doors visited, leads generated, conversion rates, and provide detailed analytics reports with actionable insights.", sw: "Tunafuata vipimo muhimu ikiwa ni pamoja na milango iliyotembelewa, viongozi waliozalishwa, viwango vya ubadilishaji, na kutoa ripoti za uchanganuzi wa kina na maarifa ya kutenda." }
+      answer: { en: "We track key metrics including doors visited, leads generated, conversion rates, and provide detailed analytics reports with actionable insights.", sw: "Tunafuata vipimo muhimu ikiwa ni pamoja na milango iliyotembelewa, wateja watarajiwa waliopatikana, viwango vya ubadilishaji, na kutoa ripoti za uchanganuzi wa kina na maarifa ya kutenda." }
     },
     {
       question: { en: "What industries do you serve?", sw: "Unatumikia viwanda gani?" },
@@ -243,16 +176,16 @@ export const currentPartners = [
     }
   ];
 
- export const pricingPlans = [
+export const pricingPlans = [
   {
     name: { en: "Starter", sw: "Mwanzo" },
-    subtitle: { en: "Street Presence", sw: "Uongozi wa Mtaani" },
+    subtitle: { en: "Street Presence", sw: "Uwepo wa Mtaani" },
     price: "TZS 300,000",
     period: { en: "per Month", sw: "kwa Mwezi" },
     target: { en: "Small businesses or startups testing physical outreach", sw: "Biashara ndogo au miradi mipya yanayojaribu kufikia wateja" },
     features: [
       { en: "1 sales rep assigned for 2 days per week (8 days/month)", sw: "Mwakilishi mmoja wa mauzo kwa siku 2 kwa wiki (siku 8/mwezi)" },
-      { en: "Coverage of selected districts or ward", sw: "Uongozi wa wilaya au kata zilizochaguliwa" },
+      { en: "Coverage of selected districts or ward", sw: "Ufikiaji wa wilaya au kata zilizochaguliwa" },
       { en: "Distribution of 100 branded flyers per week", sw: "Ugavi wa vipeperushi 100 vya biashara kwa wiki" },
       { en: "Collection of potential clients per week (5-10 per month)", sw: "Ukusanyaji wa wateja watarajiwa kwa wiki (5-10 kwa mwezi)" },
       { en: "Weekly status reports to track feedback", sw: "Ripoti za kila wiki za kufuatilia maoni" }
@@ -264,14 +197,14 @@ export const currentPartners = [
     price: "TZS 600,000",
     period: { en: "per Month", sw: "kwa Mwezi" },
     popular: true,
-    target: { en: "Businesses ready to expand reach and generate leads", sw: "Biashara zilizo tayari kupanua uwazi na kupata viongozi" },
+    target: { en: "Businesses ready to expand reach and generate leads", sw: "Biashara zilizo tayari kupanua uwazi na kupata wateja watarajiwa" },
     features: [
       { en: "2 trained sales reps assigned for 3 days/week (12 visits/month)", sw: "Wawakilishi 2 wa mauzo waliofunzwa kwa siku 3/wiki (ziara 12/mwezi)" },
-      { en: "Coverage of up to 5-8 districts/wards", sw: "Uongozi wa hadi wilaya/kata 5-8" },
+      { en: "Coverage of up to 5-8 districts/wards", sw: "Ufikiaji wa hadi wilaya/kata 5-8" },
       { en: "Distribution of 200 branded flyers per week", sw: "Ugavi wa vipeperushi 200 vya biashara kwa wiki" },
       { en: "Branded uniforms for the reps (to enhance brand presence)", sw: "Sare za biashara kwa wawakilishi (kuboresha uongozi wa biashara)" },
-      { en: "Contact collection (100+ prospects monthly)", sw: "Ukusanyaji wa anwani (wapenzi 100+ kwa mwezi)" },
-      { en: "Weekly performance reports - leads summary", sw: "Ripoti za utendaji wa kila wiki - muhtasari wa viongozi" }
+      { en: "Contact collection (100+ prospects monthly)", sw: "Ukusanyaji wa anwani (wateja watarajiwa 100+ kwa mwezi)" },
+      { en: "Weekly performance reports - leads summary", sw: "Ripoti za utendaji wa kila wiki - muhtasari wa wateja watarajiwa" }
     ]
   },
   {
@@ -282,10 +215,10 @@ export const currentPartners = [
     target: { en: "Established businesses seeking city-wide scale and dominance", sw: "Biashara zilizoimarika zinazotafuta ukuu wa jiji lote" },
     features: [
       { en: "3-4 uniformed sales reps, active 5 days/week", sw: "Wawakilishi 3-4 wa mauzo wenye sare, wakiwa hai siku 5/wiki" },
-      { en: "Coverage of entire Dar es Salaam, roofing zones", sw: "Uongozi wa Dar es Salaam nzima, maeneo ya mapaa" },
+      { en: "Coverage of the entire Dar es Salaam", sw: "Ufikiaji wa Dar es Salaam nzima" },
       { en: "Distribution of up to 1,000 flyers/posters/month", sw: "Ugavi wa hadi vipeperushi/mabango 1,000/mwezi" },
       { en: "Product demonstrations (for applicable businesses)", sw: "Maonyesho ya bidhaa (kwa biashara zinazofaa)" },
-      { en: "Monthly lead generation targets (100+ qualified prospects)", sw: "Malengo ya kila mwezi ya kupata viongozi (wapenzi 100+ wanaofaa)" },
+      { en: "Monthly lead generation targets (100+ qualified prospects)", sw: "Malengo ya kila mwezi ya kupata wateja watarajiwa (wateja watarajiwa 100+ wanaofaa)" },
       { en: "Bi-weekly strategy calls with dedicated WhatsApp check-ins", sw: "Simu za mkakati kila wiki mbili na mahakikisho ya WhatsApp" },
       { en: "Monthly performance meeting & campaign optimization", sw: "Mkutano wa utendaji wa kila mwezi na kuboresha kampeni" }
     ]

@@ -1,60 +1,97 @@
 'use client';
 
+// @/app/components/door/FAQ.js
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
 import { faqs } from '@/app/components/door/data';
 import { useLanguage } from '@/context/LanguageContext';
+import {
+  SURFACE, AMBER, CREAM, MUTED, RULE, DOOR_IMAGES,
+  AfricanPattern, SectionHead, Photo, focusRing,
+} from './shared';
+
+const copy = {
+  en: { label: 'FAQ', title: 'Frequently asked questions', imageAlt: 'A campaign briefing with the field team' },
+  sw: { label: 'Maswali', title: 'Maswali yanayoulizwa mara kwa mara', imageAlt: 'Maelekezo ya kampeni kwa timu ya uwandani' },
+};
 
 const FAQ = () => {
   const { language } = useLanguage();
-  const [expandedFaq, setExpandedFaq] = useState(null);
-
-  const getLocalizedText = (textObj) => {
-    if (!textObj) return '';
-    return textObj[language] || textObj.en;
-  };
+  const lang = language === 'sw' ? 'sw' : 'en';
+  const c = copy[lang];
+  const tr = (obj) => (obj ? obj[lang] || obj.en : '');
+  const [expanded, setExpanded] = useState(null);
 
   return (
-    <div className="py-20 bg-gray-900/80 backdrop-blur-md">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-brand-goldLight mb-6">
-            {getLocalizedText({
-              en: "Frequently Asked Questions",
-              sw: "Maswali Yanayoulizwa Mara kwa Mara"
-            })}
-          </h2>
-        </div>
+    <section
+      id="faq"
+      aria-labelledby="door-faq-title"
+      className="relative overflow-hidden pb-24 scroll-mt-24"
+      style={{ background: SURFACE }}
+    >
+      <AfricanPattern id="doorFaqPattern" />
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHead id="door-faq-title" label={c.label} title={c.title} />
 
-        <div className="max-w-3xl mx-auto">
-          {faqs.map((faq, index) => (
-            <div key={index} className="mb-6">
-              <button
-                className="w-full bg-gray-800/50 backdrop-blur-md rounded-xl p-6 border border-brand-gold/30 flex items-center justify-between hover:bg-brand-gold/10 transition-all shadow-layer"
-                onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
-              >
-                <span className="text-brand-goldLight font-semibold text-left">
-                  {getLocalizedText(faq.question)}
-                </span>
-                {expandedFaq === index ? (
-                  <ChevronUp className="w-5 h-5 text-brand-gold" />
-                ) : (
-                  <ChevronDown className="w-5 h-5 text-brand-gold" />
-                )}
-              </button>
-              
-              {expandedFaq === index && (
-                <div className="mt-4 bg-gray-800/30 backdrop-blur-md rounded-xl p-6 border border-brand-gold/20">
-                  <p className="text-brand-gold/80 leading-relaxed">
-                    {getLocalizedText(faq.answer)}
-                  </p>
-                </div>
-              )}
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16">
+          <div className="lg:col-span-4">
+            <div className="lg:sticky lg:top-28">
+              <Photo src={DOOR_IMAGES.faq} alt={c.imageAlt} aspect="4 / 5" sizes="(min-width: 1024px) 32vw, 100vw" />
             </div>
-          ))}
+          </div>
+
+          <div className="lg:col-span-8" style={{ borderBottom: `1px solid ${RULE}` }}>
+            {faqs.map((faq, i) => {
+              const open = expanded === i;
+              return (
+                <div key={faq.question.en} style={{ borderTop: `1px solid ${RULE}` }}>
+                  <h3>
+                    <button
+                      type="button"
+                      onClick={() => setExpanded(open ? null : i)}
+                      aria-expanded={open}
+                      aria-controls={`door-faq-panel-${i}`}
+                      id={`door-faq-button-${i}`}
+                      className={`w-full flex items-start justify-between gap-6 py-6 text-left ${focusRing}`}
+                    >
+                      <span
+                        className="font-display font-extrabold"
+                        style={{
+                          fontSize: 'clamp(1.1rem, 1.8vw, 1.35rem)',
+                          lineHeight: 1.2,
+                          letterSpacing: '-0.015em',
+                          color: open ? AMBER : CREAM,
+                        }}
+                      >
+                        {tr(faq.question)}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className="font-display font-bold shrink-0 leading-none"
+                        style={{ color: AMBER, fontSize: '1.5rem', width: '1.25rem', textAlign: 'center' }}
+                      >
+                        {open ? '\u2212' : '+'}
+                      </span>
+                    </button>
+                  </h3>
+                  {open && (
+                    <div
+                      id={`door-faq-panel-${i}`}
+                      role="region"
+                      aria-labelledby={`door-faq-button-${i}`}
+                      className="pb-6 pr-10"
+                    >
+                      <p className="leading-relaxed" style={{ color: MUTED, fontSize: '1.02rem' }}>
+                        {tr(faq.answer)}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

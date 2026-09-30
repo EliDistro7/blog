@@ -1,161 +1,242 @@
 'use client';
 
+// @/app/components/door/PartnersAndPricing.js
 import React from 'react';
-import { CheckCircle, Package } from 'lucide-react';
 import { pricingPlans, currentPartners } from '@/app/components/door/data';
 import { useLanguage } from '@/context/LanguageContext';
+import {
+  SURFACE, AMBER, GOLD, DARK, CREAM, MUTED, RULE, BORDER_S, DOOR_IMAGES,
+  AfricanPattern, SectionHead, Photo, openWhatsApp,
+  btnPrimary, btnPrimaryStyle, btnGhost, btnGhostStyle,
+} from './shared';
+
+const copy = {
+  en: {
+    partnersLabel: 'Our clients',
+    partnersTitle: 'Current partners',
+    partnersSub: "Companies we're actively promoting through door-to-door campaigns.",
+    products: 'Products we promote',
+    pricingLabel: 'Pricing',
+    pricingTitle: 'Pricing plans',
+    pricingSub: 'Choose the plan that fits your door-to-door marketing needs.',
+    popular: 'Most popular',
+    choose: 'Choose plan',
+    forWho: 'Best for',
+  },
+  sw: {
+    partnersLabel: 'Wateja wetu',
+    partnersTitle: 'Washirika wa sasa',
+    partnersSub: 'Makampuni tunayoyatangaza kwa kampeni za mlango hadi mlango.',
+    products: 'Bidhaa tunazotangaza',
+    pricingLabel: 'Bei',
+    pricingTitle: 'Mipango ya bei',
+    pricingSub: 'Chagua mpango unaofaa mahitaji yako ya uuzaji wa mlango hadi mlango.',
+    popular: 'Maarufu zaidi',
+    choose: 'Chagua mpango',
+    forWho: 'Inafaa kwa',
+  },
+};
+
+// Split "TZS 900,000 - 1,200,000" into currency + amount so the amount can lead
+const splitPrice = (price) => {
+  if (typeof price !== 'string') return { cur: '', amount: '' };
+  const [cur, ...rest] = price.split(' ');
+  return /^[A-Z]{3}$/.test(cur)
+    ? { cur, amount: rest.join(' ').replace(' - ', ' \u2013 ') }
+    : { cur: '', amount: price };
+};
 
 const PartnersAndPricing = () => {
   const { language } = useLanguage();
-
-  const getLocalizedText = (textObj) => {
-    if (!textObj) return '';
-    return textObj[language] || textObj.en;
-  };
+  const lang = language === 'sw' ? 'sw' : 'en';
+  const c = copy[lang];
+  const tr = (obj) => (obj ? obj[lang] || obj.en : '');
 
   const handlePlanClick = (planName) => {
-    const message = getLocalizedText({
-      en: `Hi! I'm interested in the ${getLocalizedText(planName)} plan for door-to-door marketing services. Can you provide more details?`,
-      sw: `Hujambo! Ninapendezwa na mpango wa ${getLocalizedText(planName)} kwa huduma za uuzaji wa mlango hadi mlango. Je, unaweza kutoa maelezo zaidi?`
-    });
-    
-    const whatsappUrl = `https://wa.me/255745787370?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    const name = tr(planName);
+    openWhatsApp(
+      lang === 'sw'
+        ? `Hujambo! Ninapendezwa na mpango wa ${name} kwa huduma za uuzaji wa mlango hadi mlango. Je, unaweza kutoa maelezo zaidi?`
+        : `Hi! I'm interested in the ${name} plan for door-to-door marketing services. Can you provide more details?`
+    );
   };
 
   return (
     <>
-      {/* Current Partners Section */}
-      <div className="py-20 bg-gray-900/80 backdrop-blur-md">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-brand-goldLight mb-6">
-              {getLocalizedText({
-                en: "Our Current Partners",
-                sw: "Washirika Wetu wa Sasa"
-              })}
-            </h2>
-            <p className="text-xl text-brand-gold max-w-2xl mx-auto">
-              {getLocalizedText({
-                en: "Companies we're actively promoting through door-to-door campaigns",
-                sw: "Makampuni tunayokutangatanga kwa kutumia kampeni za mlango hadi mlango"
-              })}
-            </p>
-          </div>
+      {/* ═════════ Partners ═════════ */}
+      <section
+        id="partners"
+        aria-labelledby="door-partners-title"
+        className="relative overflow-hidden pb-24 scroll-mt-24"
+        style={{ background: SURFACE }}
+      >
+        <AfricanPattern id="doorPartnersPattern" />
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHead id="door-partners-title" label={c.partnersLabel} title={c.partnersTitle} subtitle={c.partnersSub} />
 
-          <div className="space-y-12">
-            {currentPartners.map((partner, index) => {
-              const LogoComponent = partner.logo;
+          <ul className="space-y-20 lg:space-y-24">
+            {currentPartners.map((partner, i) => {
+              const accent = i % 2 === 0 ? AMBER : GOLD;
+              const flip = i % 2 === 1;
               return (
-                <div key={index} className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 border border-brand-gold/30 shadow-layer">
-                  <div className="flex items-center mb-6">
-                    <div className="p-3 bg-gradient-to-r from-brand-gold to-brand-goldLight rounded-xl mr-4 shadow-gold">
-                      <LogoComponent className="w-8 h-8 text-gray-900" />
+                <li key={partner.company}>
+                  <article className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                    <div className={`lg:col-span-5 ${flip ? 'lg:order-2' : ''}`}>
+                      <Photo
+                        src={DOOR_IMAGES.partners[partner.company]}
+                        aspect="4 / 3"
+                        sizes="(min-width: 1024px) 40vw, 100vw"
+                      />
                     </div>
-                    <div>
-                      <h3 className="text-2xl font-bold text-brand-goldLight">{partner.company}</h3>
-                      <p className="text-brand-gold">{getLocalizedText(partner.industry)}</p>
+
+                    <div className={`lg:col-span-7 ${flip ? 'lg:order-1' : ''}`}>
+                      <div className="pt-4" style={{ borderTop: `2px solid ${accent}` }}>
+                        <p className="font-display font-semibold text-sm" style={{ color: accent }}>
+                          <span aria-hidden="true" style={{ color: MUTED }}>{String(i + 1).padStart(2, '0')}{'  /  '}</span>
+                          {tr(partner.industry)}
+                          {partner.location && (
+                            <>
+                              <span aria-hidden="true" style={{ color: MUTED }}>{'  /  '}</span>
+                              {tr(partner.location)}
+                            </>
+                          )}
+                        </p>
+                        <h3
+                          className="font-display font-extrabold mt-3"
+                          style={{ fontSize: 'clamp(1.9rem, 3.6vw, 3rem)', lineHeight: 1.02, color: CREAM, letterSpacing: '-0.025em' }}
+                        >
+                          {partner.company}
+                        </h3>
+
+                        <p className="mt-6 text-sm font-display font-bold" style={{ color: MUTED, letterSpacing: '0.04em' }}>
+                          {c.products}
+                        </p>
+                        <ul className="mt-3" style={{ borderTop: `1px solid ${RULE}` }}>
+                          {partner.products.map((product) => (
+                            <li
+                              key={product.name.en}
+                              className="grid sm:grid-cols-[13rem_1fr] gap-x-6 gap-y-1 py-3"
+                              style={{ borderBottom: `1px solid ${RULE}` }}
+                            >
+                              <span className="text-sm font-semibold" style={{ color: CREAM }}>{tr(product.name)}</span>
+                              <span className="text-sm leading-relaxed" style={{ color: MUTED }}>{tr(product.description)}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {partner.products.map((product, productIndex) => {
-                      const ProductIcon = product.icon || Package;
-                      return (
-                        <div key={productIndex} className="bg-gray-700/30 rounded-xl p-6 border border-brand-gold/20 hover:border-brand-gold/40 transition-all">
-                          <div className="flex items-center mb-4">
-                            <div className="p-2 bg-brand-gold/20 rounded-lg mr-3">
-                              <ProductIcon className="w-5 h-5 text-brand-gold" />
-                            </div>
-                            <h4 className="text-lg font-semibold text-brand-goldLight">
-                              {getLocalizedText(product.name)}
-                            </h4>
-                          </div>
-                          <p className="text-brand-gold/80 text-sm leading-relaxed">
-                            {getLocalizedText(product.description)}
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                  </article>
+                </li>
               );
             })}
-          </div>
+          </ul>
         </div>
-      </div>
+      </section>
 
-      {/* Pricing Section */}
-      <div className="py-20 bg-gradient-to-b from-gray-950 to-gray-900">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-brand-goldLight mb-6">
-              {getLocalizedText({
-                en: "Pricing Plans",
-                sw: "Mipango ya Bei"
-              })}
-            </h2>
-            <p className="text-xl text-brand-gold max-w-2xl mx-auto">
-              {getLocalizedText({
-                en: "Choose the perfect plan for your door-to-door marketing needs",
-                sw: "Chagua mpango mkamilifu kwa mahitaji yako ya uuzaji wa mlango hadi mlango"
-              })}
-            </p>
-          </div>
+      {/* ═════════ Pricing ═════════ */}
+      <section
+        id="pricing"
+        aria-labelledby="door-pricing-title"
+        className="relative overflow-hidden pb-24 scroll-mt-24"
+        style={{ background: SURFACE }}
+      >
+        <AfricanPattern id="doorPricingPattern" />
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHead id="door-pricing-title" label={c.pricingLabel} title={c.pricingTitle} subtitle={c.pricingSub} />
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {pricingPlans.map((plan, index) => (
-              <div key={index} className={`bg-gray-800/50 backdrop-blur-md rounded-2xl p-8 border border-brand-gold/30 relative shadow-layer ${plan.popular ? 'ring-2 ring-brand-gold' : ''}`}>
-                {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-gradient-to-r from-brand-gold to-brand-goldLight text-gray-900 px-6 py-2 rounded-full text-sm font-bold shadow-gold">
-                      {getLocalizedText({
-                        en: "Most Popular",
-                        sw: "Maarufu Zaidi"
-                      })}
-                    </div>
-                  </div>
-                )}
-                
-                <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold text-brand-goldLight mb-4">
-                    {getLocalizedText(plan.name)}
-                  </h3>
-                  <div className="text-4xl font-bold text-brand-goldLight mb-2">
-                    {typeof plan.price === 'object' ? getLocalizedText(plan.price) : plan.price}
-                  </div>
-                  <div className="text-brand-gold">
-                    {getLocalizedText(plan.period)}
-                  </div>
-                </div>
+          <ul className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+            {pricingPlans.map((plan, i) => {
+              const accent = plan.popular ? AMBER : i % 2 === 0 ? GOLD : AMBER;
+              const { cur, amount } = splitPrice(plan.price);
+              const long = amount.length > 10;
+              return (
+                <li key={plan.name.en} className="flex">
+                  <article
+                    className="relative flex flex-col w-full rounded p-8"
+                    style={{
+                      background: plan.popular ? 'rgba(245,158,11,0.06)' : 'rgba(255,255,255,0.03)',
+                      border: `1px solid ${plan.popular ? BORDER_S : RULE}`,
+                    }}
+                  >
+                    <div
+                      aria-hidden="true"
+                      className="absolute inset-x-0 top-0"
+                      style={{ height: 3, background: accent, borderRadius: '0.25rem 0.25rem 0 0' }}
+                    />
 
-                <ul className="space-y-4 mb-8">
-                  {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center text-brand-gold/80">
-                      <CheckCircle className="w-5 h-5 text-brand-gold mr-3" />
-                      {getLocalizedText(feature)}
-                    </li>
-                  ))}
-                </ul>
+                    <p
+                      className="font-display font-bold text-sm mb-3"
+                      style={{ color: plan.popular ? AMBER : 'transparent', letterSpacing: '0.04em' }}
+                      aria-hidden={!plan.popular}
+                    >
+                      {c.popular}
+                    </p>
 
-                <button 
-                  onClick={() => handlePlanClick(plan.name)}
-                  className={`w-full py-3 rounded-xl font-bold transition-all shadow-gold hover:scale-[1.02] ${
-                    plan.popular 
-                      ? 'bg-gradient-to-r from-brand-gold to-brand-goldLight text-gray-900 hover:shadow-2xl' 
-                      : 'bg-brand-gold/10 text-brand-goldLight border border-brand-gold/40 hover:bg-brand-gold/20'
-                  }`}
-                >
-                  {getLocalizedText({
-                    en: "Choose Plan",
-                    sw: "Chagua Mpango"
-                  })}
-                </button>
-              </div>
-            ))}
-          </div>
+                    <h3
+                      className="font-display font-extrabold"
+                      style={{ fontSize: '1.75rem', lineHeight: 1.05, color: CREAM, letterSpacing: '-0.02em' }}
+                    >
+                      {tr(plan.name)}
+                    </h3>
+                    {plan.subtitle && (
+                      <p className="font-display font-semibold text-sm mt-1" style={{ color: accent }}>
+                        {tr(plan.subtitle)}
+                      </p>
+                    )}
+
+                    <p className="mt-6">
+                      {cur && (
+                        <span className="block text-sm font-display font-bold" style={{ color: MUTED, letterSpacing: '0.04em' }}>
+                          {cur}
+                        </span>
+                      )}
+                      <span
+                        className="font-display font-extrabold leading-none block mt-1"
+                        style={{
+                          color: CREAM,
+                          fontSize: long ? 'clamp(1.75rem, 2.6vw, 2.25rem)' : 'clamp(2.5rem, 4vw, 3.25rem)',
+                          letterSpacing: '-0.03em',
+                        }}
+                      >
+                        {amount}
+                      </span>
+                      <span className="block text-sm mt-2" style={{ color: MUTED }}>{tr(plan.period)}</span>
+                    </p>
+
+                    {plan.target && (
+                      <p className="mt-5 text-sm leading-relaxed" style={{ color: MUTED }}>
+                        <span style={{ color: CREAM }} className="font-semibold">{c.forWho}: </span>
+                        {tr(plan.target)}
+                      </p>
+                    )}
+
+                    <ul className="mt-8 mb-8" style={{ borderTop: `1px solid ${RULE}` }}>
+                      {plan.features.map((feature) => (
+                        <li
+                          key={feature.en}
+                          className="py-3 text-sm"
+                          style={{ borderBottom: `1px solid ${RULE}`, color: CREAM }}
+                        >
+                          {tr(feature)}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <button
+                      type="button"
+                      onClick={() => handlePlanClick(plan.name)}
+                      className={`${plan.popular ? btnPrimary : btnGhost} mt-auto w-full`}
+                      style={plan.popular ? { ...btnPrimaryStyle, color: DARK } : btnGhostStyle}
+                    >
+                      {c.choose}
+                    </button>
+                  </article>
+                </li>
+              );
+            })}
+          </ul>
         </div>
-      </div>
+      </section>
     </>
   );
 };
