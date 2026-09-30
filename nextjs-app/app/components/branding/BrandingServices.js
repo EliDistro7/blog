@@ -125,7 +125,9 @@ const BrandingServices = () => {
                 {h.primary}
                 <ArrowRight size={16} aria-hidden="true" />
               </button>
-              <a href="/#clients" className={btnGhost} style={btnGhostStyle}>{h.secondary}</a>
+              <Link href="/#clients" className={btnGhost} style={btnGhostStyle}>
+                {h.secondary}
+              </Link>
             </div>
           </div>
         </div>
