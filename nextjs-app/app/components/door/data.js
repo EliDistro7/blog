@@ -61,6 +61,135 @@ export const process = [
 
 export const currentPartners = [
   {
+    company: "SIFEX",
+    industry: { en: "International Shipping & Logistics", sw: "Usafirishaji wa Kimataifa na Logistics" },
+    location: { en: "Kipawa, Ilala, Dar es Salaam", sw: "Kipawa, Ilala, Dar es Salaam" },
+    website: "https://www.sifex.co.tz",
+    contact: "+255 688 930 963",
+    description: {
+      en: "Premium air cargo and sea freight company connecting China (Guangzhou), Dubai, and Tanzania. Future Holders promotes their services door-to-door across Dar es Salaam and beyond.",
+      sw: "Kampuni ya kimataifa ya usafirishaji wa anga na bahari inayounganisha China (Guangzhou), Dubai, na Tanzania. Future Holders inakuza huduma zao nyumba kwa nyumba kote Dar es Salaam na zaidi."
+    },
+    products: [
+      {
+        name: { en: "Air Cargo", sw: "Usafirishaji wa Anga" },
+        description: {
+          en: "Express air freight from Guangzhou (3–5 days) and Dubai (2–3 days) to Dar es Salaam, with real-time tracking and customs clearance included.",
+          sw: "Usafirishaji wa haraka wa anga kutoka Guangzhou (siku 3–5) na Dubai (siku 2–3) hadi Dar es Salaam, na ufuatiliaji wa wakati halisi na uondoaji wa forodha umejumuishwa."
+        }
+      },
+      {
+        name: { en: "Sea Freight", sw: "Usafirishaji wa Bahari" },
+        description: {
+          en: "Cost-effective ocean freight (FCL & LCL) from Guangzhou (18–25 days) and Dubai (10–15 days) to Dar es Salaam and Zanzibar.",
+          sw: "Usafirishaji wa bahari wenye bei nafuu (FCL & LCL) kutoka Guangzhou (siku 18–25) na Dubai (siku 10–15) hadi Dar es Salaam na Zanzibar."
+        }
+      },
+      {
+        name: { en: "Door-to-Door Delivery", sw: "Utoaji Mlango hadi Mlango" },
+        description: {
+          en: "End-to-end import logistics from supplier pickup in China or Dubai to final delivery anywhere in Tanzania.",
+          sw: "Logistics kamili ya kuagiza kutoka kwa msambazaji China au Dubai hadi utoaji wa mwisho popote Tanzania."
+        }
+      },
+      {
+        name: { en: "Cargo Consolidation", sw: "Ujumuishaji wa Mzigo" },
+        description: {
+          en: "Smart consolidation for smaller shipments — share container space and shipping costs with other importers.",
+          sw: "Ujumuishaji wa akili kwa mizigo midogo — shiriki nafasi ya kontena na gharama za usafirishaji na waagizaji wengine."
+        }
+      },
+      {
+        name: { en: "Express Courier", sw: "Ujumbe wa Haraka" },
+        description: {
+          en: "Priority handling for urgent documents and parcels crossing international borders.",
+          sw: "Ushughulikiaji wa kipaumbele kwa hati na vifurushi vya haraka vinavyovuka mipaka ya kimataifa."
+        }
+      }
+    ]
+  },
+  {
+    company: "SIMBA CARGO",
+    industry: { en: "Import Logistics & Freight Forwarding", sw: "Logistics ya Kuagiza na Usafirishaji" },
+    location: { en: "New Ushirika Tower, 11th–12th Floor, Lumumba St, Kariakoo, Dar es Salaam", sw: "New Ushirika Tower, Ghorofa 11–12, Mtaa wa Lumumba, Kariakoo, Dar es Salaam" },
+    contact: "+255 677 776 633 / +255 676 888 000 / +255 659 444 666",
+    description: {
+      en: "Established cargo forwarder specialising in imports from China and Dubai. Future Holders promotes their services to businesses and individuals who need reliable freight at competitive rates.",
+      sw: "Kampuni imara ya usafirishaji inayobobea katika uagizaji kutoka China na Dubai. Future Holders inakuza huduma zao kwa biashara na watu binafsi wanaohitaji usafirishaji wa kuaminika kwa bei shindani."
+    },
+    products: [
+      {
+        name: { en: "Sea Freight from China", sw: "Usafirishaji wa Bahari kutoka China" },
+        description: {
+          en: "Groupage (LCL) and full container (FCL) shipments from Guangzhou, Yiwu, and Keqiao warehouses to Dar es Salaam — approximately 35 days transit.",
+          sw: "Mizigo ya pamoja (LCL) na kontena kamili (FCL) kutoka maghala ya Guangzhou, Yiwu, na Keqiao hadi Dar es Salaam — takribani siku 35 za usafiri."
+        }
+      },
+      {
+        name: { en: "Air Freight from Dubai", sw: "Usafirishaji wa Anga kutoka Dubai" },
+        description: {
+          en: "Fast air cargo from Dubai to Dar es Salaam for time-sensitive goods, with all clearing and forwarding fees included in the final price.",
+          sw: "Usafirishaji wa haraka wa anga kutoka Dubai hadi Dar es Salaam kwa bidhaa zinazohitaji haraka, na ada zote za uondoaji wa forodha zimejumuishwa katika bei ya mwisho."
+        }
+      },
+      {
+        name: { en: "Warehousing & Inspection", sw: "Uhifadhi na Ukaguzi" },
+        description: {
+          en: "Receive, record, and quality-inspect your goods at Simba's China warehouses before they leave the origin country.",
+          sw: "Pokea, rekodi, na kagua ubora wa bidhaa zako kwenye maghala ya Simba China kabla hazijaondoka nchini chanzo."
+        }
+      },
+      {
+        name: { en: "Customs Clearance & Insurance", sw: "Uondoaji wa Forodha na Bima" },
+        description: {
+          en: "Full customs clearance handled on arrival in Dar es Salaam. Cargo insurance is available — lost shipments are compensated in full.",
+          sw: "Uondoaji kamili wa forodha unashughulikiwa ukifika Dar es Salaam. Bima ya mzigo inapatikana — mizigo iliyopotea inalipwa fidia kamili."
+        }
+      }
+    ]
+  },
+  {
+    company: "BESTAN LIMITED",
+    industry: { en: "Geotextile & Building Insulation Manufacturing", sw: "Utengenezaji wa Geotextile na Insulation ya Ujenzi" },
+    location: { en: "Vingunguti, Pugu Road (along Julius Nyerere Road), Dar es Salaam", sw: "Vingunguti, Barabara ya Pugu (karibu na Barabara ya Julius Nyerere), Dar es Salaam" },
+    website: "https://bestan.co.tz",
+    contact: "+255 744 403 087",
+    description: {
+      en: "Tanzania's first geotextile manufacturing factory, with 20+ years of experience supplying sustainable construction materials across East Africa. Future Holders promotes their products to contractors, engineers, and developers door-to-door.",
+      sw: "Kiwanda cha kwanza cha utengenezaji wa geotextile Tanzania, chenye uzoefu wa miaka 20+ katika kusambaza vifaa vya ujenzi endelevu Afrika Mashariki. Future Holders inakuza bidhaa zao kwa wakandarasi, wahandisi, na watengenezaji nyumba kwa nyumba."
+    },
+    products: [
+      {
+        name: { en: "BS® Geotextile", sw: "BS® Geotextile" },
+        description: {
+          en: "Non-woven geotextile fabric for soil separation, filtration, drainage, and stabilisation on road, infrastructure, and construction projects. ISO 9001 certified.",
+          sw: "Kitambaa cha geotextile kisio kwa ajili ya utenganishaji wa udongo, uchujaji, mifereji ya maji, na uimarishaji wa barabara, miundombinu, na miradi ya ujenzi. Imeidhinishwa ISO 9001."
+        }
+      },
+      {
+        name: { en: "BS® Polywool Fibre Boards", sw: "BS® Mbao za Nyuzi za Polywool" },
+        description: {
+          en: "Eco-friendly polywool fibre boards delivering superior acoustic and thermal insulation for modern green buildings and commercial construction.",
+          sw: "Mbao za nyuzi za polywool zinazofaa mazingira zinazotoa insulation bora ya sauti na joto kwa majengo ya kisasa ya kijani na ujenzi wa biashara."
+        }
+      },
+      {
+        name: { en: "BS® Sound Insulation", sw: "BS® Insulation ya Sauti" },
+        description: {
+          en: "Specialist soundproofing panels that reduce noise transmission between walls, floors, and ceilings in residential and commercial buildings.",
+          sw: "Paneli maalum za kuzuia sauti zinazopunguza upitishaji wa kelele kati ya kuta, sakafu, na dari katika majengo ya makazi na biashara."
+        }
+      },
+      {
+        name: { en: "BS® Thermal, Sound & Waterproof Insulation", sw: "BS® Insulation ya Joto, Sauti na Kuzuia Maji" },
+        description: {
+          en: "All-in-one insulation board combining thermal regulation, acoustic dampening, and waterproofing — ideal for roofing, factory flooring, and energy-efficient construction.",
+          sw: "Bodi ya insulation yote kwa moja inayounganisha udhibiti wa joto, uzuiaji wa sauti, na kuzuia maji — bora kwa paa, sakafu za viwanda, na ujenzi wenye ufanisi wa nishati."
+        }
+      }
+    ]
+  },
+  {
     company: "MAGNA",
     industry: { en: "Stationery & Office Supplies", sw: "Vifaa vya Ofisi" },
     products: [
