@@ -374,7 +374,7 @@ const EquipmentSalesPage = () => {
         </ul>
       </Section>
 
-      {/* ═════════ PRICING ═════════ */}
+      {/* ═════════ PRICING ═════════ 
       <Section id="pricing" labelledby="equip-pricing-title" pattern="equipPricingPattern">
         <SectionHead id="equip-pricing-title" label={c.pricing.label} title={c.pricing.title} subtitle={c.pricing.sub} />
         <ul className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
@@ -419,6 +419,7 @@ const EquipmentSalesPage = () => {
           })}
         </ul>
       </Section>
+      */}
 
       {/* ═════════ FAQ ═════════ */}
       <Section id="faq" labelledby="equip-faq-title" pattern="equipFaqPattern">
