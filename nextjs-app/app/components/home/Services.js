@@ -1,11 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
   Palette, Users, ShoppingCart, Share2, FileText, Globe,
-  ArrowRight, MessageCircle,
+  ArrowRight, MessageCircle, ChevronLeft, ChevronRight, Pause, Play,
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -20,8 +20,9 @@ const RULE     = 'rgba(245,240,232,0.16)';
 const BORDER_S = 'rgba(245,158,11,0.35)';
 
 const WHATSAPP_NUMBER = '255745787370';
+const SLIDE_MS = 6500;
 
-// ── Subtle African pattern (kept quiet so the photography leads) ─────────────
+// ── Subtle African pattern ────────────────────────────────────────────────────
 const AfricanPattern = ({ id }) => (
   <svg
     width="100%" height="100%"
@@ -41,24 +42,69 @@ const AfricanPattern = ({ id }) => (
   </svg>
 );
 
+// ── Carousel slides: swap images / service ids freely ────────────────────────
+// `focus` is the object-position so each photo is cropped around its subject.
+const slides = [
+  {
+    service: 'door-to-door',
+    image: '/services/door.jpeg',
+    focus: '60% 30%',
+    alt:   { en: 'Future Holders team talking with a customer at their door', sw: 'Timu ya Future Holders ikizungumza na mteja mlangoni kwake' },
+    kicker:{ en: 'Door-to-door marketing', sw: 'Uuzaji nyumba kwa nyumba' },
+    line:  { en: 'Real conversations at your customers’ doors.', sw: 'Mazungumzo halisi mlangoni kwa wateja wako.' },
+  },
+  {
+    service: 'equipment-sales',
+    image: '/equipment/hero.jpeg',
+    focus: '50% 55%',
+    alt:   { en: 'Excavators lined up at dusk', sw: 'Wachimbaji wakiwa wamepangwa jioni' },
+    kicker:{ en: 'Equipment sales', sw: 'Mauzo ya vifaa' },
+    line:  { en: 'Machines that work as hard as you do.', sw: 'Vifaa vinavyofanya kazi kwa bidii kama wewe.' },
+  },
+  {
+    service: 'tender-applications',
+    image: '/equipment/process.jpeg',
+    focus: '50% 50%',
+    alt:   { en: 'Excavator loaded on a flat rack at the port', sw: 'Mchimbaji amepakiwa bandarini' },
+    kicker:{ en: 'Tender applications', sw: 'Maombi ya zabuni' },
+    line:  { en: 'Bids that are complete and on time.', sw: 'Zabuni kamili na kwa wakati.' },
+  },
+  {
+    service: 'web-development',
+    image: '/equipment/cta.jpeg',
+    focus: '50% 45%',
+    alt:   { en: 'Crane truck on site', sw: 'Lori la kreni eneo la kazi' },
+    kicker:{ en: 'Web development', sw: 'Ujenzi wa tovuti' },
+    line:  { en: 'A website live in as little as 10 days.', sw: 'Tovuti hewani kwa siku 10 tu.' },
+  },
+  {
+    service: 'branding',
+    image: '/equipment/services.jpeg',
+    focus: '50% 40%',
+    alt:   { en: 'Sales representative standing with machines', sw: 'Mwakilishi wa mauzo akiwa na vifaa' },
+    kicker:{ en: 'Branding & identity', sw: 'Utambulisho wa brand' },
+    line:  { en: 'A brand people remember.', sw: 'Brand ambayo watu wanaikumbuka.' },
+  },
+];
+
 // ── Copy ──────────────────────────────────────────────────────────────────────
 const copy = {
   en: {
     hero: {
       badge: "Tanzania's marketing & digital agency",
-      title: ['Marketing that puts', 'your business', 'in front of Tanzania'],
-      caption: 'Door-to-door marketing in the field',
+      title: 'Marketing that puts your business in front of Tanzania',
       subtitle:
         'Branding, websites, social media and door-to-door sales from one local team. Trusted by 40+ businesses across the country.',
       primary: 'Chat on WhatsApp',
       secondary: 'See our services',
-      imageAlt: 'Future Holders team talking with a customer at their door',
       stats: [
         { value: '50+', label: 'Websites delivered' },
         { value: '40+', label: 'Happy clients' },
         { value: '5+',  label: 'Years of experience' },
       ],
       whatsapp: "Hi! I'd like to start a project with Future Holders. Can you help?",
+      prev: 'Previous slide', next: 'Next slide', pause: 'Pause slideshow', play: 'Play slideshow',
+      goTo: 'Go to slide',
     },
     services: {
       label: 'What we offer',
@@ -71,19 +117,19 @@ const copy = {
   sw: {
     hero: {
       badge: 'Wakala wa masoko na kidijitali Tanzania',
-      title: ['Masoko yanayoifikisha', 'biashara yako', 'kwa Watanzania'],
-      caption: 'Uuzaji nyumba kwa nyumba uwandani',
+      title: 'Masoko yanayoifikisha biashara yako kwa Watanzania',
       subtitle:
         'Utambulisho wa brand, tovuti, mitandao ya kijamii na mauzo ya nyumba kwa nyumba kutoka timu moja ya hapa nchini. Tumeaminiwa na biashara 40+ kote nchini.',
       primary: 'Ongea nasi WhatsApp',
       secondary: 'Tazama huduma zetu',
-      imageAlt: 'Timu ya Future Holders ikizungumza na mteja mlangoni kwake',
       stats: [
         { value: '50+', label: 'Tovuti zilizotolewa' },
         { value: '40+', label: 'Wateja wenye furaha' },
         { value: '5+',  label: 'Miaka ya uzoefu' },
       ],
       whatsapp: 'Hujambo! Ningependa kuanza mradi na Future Holders. Je, mnaweza kunisaidia?',
+      prev: 'Slaidi iliyopita', next: 'Slaidi inayofuata', pause: 'Simamisha slaidi', play: 'Endesha slaidi',
+      goTo: 'Nenda kwenye slaidi',
     },
     services: {
       label: 'Tunachotoa',
@@ -106,7 +152,7 @@ const services = [
       sw: 'Tovuti na maduka ya mtandaoni ya kitaalamu na ya haraka, yanayojengwa na kuzinduliwa kwa siku 10 tu.',
     },
     icon: Globe,
-    image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=75', // add this image to /public/services
+    image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=75',
     accent: AMBER,
     features: [
       { en: 'Business Websites', sw: 'Tovuti za Biashara' },
@@ -134,9 +180,9 @@ const services = [
       en: 'Content, community and paid ads across every platform, with reports that show what is working.',
       sw: 'Maudhui, jumuiya na matangazo katika majukwaa yote, pamoja na ripoti zinazoonyesha kinachofanya kazi.',
     },
-   icon: Share2,
-image: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=900&q=75',
-accent: AMBER,
+    icon: Share2,
+    image: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=900&q=75',
+    accent: AMBER,
   },
   {
     id: 'door-to-door',
@@ -179,12 +225,57 @@ accent: AMBER,
 const focusRing =
   'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber';
 
+// ── Hero carousel styles (one tiny block, scoped by class prefix) ────────────
+const carouselCss = `
+@keyframes fh-fill   { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes fh-drift  { from { transform: scale(1.0); } to { transform: scale(1.07); } }
+@keyframes fh-rise   { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+.fh-slide        { opacity: 0; transition: opacity 1100ms ease; }
+.fh-slide.is-on  { opacity: 1; }
+.fh-slide.is-on .fh-photo { animation: fh-drift ${SLIDE_MS + 1500}ms ease-out forwards; }
+.fh-caption      { animation: fh-rise 700ms cubic-bezier(.2,.7,.2,1) both; }
+.fh-fill         { transform-origin: left; transform: scaleX(0); }
+.fh-fill.is-done { transform: scaleX(1); }
+.fh-fill.is-live { animation: fh-fill ${SLIDE_MS}ms linear forwards; }
+.fh-paused .fh-fill.is-live,
+.fh-paused .fh-photo { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fh-slide { transition: none; }
+  .fh-slide.is-on .fh-photo, .fh-caption { animation: none; }
+  .fh-fill.is-live { animation: none; transform: scaleX(1); }
+}
+`;
+
 // ── Component ─────────────────────────────────────────────────────────────────
 const ServicesShowcase = () => {
   const { language } = useLanguage();
   const lang = language === 'sw' ? 'sw' : 'en';
   const c = copy[lang];
   const tr = (obj) => obj[lang] || obj.en;
+
+  const [index, setIndex] = useState(0);
+  const [userPaused, setUserPaused] = useState(false);
+  const [hoverPaused, setHoverPaused] = useState(false);
+  const touchX = useRef(null);
+
+  const paused = userPaused || hoverPaused;
+  const go   = useCallback((i) => setIndex((i + slides.length) % slides.length), []);
+  const next = useCallback(() => setIndex((i) => (i + 1) % slides.length), []);
+  const prev = useCallback(() => setIndex((i) => (i - 1 + slides.length) % slides.length), []);
+
+  const onTouchStart = (e) => { touchX.current = e.touches[0].clientX; };
+  const onTouchEnd = (e) => {
+    if (touchX.current == null) return;
+    const dx = e.changedTouches[0].clientX - touchX.current;
+    touchX.current = null;
+    if (Math.abs(dx) > 48) (dx < 0 ? next : prev)();
+  };
+  const onKeyDown = (e) => {
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft') prev();
+  };
 
   const openWhatsApp = (message) =>
     window.open(
@@ -195,34 +286,63 @@ const ServicesShowcase = () => {
 
   const [featured, ...rest] = services;
   const FeaturedIcon = featured.icon;
+  const active = slides[index];
+
+  const ctrlBtn =
+    `inline-flex items-center justify-center rounded-full transition-colors hover:bg-white/10 ${focusRing}`;
+  const ctrlStyle = { width: 44, height: 44, border: `1px solid ${RULE}`, color: CREAM, background: 'rgba(13,9,3,0.35)' };
 
   return (
     <div style={{ background: SURFACE }}>
-      {/* ═════════════════ COVER: image first ═════════════════ */}
+      <style>{carouselCss}</style>
+
+      {/* ═════════════════ COVER: living photo carousel ═════════════════ */}
       <section aria-labelledby="hero-title">
         <div
-  className="relative w-full overflow-hidden h-[clamp(34rem,90vh,54rem)] lg:h-auto lg:aspect-[16/9] lg:min-h-[36rem] lg:max-h-[60rem]"
-  style={{ background: DARK }}
->
-          <Image
-            src="/services/door.jpeg"
-            alt={c.hero.imageAlt}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-[60%_30%]"
-          />
-          {/* Top scrim keeps the fixed header readable; bottom scrim carries the headline */}
+          className={`relative w-full overflow-hidden h-[clamp(36rem,92vh,56rem)] lg:h-auto lg:aspect-[16/9] lg:min-h-[38rem] lg:max-h-[60rem] ${paused ? 'fh-paused' : ''}`}
+          style={{ background: DARK }}
+          role="group"
+          aria-roledescription="carousel"
+          aria-label={tr({ en: 'Featured services', sw: 'Huduma zilizoangaziwa' })}
+          tabIndex={0}
+          onKeyDown={onKeyDown}
+          onMouseEnter={() => setHoverPaused(true)}
+          onMouseLeave={() => setHoverPaused(false)}
+          onFocus={() => setHoverPaused(true)}
+          onBlur={() => setHoverPaused(false)}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+        >
+          {/* Stacked slides crossfade */}
+          {slides.map((s, i) => (
+            <div
+              key={s.service + i}
+              className={`fh-slide absolute inset-0 ${i === index ? 'is-on' : ''}`}
+              aria-hidden={i !== index}
+            >
+              <Image
+                src={s.image}
+                alt={i === index ? tr(s.alt) : ''}
+                fill
+                priority={i === 0}
+                sizes="100vw"
+                className="fh-photo object-cover"
+                style={{ objectPosition: s.focus }}
+              />
+            </div>
+          ))}
+
+          {/* Scrims: top for the fixed header, bottom for the headline */}
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                'linear-gradient(to bottom, rgba(13,9,3,0.55) 0%, rgba(13,9,3,0) 22%), linear-gradient(to top, rgba(26,18,8,1) 0%, rgba(26,18,8,0.75) 28%, rgba(26,18,8,0) 65%)',
+                'linear-gradient(to bottom, rgba(13,9,3,0.55) 0%, rgba(13,9,3,0) 22%), linear-gradient(to top, rgba(26,18,8,1) 0%, rgba(26,18,8,0.82) 30%, rgba(26,18,8,0) 70%)',
             }}
           />
 
           <div className="absolute inset-x-0 bottom-0">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-10 lg:pb-6">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-8 lg:pb-8">
               <div className="flex items-center gap-3 mb-5">
                 <div style={{ width: '3rem', height: 3, background: AMBER, borderRadius: 2, flexShrink: 0 }} />
                 <span className="font-display font-bold text-sm" style={{ color: AMBER, letterSpacing: '0.04em' }}>
@@ -234,31 +354,92 @@ const ServicesShowcase = () => {
                 id="hero-title"
                 className="font-display font-extrabold max-w-5xl"
                 style={{
-                  fontSize: 'clamp(2.75rem, 8.5vw, 7rem)',
-                  lineHeight: 0.96,
+                  fontSize: 'clamp(2.5rem, 7.2vw, 6rem)',
+                  lineHeight: 0.98,
                   letterSpacing: '-0.035em',
                   color: CREAM,
                 }}
               >
-                {c.hero.title[0]}{' '}
-                <span style={{ color: AMBER }}>{c.hero.title[1]}</span>{' '}
-                {c.hero.title[2]}
+                {c.hero.title}
               </h1>
+
+              {/* Slide caption + controls */}
+              <div
+                className="mt-8 pt-5 flex flex-col md:flex-row md:items-end md:justify-between gap-6"
+                style={{ borderTop: `1px solid ${RULE}` }}
+              >
+                <div key={index} className="fh-caption max-w-xl" aria-live={paused ? 'polite' : 'off'}>
+                  <p className="font-display font-bold text-sm" style={{ color: AMBER }}>
+                    {tr(active.kicker)}
+                  </p>
+                  <p className="mt-1 leading-snug" style={{ color: CREAM, fontSize: 'clamp(1.1rem, 2vw, 1.5rem)' }}>
+                    {tr(active.line)}
+                  </p>
+                  <Link
+                    href={`/services/${active.service}`}
+                    className={`group inline-flex items-center gap-2 mt-3 font-display font-bold text-sm ${focusRing}`}
+                    style={{ color: AMBER }}
+                  >
+                    {c.services.explore}
+                    <ArrowRight size={16} className="motion-safe:transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  {/* Segmented progress = navigation */}
+                  <div className="flex items-center gap-2" role="tablist" aria-label={c.hero.goTo}>
+                    {slides.map((s, i) => {
+                      const state = i < index ? 'is-done' : i === index ? 'is-live' : '';
+                      return (
+                        <button
+                          key={s.service + i}
+                          type="button"
+                          role="tab"
+                          aria-selected={i === index}
+                          aria-label={`${c.hero.goTo} ${i + 1}: ${tr(s.kicker)}`}
+                          onClick={() => go(i)}
+                          className={`relative flex items-center ${focusRing}`}
+                          style={{ width: 'clamp(1.75rem, 5vw, 3rem)', height: 24 }}
+                        >
+                          <span className="block w-full overflow-hidden rounded-full" style={{ height: 3, background: RULE }}>
+                            <span
+                              key={i === index ? `live-${index}` : `s-${i}`}
+                              className={`fh-fill block h-full ${state}`}
+                              style={{ background: AMBER }}
+                              onAnimationEnd={i === index ? next : undefined}
+                            />
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button type="button" onClick={prev} aria-label={c.hero.prev} className={ctrlBtn} style={ctrlStyle}>
+                      <ChevronLeft size={18} />
+                    </button>
+                    <button type="button" onClick={next} aria-label={c.hero.next} className={ctrlBtn} style={ctrlStyle}>
+                      <ChevronRight size={18} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setUserPaused((p) => !p)}
+                      aria-label={userPaused ? c.hero.play : c.hero.pause}
+                      className={ctrlBtn}
+                      style={ctrlStyle}
+                    >
+                      {userPaused ? <Play size={16} /> : <Pause size={16} />}
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-
-          {/* Photo caption, magazine style */}
-          <p
-            className="hidden md:block absolute right-8 top-28 text-xs italic"
-            style={{ color: 'rgba(245,240,232,0.8)', textShadow: '0 1px 8px rgba(0,0,0,0.6)' }}
-          >
-            {c.hero.caption}
-          </p>
         </div>
 
         {/* Standfirst + proof */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 lg:pb-24">
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-8 pt-8" style={{ borderTop: `1px solid ${RULE}` }}>
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-8">
             <div className="lg:col-span-6">
               <p className="leading-snug mb-8" style={{ color: CREAM, fontSize: 'clamp(1.15rem, 2vw, 1.5rem)' }}>
                 {c.hero.subtitle}
@@ -315,7 +496,6 @@ const ServicesShowcase = () => {
         <AfricanPattern id="svcPattern" />
 
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Section head */}
           <div
             className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 pt-8 mb-12"
             style={{ borderTop: `1px solid ${RULE}` }}
@@ -398,10 +578,7 @@ const ServicesShowcase = () => {
               const Icon = svc.icon;
               return (
                 <li key={svc.id}>
-                  <Link
-                    href={`/services/${svc.id}`}
-                    className={`group block ${focusRing}`}
-                  >
+                  <Link href={`/services/${svc.id}`} className={`group block ${focusRing}`}>
                     <div className="relative overflow-hidden rounded mb-5" style={{ aspectRatio: '4 / 3', background: DARK }}>
                       <Image
                         src={svc.image}
