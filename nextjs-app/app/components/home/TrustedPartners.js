@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {
   ArrowRight, MessageCircle, PartyPopper, Truck, Wrench, Factory, Landmark, ChefHat,
-  
+  Shield, TrendingUp, Package, Zap,
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -79,6 +79,121 @@ const copy = {
 
 
 const clients = [
+   {
+    id: 'alladin',
+    name: 'Alladin Event Supplies',
+    image: '/partners/alladin.jpeg',
+    bg: '#EEAA3C',
+    Icon: PartyPopper,
+    sector: { en: 'Event supplies', sw: 'Vifaa vya matukio' },
+    tagline: 'We Got You All, You All Got Us',
+    accent: AMBER,
+  },
+  {
+    id: 'selair',
+    name: 'Selair Logistics',
+    image: '/partners/selair.jpeg',
+    bg: '#010028',
+    Icon: Truck,
+    sector: { en: 'Logistics', sw: 'Usafirishaji' },
+    accent: GOLD,
+  },
+  {
+    id: 'fasteners',
+    name: 'Tanzania Fasteners Ltd',
+    image: '/partners/fasteners.jpeg',
+    bg: '#000000',
+    Icon: Wrench,
+    sector: { en: 'Fasteners & hardware', sw: 'Vifungio na vifaa' },
+    accent: AMBER,
+  },
+  {
+    id: 'simba',
+    name: 'Simba',
+    image: '/partners/simba.jpeg',
+    bg: '#F4F3F2',
+    Icon: Factory,
+    sector: { en: 'Industrial supplies', sw: 'Bidhaa za viwandani' },
+    tagline: 'Where Quality Meets Industrial Needs',
+    accent: GOLD,
+  },
+  {
+    id: 'nest',
+    name: 'NeST',
+    image: '/partners/nest.jpeg',
+    bg: '#FFFFFF',
+    Icon: Landmark,
+    sector: { en: 'Public procurement', sw: 'Manunuzi ya umma' },
+    tagline: 'National e-Procurement System of Tanzania',
+    accent: AMBER,
+  },
+  {
+    id: 'mikaela',
+    name: 'Mikaela',
+    image: '/partners/mikaela.jpeg',
+    bg: '#FFFFFF',
+    Icon: ChefHat,
+    sector: { en: 'Food & catering', sw: 'Chakula na upishi' },
+    accent: GOLD,
+  },
+
+  // ── new clients ────────────────────────────────────────────────────────────
+  {
+    id: 'simba-cargo',
+    name: 'Simba Cargo',
+    image: '/partners/simba-cargo.jpeg',
+    bg: '#000000',
+    Icon: Truck,
+    sector: { en: 'Cargo & freight', sw: 'Usafirishaji wa mizigo' },
+    accent: AMBER,
+  },
+  {
+    id: 'marketric',
+    name: 'Marketric Security & Services',
+    image: '/partners/marketric.jpeg',
+    bg: '#0D0D0D',
+    Icon: Shield,
+    sector: { en: 'Security services', sw: 'Huduma za usalama' },
+    tagline: 'Vigilant · Reliable · Trusted',
+    accent: GOLD,
+  },
+  {
+    id: 'af-advisory',
+    name: 'A&F Advisory Ltd',
+    image: '/partners/af-advisory.jpeg',
+    bg: '#F0F0F0',
+    Icon: TrendingUp,
+    sector: { en: 'Advisory & consulting', sw: 'Ushauri na usimamizi' },
+    accent: AMBER,
+  },
+  {
+    id: 'kuaid-cargo',
+    name: 'Kuaid Cargo',
+    image: '/partners/kuaid-cargo.jpeg',
+    bg: '#E8F4FC',
+    Icon: Package,
+    sector: { en: 'Cargo & freight', sw: 'Usafirishaji wa mizigo' },
+    accent: GOLD,
+  },
+  {
+    id: 'voto',
+    name: 'Voto Limited',
+    image: '/partners/voto.jpeg',
+    bg: '#FFFFFF',
+    Icon: TrendingUp,
+    sector: { en: 'Business services', sw: 'Huduma za biashara' },
+    accent: AMBER,
+  },
+  {
+    id: 'chui',
+    name: 'Chui Solar Battery',
+    image: '/partners/chui.jpeg',
+    bg: '#5BC8E0',
+    Icon: Zap,
+    sector: { en: 'Energy & solar', sw: 'Nishati na jua' },
+    tagline: 'The Power Leader',
+    accent: GOLD,
+  },
   {
     id: 'alladin',
     name: 'Alladin Event Supplies',
