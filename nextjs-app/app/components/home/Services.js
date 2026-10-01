@@ -123,7 +123,7 @@ const services = [
       sw: 'Muundo wa logo, miongozo ya brand na utambulisho wa kuona unaofanya biashara yako ikumbukwe.',
     },
     icon: Palette,
-    image: 'https://images.unsplash.com/photo-1600132806608-231446b2e7af?auto=format&fit=crop&w=900&q=75',
+    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=2000&q=75',
     accent: GOLD,
   },
   {

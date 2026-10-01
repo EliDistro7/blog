@@ -1,27 +1,23 @@
 'use client';
 
 // @/app/components/equipment/shared.js
-// Tokens and building blocks live in the tender module so every page matches.
-// When convenient, move that file to @/app/components/shared and update imports.
 export * from '@/app/components/tender/shared';
 
-const u = (id, w = 1600) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=75`;
-
-// Every photo lives here so swapping one is a one-line change.
-// Remote images need next.config: images.remotePatterns -> images.unsplash.com
-// Prefer real photos of your own stock: drop them in /public/equipment and use '/equipment/x.jpg'.
+// Local images served from /public/equipment/
+// To swap a photo, replace the file and update the path here.
 export const EQUIP_IMAGES = {
-  hero:     u('1541888946425-d81bb19240f5', 2000),
-  services: u('1590496793929-36417d3117de', 1200),
-  process:  u('1621905251189-08b45d6a269e', 1200),
-  faq:      u('1581094794329-c8112a89af12', 1000),
-  cta:      u('1504307651254-35680f356dfd', 2000),
-  // Order matches equipmentCategories
+  hero:     '/equipment/hero.jpeg',         // equip.jpeg — row of ZE335E excavators at dusk
+  services: '/equipment/services.jpeg',     // man in Zoomlion shirt with machines
+  process:  '/equipment/process.jpeg',      // excavator on CMA CGM flat rack at port
+  faq:      '/equipment/faq.jpeg',          // white lowbed trailer
+  cta:      '/equipment/cta.jpeg',          // Zoomlion TC500V crane truck
+
+  // Order must match equipmentCategories array in data.js
   categories: [
-    u('1579912437766-7896df6d3cd3', 1400), // Excavators
-    u('1580901368919-7738efb0f87e', 1400), // Bulldozers
-    u('1533106418989-88406c7cc8ca', 1400), // Wheel loaders
-    u('1601584115197-04ecc0da31d7', 1400), // Dump trucks
+    '/equipment/cat-excavators.jpeg',       // use your best excavator shot here
+    '/equipment/cat-bulldozers.jpeg',       // replace with a bulldozer photo when available
+    '/equipment/cat-loaders.jpeg',          // replace with a wheel loader photo when available
+    '/equipment/cat-dump-trucks.jpeg',      // replace with a dump truck photo when available
+    '/equipment/cat-lowbed.jpeg',           // red lowbed trailer
   ],
 };
