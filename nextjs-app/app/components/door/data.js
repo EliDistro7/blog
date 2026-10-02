@@ -234,53 +234,33 @@ export const currentPartners = [
       }
     ]
   },
+
+
+
   {
-    company: "TAMTAM",
-    industry: { en: "Food Distribution", sw: "Usambazaji wa Chakula" },
+    company: "ARIVEA GLOBAL",
+    industry: { en: "Feminine Hygiene Products", sw: "Bidhaa za Usafi wa Wanawake" },
+    website: "https://www.ariveaglobal.com",
+    description: {
+      en: "Arivea Sanitary Pads made with soft cotton and anion chips for menstrual hygiene and daily protection. Features include an anion chip for freshness and odour reduction, 8-hour leak protection, and rash-free comfort for sensitive skin.",
+      sw: "Taulo za kike za Arivea zilizotengenezwa kwa pamba laini na chipu za anion kwa usafi wa hedhi na ulinzi wa kila siku. Zina chipu ya anion kwa ubaridi na kupunguza harufu, ulinzi wa saa 8 dhidi ya uvujaji, na faraja isiyosababisha vipele kwa ngozi nyeti."
+    },
     products: [
       {
-        name: { en: "Wholesale Distribution", sw: "Usambazaji wa Jumla" },
-        description: { en: "Bulk food distribution services", sw: "Huduma za usambazaji wa chakula kwa wingi" }
-      }
-    ]
-  },
-  {
-    company: "EX-PIDO",
-    industry: { en: "Food & Spices", sw: "Chakula na Viungo" },
-    products: [
-      {
-        name: { en: "Mosquito Repellent", sw: "Dawa ya Mbu" },
-        description: { en: "Natural mosquito repellent products", sw: "Bidhaa za asili za kuzuia mbu" }
+        name: { en: "Ultimate 338mm", sw: "Ultimate 338mm" },
+        description: { en: "For nighttime or heavy flow protection (8 pads per pack)", sw: "Kwa ulinzi wa usiku au mtiririko mkubwa (taulo 8 kwa pakiti)" }
       },
       {
-        name: { en: "Thyme Sticks", sw: "Vijiti vya Thyme" },
-        description: { en: "Natural thyme sticks for flavoring", sw: "Vijiti vya thyme vya asili kwa ladha" }
+        name: { en: "Ultimate 290mm", sw: "Ultimate 290mm" },
+        description: { en: "For regular daytime use and strong coverage (10 pads per pack)", sw: "Kwa matumizi ya kawaida ya mchana na ulinzi imara (taulo 10 kwa pakiti)" }
       },
       {
-        name: { en: "Turmeric", sw: "Manjano" },
-        description: { en: "Pure turmeric powder and sticks", sw: "Unga na vijiti vya manjano safi" }
-      }
-    ]
-  },
-  {
-    company: "SAADO FOODS",
-    industry: { en: "Confectionery & Food Products", sw: "Peremende na Bidhaa za Chakula" },
-    products: [
-      {
-        name: { en: "Chocolate", sw: "Chokoleti" },
-        description: { en: "Premium chocolate products and confectionery", sw: "Bidhaa za chokoleti na peremende za hali ya juu" }
+        name: { en: "Ultimate 180mm", sw: "Ultimate 180mm" },
+        description: { en: "For lighter days or post-period use (25 pads per pack)", sw: "Kwa siku nyepesi au matumizi baada ya hedhi (taulo 25 kwa pakiti)" }
       },
       {
-        name: { en: "Finger Chocolate", sw: "Chokoleti ya Kidole" },
-        description: { en: "Finger-shaped chocolate snacks", sw: "Vitafunio vya chokoleti vya umbo la kidole" }
-      },
-      {
-        name: { en: "Top Corn", sw: "Mahindi Bora" },
-        description: { en: "Premium corn-based snack products", sw: "Vitafunio vya mahindi vya hali ya juu" }
-      },
-      {
-        name: { en: "Biscuits", sw: "Biskuti" },
-        description: { en: "Various types of biscuits and cookies", sw: "Aina mbalimbali za biskuti na mikate" }
+        name: { en: "Avyra Graphene", sw: "Avyra Graphene" },
+        description: { en: "Advanced napkins for lasting freshness and heavy flow absorption", sw: "Taulo za kisasa kwa ubaridi wa kudumu na kunyonya mtiririko mkubwa" }
       }
     ]
   }

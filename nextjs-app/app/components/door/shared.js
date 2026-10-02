@@ -18,10 +18,12 @@ export const DOOR_IMAGES = {
   cta: u('1560472354-b33ff0c44a43', 2000),
   // Keyed by partner company name in data.js
   partners: {
+    'SIFEX': '/partners/sifex.jpeg',
+    'SIMBA CARGO': '/partners/simba-cargo.jpeg',
+    'BESTAN LIMITED': '/partners/bestan.jpeg',
     'MAGNA': u('1456735190827-d1262f71b8a3', 1200),
-    'CHRISTY QUALITY FOODS PVT LTD': u('1500382017468-9049fed747ef', 1200),
-    'TAMTAM': u('1586528116311-ad8dd3c8310d', 1200),
-    'EX-PIDO': u('1596040033229-a9821ebd058d', 1200),
-    'SAADO FOODS': u('1481391319762-47dff72954d9', 1200),
+    'CHRISTY QUALITY FOODS PVT LTD': '/door/tamtam.jpeg',
+    
+    'ARIVEA GLOBAL': '/partners/arivea.jpeg',
   },
 };
