@@ -23,7 +23,7 @@ const copy = {
       { label: 'Email us' },
       { label: 'Visit us' },
     ],
-    address: ['Dar es Salaam Business Center', 'Plot 123, Uhuru Road'],
+    address: ['Dar es Salaam ', 'Temeke'],
     trust: 'Experience across public and private procurement',
     trustItems: ['TRA', 'TANROADS', 'PPRA', 'Local Councils'],
     whatsapp: "Hi! I'd like to start a tender application with Future Holders.",
