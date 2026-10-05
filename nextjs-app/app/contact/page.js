@@ -71,7 +71,7 @@ const content = {
       text: 'Discover the talented professionals behind Future Holders and the work they deliver.',
       buttons: [
         { text: 'View our team', href: '/team' },
-        { text: 'See our portfolio', href: '/portfolio' },
+       
       ],
     },
   },
@@ -124,7 +124,7 @@ const content = {
       text: 'Gundua wataalamu wenye vipaji nyuma ya Future Holders na kazi wanazotoa.',
       buttons: [
         { text: 'Tazama timu yetu', href: '/team' },
-        { text: 'Ona portfolio yetu', href: '/portfolio' },
+    
       ],
     },
   },
