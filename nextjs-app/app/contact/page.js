@@ -7,14 +7,9 @@ import { Mail, Phone, MessageCircle, ArrowRight, CheckCircle2 } from 'lucide-rea
 
 const WHATSAPP_NUMBER = '255617833806'
 
-type FormData = {
-  name: string
-  email: string
-  service: string
-  message: string
-}
 
-const SERVICE_KEYS = ['profile', 'website', 'app', 'card', 'proposal'] as const
+
+const SERVICE_KEYS = ['profile', 'website', 'app', 'card', 'proposal'] 
 
 // ── reusable underline input class ──────────────────────────────────────────
 const inputBase =
@@ -31,9 +26,9 @@ export default function ContactPage() {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<FormData>()
+  } = useForm()
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data) => {
     // TODO: wire up to Resend / EmailJS / your preferred email API
     // await fetch('/api/contact', { method: 'POST', body: JSON.stringify(data) })
     console.log('Form submission:', data)
