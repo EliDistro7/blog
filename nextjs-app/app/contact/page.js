@@ -1,374 +1,285 @@
-'use client';
+'use client'
 
-import { Libre_Baskerville, Source_Sans_3 as Source_Sans_Pro } from "next/font/google";
-import { Mail, Phone, MapPin, Clock, Send, Camera, Utensils, Mic2, Share2, Users } from 'lucide-react';
-import Link from "next/link";
-import { useLanguage } from '@/context/LanguageContext';
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useLang } from '../../lib/i18n/LanguageContext'
+import { Mail, Phone, MessageCircle, ArrowRight, CheckCircle2 } from 'lucide-react'
 
-const baskerville = Libre_Baskerville({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-baskerville"
-});
+const WHATSAPP_NUMBER = '255617833806'
 
-const sourceSans = Source_Sans_Pro({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-source-sans"
-});
+type FormData = {
+  name: string
+  email: string
+  service: string
+  message: string
+}
+
+const SERVICE_KEYS = ['profile', 'website', 'app', 'card', 'proposal'] as const
+
+// ── reusable underline input class ──────────────────────────────────────────
+const inputBase =
+  'w-full bg-transparent border-b py-3 text-sm font-body text-bss-white placeholder-bss-muted outline-none transition-colors duration-200'
+const inputOk  = 'border-bss-border focus:border-bss-subtle'
+const inputErr = 'border-red-500'
 
 export default function ContactPage() {
-  const { language } = useLanguage();
+  const { t } = useLang()
+  const [sent, setSent] = useState(false)
 
-  // Translation content
-  const content = {
-    en: {
-      hero: {
-        title: "Connect With Future Holders",
-        subtitle: "Reach out to our multi-disciplinary team for all your service needs"
-      },
-      form: {
-        title: "Service Inquiry",
-        labels: {
-          name: "Full Name",
-          email: "Email Address",
-          service: "Service Needed",
-          message: "Project Details",
-          placeholder: "Tell us about your project needs..."
-        },
-        services: [
-          { value: "", label: "Select a service" },
-          { value: "web", label: "Web Design" },
-     
-          { value: "social", label: "Social Media" },
-         
-          { value: "team", label: "Team Services" }
-        ],
-        submit: "Send Inquiry"
-      },
-      serviceContacts: {
-        title: "Service-Specific Contacts",
-        items: [
-          {
-            title: "Web Design",
-            details: "For website development and digital solutions",
-            email: "sales@futureholder.pro",
-            phone: "+255 745 787 370"
-          },
-      
-          {
-            title: "Social Media",
-            details: "For digital marketing and brand growth",
-            email: "sales@futureholder.pro",
-            phone: "+255 745 787 370"
-          },
-       
-        ]
-      },
-      companyContacts: {
-        title: "Company Contacts",
-        items: [
-          {
-            title: "General Inquiries",
-            email: "info@futureholder.pro",
-            phone: "+255 745 787 370"
-          },
-      
-        
-        ]
-      },
-      cta: {
-        title: "Meet Our Expert Team",
-        subtitle: "Discover the talented professionals behind Future Holders diverse services",
-        buttons: [
-          { text: "View Our Team", href: "/team" },
-          { text: "See Our Portfolio", href: "/portfolio" }
-        ]
-      }
-    },
-    sw: {
-      hero: {
-        title: "Wasiliana Na Future Holders",
-        subtitle: "Pata huduma zote unazohitaji kutoka kwa timu yetu ya wataalamu"
-      },
-      form: {
-        title: "Utafiti wa Huduma",
-        labels: {
-          name: "Jina Kamili",
-          email: "Barua Pepe",
-          service: "Huduma Unayohitaji",
-          message: "Maelezo ya Mradi",
-          placeholder: "Tuambie kuhusu mahitaji ya mradi wako..."
-        },
-        services: [
-          { value: "", label: "Chagua huduma" },
-          { value: "web", label: "Uundaji wa Tovuti" },
-          { value: "catering", label: "Huduma za Upishi" },
-          { value: "social", label: "Mitandao ya Kijamii" },
-          { value: "mc", label: "Huduma za MC" },
-          { value: "portfolio", label: "Maonyesho ya Portfolio" },
-          { value: "team", label: "Huduma za Timu" }
-        ],
-        submit: "Tuma Utafiti"
-      },
-      serviceContacts: {
-        title: "Mawasiliano ya Huduma Maalum",
-        items: [
-          {
-            title: "Uundaji wa Tovuti",
-            details: "Kwa uundaji wa tovuti na suluhisho za kidijitali",
-            email: "sales@futureholder.pro",
-            phone: "+255 745 787 370"
-          },
-         
-          {
-            title: "Mitandao ya Kijamii",
-            details: "Kwa uuzaji wa kidijitali na ukuaji wa chapa",
-            email: "info@futureholder.pro",
-            phone: "+255 745 787 370"
-          },
-     
-        ]
-      },
-      companyContacts: {
-        title: "Mawasiliano ya Ofisi",
-        items: [
-            {
-            title: "CEO / Mkurugenzi",
-            email: "info@futureholder.pro",
-            phone: "+255 745 787 370"
-          },
-          {
-            title: "Maswali ya Jumla",
-            email: "info@futureholder.pro",
-            phone: "+255 765 762 688, +255 697 093 672, +255 628 673 512"
-          },
-          {
-            title: "Kazi",
-            email: "sales@futureholder.pro",
-            phone: "+255 745 787 370"
-          },
-          {
-            title: "Kuona Portfolio",
-            email: "info@futureholder.pro",
-            phone: "+255 745 787 370"
-          }
-        ]
-      },
-      cta: {
-        title: "Kutana Na Timu Yetu ya Wataalamu",
-        subtitle: "Gundua wataalamu wenye vipaji nyuma ya huduma mbalimbali za Future Holders",
-        buttons: [
-          { text: "Tazama Timu Yetu", href: "/team" },
-          { text: "Ona Portfolio Yetu", href: "/portfolio" }
-        ]
-      }
-    }
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<FormData>()
 
-  // Service contacts with icons and colors (updated for dark/gold theme)
-  const serviceContacts = content[language].serviceContacts.items.map((item, index) => {
-    const icons = [
-      <Camera key='camera-icon' className="w-5 h-5 text-brand-gold" />,
-      <Utensils key='utensils-icon' className="w-5 h-5 text-brand-goldLight" />,
-      <Share2 key='share-2' className="w-5 h-5 text-brand-gold" />,
-      <Mic2 key='mic2' className="w-5 h-5 text-brand-goldLight" />
-    ];
-    const colors = [
-      { bg: "bg-brand-gold/10", border: "border-brand-gold/30" },
-      { bg: "bg-brand-goldLight/10", border: "border-brand-goldLight/30" },
-      { bg: "bg-brand-gold/10", border: "border-brand-gold/30" },
-      { bg: "bg-brand-goldLight/10", border: "border-brand-goldLight/30" }
-    ];
-    return { ...item, icon: icons[index], ...colors[index] };
-  });
+  const onSubmit = async (data: FormData) => {
+    // TODO: wire up to Resend / EmailJS / your preferred email API
+    // await fetch('/api/contact', { method: 'POST', body: JSON.stringify(data) })
+    console.log('Form submission:', data)
+    await new Promise((r) => setTimeout(r, 800))
+    setSent(true)
+    reset()
+  }
+
+  const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    'Hello BSS, I would like to enquire about your services.'
+  )}`
 
   return (
-    <div className={`min-h-screen ${sourceSans.variable} font-sans bg-brand-dark text-white`}>
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-brand-dark via-brand-deep to-brand-medium py-32 text-center">
-        <div className="absolute inset-0 opacity-10 bg-[url('/images/circuit-pattern.svg')] bg-[size:1200px]"></div>
-        <div className="container relative z-10 px-4">
-          <h1 className={`text-4xl md:text-6xl font-bold ${baskerville.variable} font-serif text-brand-gold mb-6`}>
-            {content[language].hero.title}
-          </h1>
-          <p className="text-xl text-brand-goldLight/90 max-w-3xl mx-auto">
-            {content[language].hero.subtitle}
-          </p>
+    <>
+      {/* ── HEADER ───────────────────────────────────────── */}
+      <section className="pt-36 pb-16 border-b border-bss-border">
+        <div className="container-site">
+          <p className="eyebrow">{t.contact.eyebrow}</p>
+          <h1 className="display-xl max-w-xl mb-6">{t.contact.headline}</h1>
+          <p className="body-lead max-w-prose">{t.contact.body}</p>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-brand-dark clip-path-wave"></div>
-      </div>
+      </section>
 
-      {/* Contact Content */}
-      <div className="container py-20 px-4">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
-          {/* Contact Form */}
-          <div className="bg-brand-deep rounded-xl shadow-gold border border-brand-gold/20 p-8">
-            <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-brand-gold mb-6`}>
-              {content[language].form.title}
-            </h2>
-            <form className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="name" className="block text-brand-goldLight font-medium mb-2">
-                    {content[language].form.labels.name}
-                  </label>
-                  <input 
-                    type="text" 
-                    id="name" 
-                    className="w-full px-4 py-3 rounded-lg bg-brand-medium border border-brand-gold/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-brand-gold focus:border-transparent"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-brand-goldLight font-medium mb-2">
-                    {content[language].form.labels.email}
-                  </label>
-                  <input 
-                    type="email" 
-                    id="email" 
-                    className="w-full px-4 py-3 rounded-lg bg-brand-medium border border-brand-gold/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-brand-gold focus:border-transparent"
-                    required
-                  />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="service" className="block text-brand-goldLight font-medium mb-2">
-                  {content[language].form.labels.service}
-                </label>
-                <select 
-                  id="service" 
-                  className="w-full px-4 py-3 rounded-lg bg-brand-medium border border-brand-gold/30 text-white focus:ring-2 focus:ring-brand-gold focus:border-transparent"
-                >
-                  {content[language].form.services.map((service, index) => (
-                    <option key={`${index}-option`} value={service.value} className="bg-brand-medium text-white">
-                      {service.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-brand-goldLight font-medium mb-2">
-                  {content[language].form.labels.message}
-                </label>
-                <textarea 
-                  id="message" 
-                  rows={5} 
-                  className="w-full px-4 py-3 rounded-lg bg-brand-medium border border-brand-gold/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-brand-gold focus:border-transparent"
-                  placeholder={content[language].form.labels.placeholder}
-                  required
-                ></textarea>
-              </div>
-              <button 
-                type="submit" 
-                className="flex items-center justify-center gap-2 px-8 py-4 bg-brand-gold hover:bg-brand-goldLight text-brand-dark font-bold rounded-lg transition-all duration-300 shadow-gold hover:shadow-glow"
-              >
-                <Send className="w-5 h-5" />
-                {content[language].form.submit}
-              </button>
-            </form>
-          </div>
+      {/* ── MAIN CONTENT ─────────────────────────────────── */}
+      <section className="section-pad">
+        <div className="container-site">
+          <div className="grid md:grid-cols-2 gap-16 lg:gap-24">
 
-          {/* Service Contacts */}
-          <div className="space-y-6">
-            <div className="bg-brand-deep rounded-xl shadow-gold border border-brand-gold/20 p-6">
-              <h2 className={`text-2xl font-bold ${baskerville.variable} font-serif text-brand-gold mb-6`}>
-                {content[language].serviceContacts.title}
-              </h2>
-              <div className="space-y-4">
-                {serviceContacts.map((service, index) => (
-                  <div 
-                    key={`${index}-service-contacts`} 
-                    className={`p-4 rounded-lg ${service.bg} border ${service.border} bg-brand-medium/50`}
+            {/* ── FORM ── */}
+            <div>
+              {sent ? (
+                /* Success state */
+                <div className="py-12 flex flex-col gap-6">
+                  <CheckCircle2
+                    size={40}
+                    strokeWidth={1.5}
+                    className="text-bss-subtle"
+                    aria-hidden="true"
+                  />
+                  <p className="font-display text-2xl font-bold text-bss-white">
+                    {t.contact.formSuccess}
+                  </p>
+                  <button
+                    onClick={() => setSent(false)}
+                    className="self-start text-xs tracking-wider uppercase font-medium text-bss-muted hover:text-bss-white transition-colors"
                   >
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className={`p-2 rounded-md bg-brand-gold/20`}>
-                        {service.icon}
-                      </div>
-                      <h3 className="font-bold text-brand-goldLight">{service.title}</h3>
-                    </div>
-                    <p className="text-gray-300 mb-3 text-sm">{service.details}</p>
-                    <div className="space-y-2">
-                      <Link 
-                        href={`mailto:${service.email}`} 
-                        className="flex items-center gap-2 text-brand-goldLight hover:text-brand-gold text-sm transition-colors"
-                      >
-                        <Mail className="w-4 h-4" />
-                        {service.email}
-                      </Link>
-                      <Link 
-                        href={`tel:${service.phone.replace(/\D/g, '')}`} 
-                        className="flex items-center gap-2 text-brand-goldLight hover:text-brand-gold text-sm transition-colors"
-                      >
-                        <Phone className="w-4 h-4" />
-                        {service.phone}
-                      </Link>
-                    </div>
+                    ← Send another
+                  </button>
+                </div>
+              ) : (
+                <form
+                  onSubmit={handleSubmit(onSubmit)}
+                  className="flex flex-col gap-8"
+                  noValidate
+                >
+                  {/* Name */}
+                  <div className="flex flex-col gap-2">
+                    <label className="eyebrow">{t.contact.formName}</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. John Mwangi"
+                      aria-invalid={!!errors.name}
+                      className={`${inputBase} ${errors.name ? inputErr : inputOk}`}
+                      {...register('name', { required: true })}
+                    />
+                    {errors.name && (
+                      <p className="text-xs text-red-400 mt-1">
+                        {t.contact.formName} is required.
+                      </p>
+                    )}
                   </div>
-                ))}
-              </div>
+
+                  {/* Email */}
+                  <div className="flex flex-col gap-2">
+                    <label className="eyebrow">{t.contact.formEmail}</label>
+                    <input
+                      type="email"
+                      placeholder="you@company.com"
+                      aria-invalid={!!errors.email}
+                      className={`${inputBase} ${errors.email ? inputErr : inputOk}`}
+                      {...register('email', {
+                        required: true,
+                        pattern: /^\S+@\S+\.\S+$/,
+                      })}
+                    />
+                    {errors.email && (
+                      <p className="text-xs text-red-400 mt-1">
+                        A valid email address is required.
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Service */}
+                  <div className="flex flex-col gap-2">
+                    <label className="eyebrow">{t.contact.formService}</label>
+                    <div className="relative">
+                      <select
+                        aria-invalid={!!errors.service}
+                        className={`${inputBase} bg-bss-black cursor-pointer appearance-none pr-8 ${
+                          errors.service ? inputErr : inputOk
+                        }`}
+                        defaultValue=""
+                        {...register('service', { required: true })}
+                      >
+                        <option value="" disabled className="text-bss-muted">
+                          Select a service
+                        </option>
+                        {SERVICE_KEYS.map((key) => (
+                          <option key={key} value={key} className="bg-bss-surface">
+                            {t.services.tabs[key]}
+                          </option>
+                        ))}
+                      </select>
+                      {/* chevron */}
+                      <span
+                        className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-bss-muted"
+                        aria-hidden="true"
+                      >
+                        ↓
+                      </span>
+                    </div>
+                    {errors.service && (
+                      <p className="text-xs text-red-400 mt-1">
+                        Please select a service.
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Message */}
+                  <div className="flex flex-col gap-2">
+                    <label className="eyebrow">{t.contact.formMessage}</label>
+                    <textarea
+                      rows={5}
+                      placeholder="Tell us what you need and when."
+                      aria-invalid={!!errors.message}
+                      className={`${inputBase} resize-none ${
+                        errors.message ? inputErr : inputOk
+                      }`}
+                      {...register('message', { required: true })}
+                    />
+                    {errors.message && (
+                      <p className="text-xs text-red-400 mt-1">
+                        A message is required.
+                      </p>
+                    )}
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="btn-primary self-start inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-wait"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <span
+                          className="inline-block w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin"
+                          aria-hidden="true"
+                        />
+                        Sending…
+                      </>
+                    ) : (
+                      <>
+                        {t.contact.formSubmit}
+                        <ArrowRight size={14} aria-hidden="true" />
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
             </div>
 
-            {/* General Contacts */}
-            <div className="bg-brand-deep rounded-xl shadow-gold border border-brand-gold/20 p-6">
-              <h2 className={`text-2xl font-bold ${baskerville.variable} font-serif text-brand-gold mb-6`}>
-                {content[language].companyContacts.title}
-              </h2>
-              <div className="space-y-4">
-                {content[language].companyContacts.items.map((info, index) => (
-                  <div key={`${index}-company-contacts`} className="p-4 rounded-lg bg-brand-medium/50 border border-brand-gold/20">
-                    <h3 className="font-bold text-brand-goldLight mb-2">{info.title}</h3>
-                    <div className="space-y-2">
-                      <a 
-                        href={`mailto:${info.email}`} 
-                        className="flex items-center gap-2 text-brand-goldLight hover:text-brand-gold text-sm transition-colors"
-                      >
-                        <Mail className="w-4 h-4" />
-                        {info.email}
-                      </a>
-                      <a 
-                        href={`tel:${info.phone.replace(/\D/g, '')}`} 
-                        className="flex items-center gap-2 text-brand-goldLight hover:text-brand-gold text-sm transition-colors"
-                      >
-                        <Phone className="w-4 h-4" />
-                        {info.phone}
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            {/* ── INFO PANEL ── */}
+            <div className="flex flex-col gap-10">
 
-      {/* Team CTA */}
-      <div className="bg-gradient-to-r from-brand-gold to-brand-goldLight py-16 px-4">
-        <div className="container max-w-4xl mx-auto text-center">
-          <h2 className={`text-3xl font-bold ${baskerville.variable} font-serif text-brand-dark mb-6`}>
-            {content[language].cta.title}
-          </h2>
-          <p className="text-brand-goldDark mb-8 text-lg max-w-2xl mx-auto">
-            {content[language].cta.subtitle}
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            {content[language].cta.buttons.map((button, index) => (
-              <Link
-                key={`${index}-team-cta`}
-                href={button.href}
-                className={`inline-flex items-center justify-center gap-2 font-bold px-8 py-4 rounded-lg transition-all duration-300 shadow-depth hover:shadow-glow ${
-                  index === 0 
-                    ? 'bg-brand-dark text-brand-gold hover:bg-brand-deep border-2 border-brand-dark' 
-                    : 'bg-white text-brand-goldDark hover:bg-gray-100 border-2 border-white'
-                }`}
+              {/* WhatsApp CTA */}
+              <div className="border border-bss-border p-8 flex flex-col gap-6">
+                <div className="flex items-center gap-3">
+                  <MessageCircle
+                    size={18}
+                    strokeWidth={1.5}
+                    className="text-bss-subtle shrink-0"
+                    aria-hidden="true"
+                  />
+                  <p className="eyebrow">{t.contact.whatsappLabel}</p>
+                </div>
+                <p className="body-base">
+                  Prefer a quick chat? Message us directly and we'll reply fast.
+                </p>
+                <a
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary inline-flex items-center gap-2 self-start"
+                >
+                  {t.contact.whatsappLabel}
+                  <ArrowRight size={14} aria-hidden="true" />
+                </a>
+              </div>
+
+              {/* Phone */}
+              <div
+                className="border-t border-bss-border pt-8 flex flex-col gap-3"
               >
-                {index === 0 ? <Users className="w-5 h-5" /> : <Camera className="w-5 h-5" />}
-                {button.text}
-              </Link>
-            ))}
+                <div className="flex items-center gap-3">
+                  <Phone
+                    size={16}
+                    strokeWidth={1.5}
+                    className="text-bss-subtle shrink-0"
+                    aria-hidden="true"
+                  />
+                  <p className="eyebrow">{t.contact.officeLabel}</p>
+                </div>
+                <a
+                  href={`tel:+${WHATSAPP_NUMBER}`}
+                  className="font-display text-3xl font-bold text-bss-white hover:text-bss-offwhite transition-colors"
+                >
+                  {t.contact.officeNumber}
+                </a>
+                <p className="body-base">Dar es Salaam, Tanzania</p>
+              </div>
+
+              {/* Email */}
+              <div
+                className="border-t border-bss-border pt-8 flex flex-col gap-3"
+              >
+                <div className="flex items-center gap-3">
+                  <Mail
+                    size={16}
+                    strokeWidth={1.5}
+                    className="text-bss-subtle shrink-0"
+                    aria-hidden="true"
+                  />
+                  <p className="eyebrow">Email</p>
+                </div>
+                <a
+                  href="mailto:info@bss.co.tz"
+                  className="font-display text-xl font-bold text-bss-white hover:text-bss-offwhite transition-colors"
+                >
+                  info@bss.co.tz
+                </a>
+              </div>
+
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
+      </section>
+    </>
+  )
 }
