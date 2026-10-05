@@ -55,10 +55,10 @@ const TenderApplicationServices = () => {
         setSelectedTenderType={setSelectedTenderType}
       />
       
-      <TenderSuccessSection language={language} successfulTenders={successfulTenders} />
+  {/*    <TenderSuccessSection language={language} successfulTenders={successfulTenders} />
       
       <TenderPricingSection language={language} pricingPlans={tenderPricingPlans} />
-      
+     */} 
       <TenderFAQSection 
         language={language} 
         faqs={tenderFaqs} 
