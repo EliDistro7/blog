@@ -133,6 +133,32 @@ export const platforms = [
 ];
 
 export const currentClients = [
+    {
+    company: "SIFONGO FREIGHT & LOGISTICS",
+    image: "/partners/sifongo.jpeg",
+    industry: { en: "Reproductive Health Education", sw: "Elimu ya Afya ya Uzazi" },
+    platforms: ["Instagram"],
+    socialLinks: {
+      instagram: "https://www.instagram.com/sifongofreight_/",
+//linkedin: "https://linkedin.com/company/amka-kijana",
+    //  youtube: "https://twitter.com/amkakijana"
+    },
+    results: {
+      followers: "150",
+      engagement: "+250%",
+      leads: "+180%"
+    },
+    services: [
+      {
+        name: { en: "Reproductive health Content Creation", sw: "Uundaji wa Maudhui ya Afya ya uzazi" },
+        description: { en: "Educational reproductive health content", sw: "Maudhui ya kielimu ya ya afya ya uzazi" }
+      },
+      {
+        name: { en: "B2B Lead Generation", sw: "Uongozaji wa B2B" },
+        description: { en: "Instagram campaigns targeting young adults in Tanzania", sw: "Kampeni za Instagram zilizowalenga wazazi vijana" }
+      }
+    ]
+  },
   {
     company: "AMKA KIJANA",
     image: "/images/kijana.webp",
@@ -161,7 +187,7 @@ export const currentClients = [
   },
   {
     company: "FH AGRO",
-    image: "/images/fh.webp",
+    image: "/partners/fh-agro.jpeg",
     industry: { en: "Agro-Business", sw: "Kilimo Biashara" },
     platforms: ["Instagram"],
     socialLinks: {
@@ -210,8 +236,8 @@ export const currentClients = [
     ]
   },
   {
-    company: "BabyStuff_TZ",
-    image: "/images/kids.webp",
+    company: "SIFEX AIR CARGO",
+    image: "/partners/sifex.jpeg",
     industry: { en: "Kid's clothes", sw: "Nguo za Watoto" },
     platforms: ["Instagram", "YouTube", "TikTok"],
     socialLinks: {
@@ -235,12 +261,12 @@ export const currentClients = [
     ]
   },
   {
-    company: "PICHAZANGU STORE",
-    image: "/images/pichazangu.jpg",
-    industry: { en: "Media & Storage", sw: "Media na Storage" },
+    company: "ALLADIN EVENTS",
+    image: "/partners/alladin.jpeg",
+    industry: { en: "Events management", sw: "Events management" },
     platforms: ["Instagram"],
     socialLinks: {
-      instagram: "https://www.instagram.com/pichazangu.store/",
+      instagram: "https://www.instagram.com/thealadinevents/",
     
     },
     results: {
